@@ -1,0 +1,1572 @@
+    .file "iram.s"
+    .section .iram, "ax"
+    .align 1
+    .global func_0000000
+func_0000000:
+    ld.w %r4,[%r6]
+    cmp %r4,0x0
+    sjreq .L0000148
+    xld.uh %r4,[%r6+0xe]
+    xand %r4,0x4000
+    cmp %r4,0x0
+    jrne .L00000AC
+    ext gfx_dirty_main_x0@m
+    ld.w %r7,gfx_dirty_main_x0@l
+    ld.ub %r4,[%r7]
+    xld.h %r5,[%r6+0x4]
+    cmp %r4,%r5
+    jrle.d .L0000036
+    cmp %r5,0x0
+    jrlt.d .L0000030
+    ld.w %r5,0x0
+    xld.ub %r4,[%r6+0x4]
+    ld.b [%r7],%r4
+    jp .L0000036
+.L0000030:
+    ext gfx_dirty_main_x0@m
+    ld.w %r4,gfx_dirty_main_x0@l
+    ld.b [%r4],%r5
+.L0000036:
+    xld.ub %r4,[%r6+0x8]
+    xld.uh %r5,[%r6+0x4]
+    add %r4,%r5
+    sub %r4,0x1
+    ld.h %r5,%r4
+    ext gfx_dirty_main_x1@m
+    ld.w %r7,gfx_dirty_main_x1@l
+    ld.ub %r4,[%r7]
+    cmp %r4,%r5
+    jrge .L0000062
+    xcmp %r5,0x7f
+    jrgt .L0000058
+    ld.b [%r7],%r5
+    jp .L0000062
+.L0000058:
+    xld.w %r5,0x7f
+    ext gfx_dirty_main_x1@m
+    ld.w %r4,gfx_dirty_main_x1@l
+    ld.b [%r4],%r5
+.L0000062:
+    ext gfx_dirty_main_y0@m
+    ld.w %r7,gfx_dirty_main_y0@l
+    ld.ub %r4,[%r7]
+    xld.h %r5,[%r6+0x6]
+    cmp %r4,%r5
+    jrle.d .L0000084
+    cmp %r5,0x1b
+    jrle.d .L000007E
+    ld.w %r5,0x1c
+    xld.ub %r4,[%r6+0x6]
+    ld.b [%r7],%r4
+    jp .L0000084
+.L000007E:
+    ext gfx_dirty_main_y0@m
+    ld.w %r4,gfx_dirty_main_y0@l
+    ld.b [%r4],%r5
+.L0000084:
+    xld.ub %r4,[%r6+0x9]
+    xld.uh %r5,[%r6+0x6]
+    add %r4,%r5
+    sub %r4,0x1
+    ld.h %r6,%r4
+    ext gfx_dirty_main_y1@m
+    ld.w %r5,gfx_dirty_main_y1@l
+    ld.ub %r4,[%r5]
+    cmp %r4,%r6
+    jrge .L0000148
+    xcmp %r6,0x63
+    jrle .L000013A
+    xld.w %r5,0x63
+    ext gfx_dirty_main_y1@m
+    ld.w %r4,gfx_dirty_main_y1@l
+    jp .L0000146
+.L00000AC:
+    ext gfx_dirty_bar_x0@m
+    ld.w %r7,gfx_dirty_bar_x0@l
+    ld.ub %r4,[%r7]
+    xld.h %r5,[%r6+0x4]
+    cmp %r4,%r5
+    jrle.d .L00000CE
+    cmp %r5,0x0
+    jrlt.d .L00000C8
+    ld.w %r5,0x0
+    xld.ub %r4,[%r6+0x4]
+    ld.b [%r7],%r4
+    jp .L00000CE
+.L00000C8:
+    ext gfx_dirty_bar_x0@m
+    ld.w %r4,gfx_dirty_bar_x0@l
+    ld.b [%r4],%r5
+.L00000CE:
+    xld.ub %r4,[%r6+0x8]
+    xld.uh %r5,[%r6+0x4]
+    add %r4,%r5
+    sub %r4,0x1
+    ld.h %r5,%r4
+    ext gfx_dirty_bar_x1@m
+    ld.w %r7,gfx_dirty_bar_x1@l
+    ld.ub %r4,[%r7]
+    cmp %r4,%r5
+    jrge .L00000FA
+    xcmp %r5,0x7f
+    jrgt .L00000F0
+    ld.b [%r7],%r5
+    jp .L00000FA
+.L00000F0:
+    xld.w %r5,0x7f
+    ext gfx_dirty_bar_x1@m
+    ld.w %r4,gfx_dirty_bar_x1@l
+    ld.b [%r4],%r5
+.L00000FA:
+    ext gfx_dirty_bar_y0@m
+    ld.w %r7,gfx_dirty_bar_y0@l
+    ld.ub %r4,[%r7]
+    xld.h %r5,[%r6+0x6]
+    cmp %r4,%r5
+    jrle.d .L000011C
+    cmp %r5,0x0
+    jrlt.d .L0000116
+    ld.w %r5,0x0
+    xld.ub %r4,[%r6+0x6]
+    ld.b [%r7],%r4
+    jp .L000011C
+.L0000116:
+    ext gfx_dirty_bar_y0@m
+    ld.w %r4,gfx_dirty_bar_y0@l
+    ld.b [%r4],%r5
+.L000011C:
+    xld.ub %r4,[%r6+0x9]
+    xld.uh %r5,[%r6+0x6]
+    add %r4,%r5
+    sub %r4,0x1
+    ld.h %r6,%r4
+    ext gfx_dirty_bar_y1@m
+    ld.w %r5,gfx_dirty_bar_y1@l
+    ld.ub %r4,[%r5]
+    cmp %r4,%r6
+    jrge .L0000148
+    xcmp %r6,0x7f
+    jrgt .L000013E
+.L000013A:
+    ld.b [%r5],%r6
+    jp .L0000148
+.L000013E:
+    xld.w %r5,0x7f
+    ext gfx_dirty_bar_y1@m
+    ld.w %r4,gfx_dirty_bar_y1@l
+.L0000146:
+    ld.b [%r4],%r5
+.L0000148:
+    ret
+    .section .iram, "ax"
+    .align 1
+    .global func_000014A
+func_000014A:
+    ld.w %r4,[%r6]
+    sll %r7,0x1
+    add %r4,%r7
+    xld.uh %r7,[%r4+0x6]
+    ld.w %r5,%r7
+    srl %r5,0x8
+    ld.w %r4,%r7
+    xand %r4,0xff
+    sll %r4,0x8
+    ld.w %r7,%r5
+    or %r7,%r4
+    xld.uh %r4,[%r6+0xe]
+    xand %r4,0x800
+    cmp %r4,0x0
+    jreq .L00001A2
+    xcmp %r7,0x6000
+    sjreq.d .L00002D2
+    ld.w %r4,%r7
+    xcmp %r7,0xa000
+    sjreq .L00002D2
+    xcmp %r7,0x4000
+    sjreq .L00002D2
+    xcmp %r7,0xe4c0
+    sjreq .L00002D2
+    xcmp %r7,0xe5e0
+    sjreq .L00002D2
+    xcmp %r7,0xe460
+    sjreq .L00002D2
+.L00001A2:
+    xld.uh %r4,[%r6+0xe]
+    and %r4,0x7
+    cmp %r4,0x6
+    sjrugt.d .L00002D0
+    sll %r4,0x2
+    xld.w %r5,D_255C7DC
+    add %r4,%r5
+    ld.w %r4,[%r4]
+    jp %r4
+    ld.w %r4,%r7
+    and %r4,0x1f
+    ld.w %r6,%r4
+    sll %r6,0x4
+    ld.w %r4,%r7
+    xand %r4,0x7e0
+    ld.w %r5,%r4
+    srl %r5,0x1
+    ld.w %r4,%r7
+    xand %r4,0xf800
+    ld.w %r7,%r4
+    jp.d .L00002A6
+    srl %r7,0x8
+    ld.w %r4,%r7
+    and %r4,0x1f
+    ld.w %r6,%r4
+    sll %r6,0x3
+    ld.w %r4,%r7
+    xand %r4,0x7e0
+    ld.w %r5,%r4
+    srl %r5,0x2
+    ld.w %r4,%r7
+    xand %r4,0xf800
+    ld.w %r7,%r4
+    srl %r7,0x9
+    add %r6,%r5
+    add %r6,%r7
+    xcall.d __divsi3
+    ld.w %r7,0x7
+    ld.uh %r7,%r4
+    ld.w %r5,%r7
+    srl %r5,0x3
+    ld.w %r4,%r7
+    xand %r4,0xfc
+    sll %r4,0x3
+    or %r5,%r4
+    ld.w %r4,%r7
+    xand %r4,0xf8
+    jp.d .L00002CA
+    sll %r4,0x8
+    xld.w %r4,0xc618
+    jp .L00002D2
+    ld.w %r4,%r7
+    and %r4,0x1f
+    ld.w %r6,%r4
+    sll %r6,0x3
+    ld.w %r4,%r7
+    xand %r4,0x7e0
+    ld.w %r5,%r4
+    srl %r5,0x3
+    ld.w %r4,%r7
+    xand %r4,0xf800
+    ld.w %r7,%r4
+    xadd %r6,0x80
+    xcmp %r6,0xf8
+    jrule.d .L000024C
+    srl %r7,0x8
+    xld.w %r6,0xf8
+.L000024C:
+    ld.w %r4,%r5
+    xadd %r4,0x80
+    ld.uh %r5,%r4
+    xcmp %r5,0xfc
+    jrule.d .L0000260
+    ld.w %r4,%r7
+    xld.w %r5,0xfc
+.L0000260:
+    xadd %r4,0x50
+    ld.uh %r7,%r4
+    xcmp %r7,0xf8
+    jrule .L0000270
+    xld.w %r7,0xf8
+.L0000270:
+    ld.w %r4,%r6
+    srl %r4,0x3
+    xand %r5,0xfc
+    sll %r5,0x3
+    or %r4,%r5
+    ld.w %r5,%r7
+    xand %r5,0xf8
+    sll %r5,0x8
+    or %r4,%r5
+    jp.d .L00002D2
+    ld.uh %r4,%r4
+    ld.w %r4,%r7
+    and %r4,0x1f
+    ld.w %r6,%r4
+    sll %r6,0x2
+    ld.w %r4,%r7
+    xand %r4,0x7e0
+    ld.w %r5,%r4
+    srl %r5,0x1
+    ld.w %r4,%r7
+    xand %r4,0xf800
+    ld.w %r7,%r4
+    srl %r7,0x4
+.L00002A6:
+    add %r6,%r5
+    add %r6,%r7
+    xcall.d __divsi3
+    ld.w %r7,0x7
+    ld.uh %r7,%r4
+    ld.w %r5,%r7
+    srl %r5,0x3
+    ld.w %r4,%r7
+    xand %r4,0xf8
+    sll %r4,0x2
+    or %r5,%r4
+    ld.w %r4,%r7
+    xand %r4,0xe0
+    sll %r4,0x6
+.L00002CA:
+    or %r5,%r4
+    jp.d .L00002D2
+    ld.w %r4,%r5
+.L00002D0:
+    ld.w %r4,%r7
+.L00002D2:
+    ret
+    .section .iram, "ax"
+    .align 1
+    .global func_00002D4
+func_00002D4:
+    ld.uh %r6,%r6
+    xcmp %r6,0x6000
+    jreq.d .L0000310
+    ld.w %r4,0x1f
+    xld.w %r4,0x5afc
+    xcmp %r6,0xa000
+    jreq .L0000310
+    xld.w %r4,0x859
+    xcmp %r6,0x4000
+    jreq .L0000310
+    xcmp %r6,0xe4c0
+    jreq.d .L0000310
+    ld.w %r4,0x1f
+    xld.w %r4,0x5afc
+    xcmp %r6,0xe5e0
+    jreq .L0000310
+    xld.w %r4,0x859
+    xcmp %r6,0xe460
+    jreq .L0000310
+    ld.w %r4,%r6
+.L0000310:
+    ret
+    .section .iram, "ax"
+    .align 1
+    .global func_0000312
+func_0000312:
+    pushn %r3
+    sub %sp,0x1
+    ld.w %r0,%r6
+    ld.w %r3,%r7
+    cmp %r7,0x0
+    sjreq.d .L0000418
+    ld.uh %r2,%r8
+    xld.ub %r4,[%r7+0x3]
+    add %r2,%r4
+    ld.uh %r2,%r2
+    ld.w %r4,0x0
+    ld.w [%sp+0x0],%r4
+    xld.ub %r4,[%r7+0x2]
+    add %r4,%r2
+    cmp %r2,%r4
+    jrge.d .L00003BC
+    ld.w %r1,%r2
+.L000033A:
+    ld.w %r7,[%sp+0x0]
+    scall.d func_000014A
+    ld.w %r6,%r0
+    ld.uh %r7,%r4
+    xld.uh %r4,[%r0+0xe]
+    xand %r4,0x800
+    cmp %r4,0x0
+    jreq .L0000356
+    call.d func_00002D4
+    ld.w %r6,%r7
+    ld.uh %r7,%r4
+.L0000356:
+    xld.uh %r4,[%r0+0xe]
+    xand %r4,0x80
+    cmp %r4,0x0
+    jrne.d .L00003A8
+    ld.w %r6,%r1
+    ext gfx_pal_blue@m
+    ld.w %r4,gfx_pal_blue@l
+    add %r6,%r4
+    ld.w %r5,%r7
+    and %r5,0x1f
+    sll %r5,0x3
+    ld.w %r4,%r7
+    and %r4,0x1
+    sll %r4,0x2
+    or %r5,%r4
+    ld.b [%r6],%r5
+    ld.w %r5,%r1
+    ext gfx_pal_green@m
+    ld.w %r4,gfx_pal_green@l
+    add %r5,%r4
+    ld.w %r4,%r7
+    xand %r4,0x7e0
+    sra %r4,0x3
+    ld.b [%r5],%r4
+    ld.w %r6,%r1
+    ext gfx_pal_red@m
+    ld.w %r4,gfx_pal_red@l
+    add %r6,%r4
+    ld.w %r5,%r7
+    xand %r5,0xf800
+    sra %r5,0x8
+    ld.w %r4,%r7
+    xand %r4,0x800
+    sra %r4,0x9
+    or %r5,%r4
+    ld.b [%r6],%r5
+.L00003A8:
+    add %r1,0x1
+    ld.w %r4,[%sp+0x0]
+    add %r4,0x1
+    ld.uh %r4,%r4
+    ld.w [%sp+0x0],%r4
+    xld.ub %r4,[%r3+0x2]
+    add %r4,%r2
+    cmp %r1,%r4
+    jrlt .L000033A
+.L00003BC:
+    xld.ub %r4,[%r3+0x2]
+    cmp %r4,0x10
+    jrule .L00003EC
+    ld.w %r6,[%sp+0x0]
+    sll %r6,0x1
+    xld.ub %r4,[%r0+0x8]
+    xld.ub %r5,[%r0+0x9]
+    mlt.w %r4,%r5
+    ld.w %r4,%alr
+    xld.ub %r5,[%r0+0xa]
+    mlt.w %r4,%r5
+    ld.w %r4,%alr
+    add %r6,%r4
+    xld.h [%r0+0x10],%r6
+    xld.uh %r4,[%r0+0xe]
+    xoor %r4,0xffff8000
+    jp .L0000414
+.L00003EC:
+    ld.w %r6,[%sp+0x0]
+    sll %r6,0x1
+    xld.ub %r4,[%r0+0x8]
+    srl %r4,0x1
+    xld.ub %r5,[%r0+0x9]
+    mlt.w %r4,%r5
+    ld.w %r4,%alr
+    xld.ub %r5,[%r0+0xa]
+    mlt.w %r4,%r5
+    ld.w %r4,%alr
+    add %r6,%r4
+    xld.h [%r0+0x10],%r6
+    xld.uh %r4,[%r0+0xe]
+    xand %r4,0x7fff
+.L0000414:
+    xld.h [%r0+0xe],%r4
+.L0000418:
+    xld.h [%r0+0xc],%r2
+    add %sp,0x1
+    popn %r3
+    ret
+    .global func_0000422
+func_0000422:
+    ld.ub %r7,%r7
+    ld.w %r5,[%r6]
+    xld.uh %r4,[%r6+0xe]
+    xand %r4,0x40
+    cmp %r4,0x0
+    jreq.d .L000043A
+    ld.ub %r8,%r8
+    ld.w %r4,%r7
+    ld.w %r7,%r8
+    ld.w %r8,%r4
+.L000043A:
+    xld.uh %r4,[%r6+0xe]
+    xand %r4,0x20
+    cmp %r4,0x0
+    jreq .L0000450
+    xld.ub %r4,[%r6+0x9]
+    sub %r4,%r8
+    sub %r4,0x1
+    ld.ub %r8,%r4
+.L0000450:
+    xld.uh %r4,[%r6+0xe]
+    and %r4,0x10
+    cmp %r4,0x0
+    jreq .L0000464
+    xld.ub %r4,[%r6+0x8]
+    sub %r4,%r7
+    sub %r4,0x1
+    ld.ub %r7,%r4
+.L0000464:
+    xld.h %r4,[%r6+0xe]
+    cmp %r4,0x0
+    jrge .L0000484
+    xld.uh %r4,[%r6+0x10]
+    ld.ub %r6,[%r5]
+    mlt.w %r8,%r6
+    ld.w %r6,%alr
+    add %r5,0x2
+    add %r4,%r5
+    add %r4,%r7
+    add %r4,%r6
+    xld.ub %r4,[%r4+0x4]
+    jp .L00004C6
+.L0000484:
+    ld.w %r4,%r7
+    and %r4,0x1
+    cmp %r4,0x0
+    jreq .L00004AA
+    xld.uh %r4,[%r6+0x10]
+    ld.ub %r6,[%r5]
+    srl %r6,0x1
+    mlt.w %r8,%r6
+    ld.w %r6,%alr
+    srl %r7,0x1
+    add %r5,0x2
+    add %r4,%r5
+    add %r4,%r7
+    add %r4,%r6
+    xld.ub %r4,[%r4+0x4]
+    jp.d .L00004C6
+    srl %r4,0x4
+.L00004AA:
+    xld.uh %r4,[%r6+0x10]
+    ld.ub %r6,[%r5]
+    srl %r6,0x1
+    mlt.w %r8,%r6
+    ld.w %r6,%alr
+    srl %r7,0x1
+    add %r5,0x2
+    add %r4,%r5
+    add %r4,%r7
+    add %r4,%r6
+    xld.ub %r4,[%r4+0x4]
+    and %r4,0xf
+.L00004C6:
+    ret
+    .section .iram, "ax"
+    .align 1
+    .global func_00004C8
+func_00004C8:
+    pushn %r3
+    sub %sp,0x2
+    ld.h %r6,%r6
+    ld.w [%sp+0x0],%r6
+    ld.h %r7,%r7
+    ld.w [%sp+0x1],%r7
+    ext gfx_object_count@m
+    ld.w %r4,gfx_object_count@l
+    ld.ub %r4,[%r4]
+    sub %r4,0x1
+    ld.h %r1,%r4
+    cmp %r1,0x0
+    jrlt.d .L0000580
+    ld.w %r4,0x0
+    ld.w %r4,0x14
+.L00004E6:
+    mlt.h %r1,%r4
+    ld.w %r4,%alr
+    ld.w %r0,%r4
+    ext gfx_objects@m
+    ld.w %r5,gfx_objects@l
+    add %r0,%r5
+    ld.w %r2,[%r0]
+    cmp %r2,0x0
+    jreq.d .L0000574
+    ld.w %r4,%r1
+    xld.uh %r3,[%r0+0xe]
+    ld.w %r4,%r3
+    xand %r4,0x4000
+    cmp %r4,0x0
+    jreq.d .L0000574
+    ld.w %r4,%r1
+    xld.uh %r4,[%r0+0x6]
+    ld.w %r5,[%sp+0x1]
+    sub %r5,%r4
+    ld.h %r8,%r5
+    cmp %r8,0x0
+    jrlt.d .L0000574
+    ld.w %r4,%r1
+    xld.ub %r4,[%r0+0x9]
+    cmp %r4,%r8
+    jrle.d .L0000574
+    ld.w %r4,%r1
+    xld.uh %r4,[%r0+0x4]
+    ld.w %r5,[%sp+0x0]
+    sub %r5,%r4
+    ld.h %r7,%r5
+    cmp %r7,0x0
+    jrlt.d .L0000574
+    ld.w %r4,%r1
+    xld.ub %r4,[%r0+0x8]
+    cmp %r4,%r7
+    jrle.d .L0000574
+    ld.w %r4,%r1
+    ld.ub %r7,%r7
+    ld.ub %r8,%r8
+    scall.d func_0000422
+    ld.w %r6,%r0
+    ld.ub %r6,%r4
+    ld.w %r4,%r3
+    xand %r4,0x2000
+    cmp %r4,0x0
+    jreq.d .L0000564
+    not %r4,%r6
+    xld.ub %r7,[%r2+0x2]
+    xcall.d __umodsi3
+    ld.ub %r6,%r4
+    ld.ub %r6,%r4
+.L0000564:
+    cmp %r6,0x0
+    jreq .L0000572
+    xld.ub %r4,[%r0+0xc]
+    add %r6,%r4
+    jp.d .L0000580
+    ld.ub %r4,%r6
+.L0000572:
+    ld.w %r4,%r1
+.L0000574:
+    sub %r4,0x1
+    ld.h %r1,%r4
+    cmp %r1,0x0
+    jrge.d .L00004E6
+    ld.w %r4,0x14
+    ld.w %r4,0x0
+.L0000580:
+    add %sp,0x2
+    popn %r3
+    ret
+    .global func_0000586
+func_0000586:
+    pushn %r3
+    ld.h %r3,%r6
+    ext gfx_object_count@m
+    ld.w %r4,gfx_object_count@l
+    ld.ub %r4,[%r4]
+    sub %r4,0x1
+    ld.h %r1,%r4
+    cmp %r1,0x0
+    jrlt.d .L0000656
+    ld.h %r2,%r7
+    ld.w %r4,0x14
+.L000059C:
+    mlt.h %r1,%r4
+    ld.w %r4,%alr
+    ld.w %r0,%r4
+    ext gfx_objects@m
+    ld.w %r5,gfx_objects@l
+    add %r0,%r5
+    ld.w %r4,[%r0]
+    cmp %r4,0x0
+    jreq.d .L000064C
+    ld.w %r4,%r1
+    xld.uh %r5,[%r0+0xe]
+    ld.w %r4,%r5
+    xand %r4,0x4000
+    cmp %r4,0x0
+    jrne.d .L000064C
+    ld.w %r4,%r1
+    xld.uh %r4,[%r0+0x6]
+    ld.w %r6,%r2
+    sub %r6,%r4
+    ld.h %r8,%r6
+    cmp %r8,0x0
+    jrlt.d .L000064C
+    ld.w %r4,%r1
+    xld.ub %r4,[%r0+0x9]
+    cmp %r4,%r8
+    jrle.d .L000064C
+    ld.w %r4,%r1
+    xld.uh %r4,[%r0+0x4]
+    ld.w %r6,%r3
+    sub %r6,%r4
+    ld.h %r7,%r6
+    cmp %r7,0x0
+    jrlt.d .L000064C
+    ld.w %r4,%r1
+    xld.ub %r4,[%r0+0x8]
+    cmp %r4,%r7
+    jrle.d .L000064C
+    ld.w %r4,%r1
+    ld.w %r4,%r5
+    xand %r4,0x1000
+    cmp %r4,0x0
+    jreq.d .L0000612
+    ld.w %r4,%r2
+    sub %r4,0x1c
+    sll %r4,0x7
+    add %r3,%r4
+    ld.uh %r4,%r3
+    ext gfx_frame_buffer@m
+    ld.w %r5,gfx_frame_buffer@l
+    add %r4,%r5
+    ld.ub %r4,[%r4]
+    jp .L0000658
+.L0000612:
+    ld.ub %r7,%r7
+    ld.ub %r8,%r8
+    scall.d func_0000422
+    ld.w %r6,%r0
+    ld.ub %r6,%r4
+    xld.uh %r4,[%r0+0xe]
+    xand %r4,0x2000
+    cmp %r4,0x0
+    jreq.d .L000063C
+    not %r4,%r6
+    ld.ub %r6,%r4
+    ld.w %r4,[%r0]
+    xld.ub %r7,[%r4+0x2]
+    xcall __umodsi3
+    ld.ub %r6,%r4
+.L000063C:
+    cmp %r6,0x0
+    jreq .L000064A
+    xld.ub %r4,[%r0+0xc]
+    add %r6,%r4
+    jp.d .L0000658
+    ld.ub %r4,%r6
+.L000064A:
+    ld.w %r4,%r1
+.L000064C:
+    sub %r4,0x1
+    ld.h %r1,%r4
+    cmp %r1,0x0
+    jrge.d .L000059C
+    ld.w %r4,0x14
+.L0000656:
+    ld.w %r4,0x0
+.L0000658:
+    popn %r3
+    ret
+.L000065C:
+    pushn %r3
+    sub %sp,0x3
+    ld.ub %r8,%r8
+    ld.w [%sp+0x0],%r8
+    ld.ub %r9,%r9
+    ld.w [%sp+0x1],%r9
+    ld.ub %r4,[%sp+0x20]
+    ld.w [%sp+0x2],%r4
+    ld.ub %r3,%r7
+    cmp %r3,%r8
+    jrugt.d .L00006B0
+    ld.uh %r2,%r6
+.L0000674:
+    ld.w %r0,[%sp+0x1]
+    ld.w %r4,[%sp+0x2]
+    cmp %r0,%r4
+    jrugt.d .L00006A6
+    ld.w %r4,%r3
+    ld.w %r1,%r2
+.L0000680:
+    ld.w %r4,%r2
+    add %r4,0x1
+    ld.uh %r2,%r4
+    ext gfx_frame_buffer@m
+    ld.w %r4,gfx_frame_buffer@l
+    add %r1,%r4
+    ld.w %r6,%r0
+    scall.d func_00004C8
+    ld.w %r7,%r3
+    ld.b [%r1],%r4
+    ld.w %r4,%r0
+    add %r4,0x1
+    ld.ub %r0,%r4
+    ld.w %r4,[%sp+0x2]
+    cmp %r0,%r4
+    jrule.d .L0000680
+    ld.w %r1,%r2
+    ld.w %r4,%r3
+.L00006A6:
+    add %r4,0x1
+    ld.ub %r3,%r4
+    ld.w %r4,[%sp+0x0]
+    cmp %r3,%r4
+    jrule .L0000674
+.L00006B0:
+    ld.w %r4,%r2
+    add %sp,0x3
+    popn %r3
+    ret
+    .global func_00006B8
+func_00006B8:
+    pushn %r3
+    sub %sp,0x2
+    ld.ub %r0,%r6
+    ld.ub %r1,%r7
+    ld.ub %r2,%r8
+    ld.ub %r3,%r9
+    ld.w [%sp+0x0],%r3
+    ld.w %r6,0x0
+    ld.w %r7,%r0
+    ld.w %r8,%r1
+    call.d .L000065C
+    ld.w %r9,%r2
+    ld.uh %r8,%r4
+    xld.w %r4,lcd_is_st7735
+    ld.ub %r4,[%r4]
+    ld.ub %r4,%r4
+    cmp %r4,0x0
+    jreq.d .L00006E8
+    ld.w %r4,0x2
+    ld.b [%sp+0x4],%r4
+    jp.d .L00006EC
+    ld.w %r4,0x1
+.L00006E8:
+    ld.w %r4,0x0
+    ld.b [%sp+0x4],%r4
+.L00006EC:
+    ld.b [%sp+0x5],%r4
+    cmp %r8,0x0
+    jreq .L000079C
+    xld.w %r7,0x600000
+    xld.w %r4,0x2b
+    ld.h [%r7],%r4
+    ld.ub %r4,[%sp+0x5]
+    add %r0,%r4
+    ld.ub %r4,%r0
+    xld.w %r5,0x600001
+    ld.b [%r5],%r4
+    ld.w %r6,0x0
+    ld.b [%r5],%r6
+    ld.ub %r4,[%sp+0x5]
+    add %r1,%r4
+    ld.ub %r4,%r1
+    ld.b [%r5],%r4
+    xld.w %r4,0x2a
+    ld.h [%r7],%r4
+    ld.ub %r4,[%sp+0x4]
+    add %r2,%r4
+    ld.ub %r4,%r2
+    ld.b [%r5],%r4
+    ld.b [%r5],%r6
+    ld.ub %r4,[%sp+0x4]
+    add %r3,%r4
+    ld.ub %r4,%r3
+    ld.b [%r5],%r4
+    xld.w %r4,0x2c
+    ld.b [%r7],%r4
+    cmp %r6,%r8
+    jruge.d .L000079C
+    ld.w %r7,%r5
+    ext lcd_palette_set@m
+    ld.w %r4,lcd_palette_set@l
+    ld.ub %r9,[%r4]
+    ext gfx_pal_blue@m
+    ld.w %r13,gfx_pal_blue@l
+    ext gfx_pal_green@m
+    ld.w %r12,gfx_pal_green@l
+    ext gfx_pal_red@m
+    ld.w %r11,gfx_pal_red@l
+    ld.w %r4,%r6
+.L0000750:
+    ext gfx_frame_buffer@m
+    ld.w %r5,gfx_frame_buffer@l
+    add %r4,%r5
+    ld.ub %r5,[%r4]
+    cmp %r9,0x1
+    jrne.d .L0000774
+    ld.w %r4,%r5
+    add %r4,%r13
+    ld.ub %r4,[%r4]
+    ld.b [%r7],%r4
+    ld.w %r4,%r5
+    add %r4,%r12
+    ld.ub %r4,[%r4]
+    ld.b [%r7],%r4
+    ld.w %r4,%r5
+    add %r4,%r11
+    ld.ub %r4,[%r4]
+    jp .L000078E
+.L0000774:
+    add %r4,%r13
+    xld.ub %r4,[%r4+0x100]
+    ld.b [%r7],%r4
+    ld.w %r4,%r5
+    add %r4,%r12
+    xld.ub %r4,[%r4+0x100]
+    ld.b [%r7],%r4
+    ld.w %r4,%r5
+    add %r4,%r11
+    xld.ub %r4,[%r4+0x100]
+.L000078E:
+    ld.b [%r7],%r4
+    ld.w %r4,%r6
+    add %r4,0x1
+    ld.uh %r6,%r4
+    cmp %r6,%r8
+    jrult.d .L0000750
+    ld.w %r4,%r6
+.L000079C:
+    add %sp,0x2
+    popn %r3
+    ret
+    .section .iram, "ax"
+    .align 1
+    .global func_00007A2
+func_00007A2:
+    pushn %r3
+    sub %sp,0x4
+    ld.ub %r6,%r6
+    ld.ub %r7,%r7
+    ld.w [%sp+0x0],%r7
+    ld.ub %r8,%r8
+    ld.w [%sp+0x1],%r8
+    ld.ub %r9,%r9
+    ld.w [%sp+0x2],%r9
+    ld.w %r4,%r6
+    sub %r4,0x1c
+    sll %r4,0x7
+    add %r4,%r8
+    ld.uh %r2,%r4
+    ld.w %r4,%r8
+    sub %r4,%r9
+    xadd %r4,0x7f
+    ld.uh %r4,%r4
+    ld.w [%sp+0x3],%r4
+    cmp %r6,%r7
+    jrugt.d .L0000814
+    ld.w %r3,%r6
+.L00007D0:
+    ld.w %r0,[%sp+0x1]
+    ld.w %r4,[%sp+0x2]
+    cmp %r0,%r4
+    jrugt.d .L0000802
+    ld.w %r4,%r2
+    ld.w %r1,%r2
+.L00007DC:
+    ld.w %r4,%r2
+    add %r4,0x1
+    ld.uh %r2,%r4
+    ext gfx_frame_buffer@m
+    ld.w %r5,gfx_frame_buffer@l
+    add %r1,%r5
+    ld.w %r6,%r0
+    scall.d func_0000586
+    ld.w %r7,%r3
+    ld.b [%r1],%r4
+    ld.w %r4,%r0
+    add %r4,0x1
+    ld.ub %r0,%r4
+    ld.w %r4,[%sp+0x2]
+    cmp %r0,%r4
+    jrule.d .L00007DC
+    ld.w %r1,%r2
+    ld.w %r4,%r2
+.L0000802:
+    ld.w %r5,[%sp+0x3]
+    add %r4,%r5
+    ld.uh %r2,%r4
+    ld.w %r4,%r3
+    add %r4,0x1
+    ld.ub %r3,%r4
+    ld.w %r4,[%sp+0x0]
+    cmp %r3,%r4
+    jrule .L00007D0
+.L0000814:
+    add %sp,0x4
+    popn %r3
+    ret
+    .global func_000081A
+func_000081A:
+    pushn %r3
+    sub %sp,0x5
+    ld.ub %r1,%r6
+    ld.ub %r7,%r7
+    ld.w [%sp+0x1],%r7
+    ld.ub %r8,%r8
+    ld.w [%sp+0x2],%r8
+    ld.ub %r0,%r9
+    ld.w %r6,%r1
+    call.d func_00007A2
+    ld.w %r9,%r0
+    xld.w %r4,lcd_is_st7735
+    ld.ub %r4,[%r4]
+    ld.ub %r4,%r4
+    cmp %r4,0x0
+    jreq.d .L0000846
+    ld.w %r4,0x2
+    ld.b [%sp+0x0],%r4
+    jp.d .L000084A
+    ld.w %r4,0x1
+.L0000846:
+    ld.w %r4,0x0
+    ld.b [%sp+0x0],%r4
+.L000084A:
+    ld.b [%sp+0x1],%r4
+    xld.w %r6,0x600000
+    xld.w %r4,0x2b
+    ld.h [%r6],%r4
+    ld.ub %r4,[%sp+0x1]
+    ld.w %r5,%r1
+    add %r5,%r4
+    ld.ub %r4,%r5
+    xld.w %r5,0x600001
+    ld.b [%r5],%r4
+    ld.w %r7,0x0
+    ld.b [%r5],%r7
+    ld.ub %r4,[%sp+0x1]
+    ld.w %r8,[%sp+0x1]
+    add %r8,%r4
+    ld.ub %r4,%r8
+    ld.b [%r5],%r4
+    xld.w %r4,0x2a
+    ld.h [%r6],%r4
+    ld.ub %r4,[%sp+0x0]
+    ld.w %r8,[%sp+0x2]
+    add %r8,%r4
+    ld.ub %r4,%r8
+    ld.b [%r5],%r4
+    ld.b [%r5],%r7
+    ld.ub %r4,[%sp+0x0]
+    ld.w %r7,%r0
+    add %r7,%r4
+    ld.ub %r4,%r7
+    ld.b [%r5],%r4
+    xld.w %r4,0x2c
+    ld.b [%r6],%r4
+    ld.w %r4,%r1
+    sub %r4,0x1c
+    sll %r4,0x7
+    ld.w %r8,[%sp+0x2]
+    add %r4,%r8
+    ld.uh %r12,%r4
+    ld.w %r4,%r8
+    sub %r4,%r0
+    xadd %r4,0x7f
+    ld.uh %r4,%r4
+    ld.w [%sp+0x3],%r4
+    ld.w %r4,[%sp+0x1]
+    cmp %r1,%r4
+    jrugt.d .L00009A0
+    ld.w %r14,%r1
+    ext gfx_pal_green@m
+    ld.w %r3,gfx_pal_green@l
+    ext gfx_pal_red@m
+    ld.w %r2,gfx_pal_red@l
+.L00008C0:
+    ld.w %r11,[%sp+0x2]
+    cmp %r11,%r0
+    jrugt.d .L000098E
+    ld.w %r4,%r12
+    xld.w %r4,gfx_tint_first
+    ld.ub %r1,[%r4]
+    ld.w %r4,%r14
+    sub %r4,0x1c
+    ld.ub %r4,%r4
+    ld.w [%sp+0x4],%r4
+    ext gfx_pal_blue@m
+    ld.w %r10,gfx_pal_blue@l
+    xld.w %r13,0x600001
+    ld.w %r4,%r12
+.L00008E4:
+    ld.w %r5,%r12
+    add %r5,0x1
+    ld.uh %r12,%r5
+    ext gfx_frame_buffer@m
+    ld.w %r5,gfx_frame_buffer@l
+    add %r4,%r5
+    ld.ub %r9,[%r4]
+    cmp %r1,%r9
+    jrugt.d .L000096C
+    ld.w %r4,%r9
+    xld.w %r4,gfx_tint_end
+    ld.ub %r4,[%r4]
+    cmp %r4,%r9
+    jrule.d .L000096C
+    ld.w %r4,%r9
+    ld.w %r7,[%sp+0x4]
+    xcmp %r7,0x3f
+    jrugt .L000096C
+    xld.w %r5,0x5b
+    sub %r5,%r14
+    ld.uh %r5,%r5
+    xld.w %r7,0x58
+    mltu.h %r5,%r7
+    ld.w %r7,%alr
+    add %r4,%r10
+    ld.ub %r4,[%r4]
+    xld.w %r8,0x40
+    sub %r8,%r5
+    mlt.w %r4,%r8
+    ld.w %r4,%alr
+    add %r7,%r4
+    sra %r7,0x6
+    xld.w %r6,0x51
+    mltu.h %r5,%r6
+    ld.w %r6,%alr
+    ld.w %r4,%r9
+    add %r4,%r3
+    ld.ub %r4,[%r4]
+    mlt.w %r4,%r8
+    ld.w %r4,%alr
+    add %r6,%r4
+    sra %r6,0x6
+    xld.w %r4,0xff
+    mltu.h %r5,%r4
+    ld.w %r5,%alr
+    ld.w %r4,%r9
+    add %r4,%r2
+    ld.ub %r4,[%r4]
+    mlt.w %r4,%r8
+    ld.w %r4,%alr
+    add %r5,%r4
+    sra %r5,0x6
+    ld.ub %r7,%r7
+    ld.b [%r13],%r7
+    ld.ub %r6,%r6
+    ld.b [%r13],%r6
+    ld.ub %r5,%r5
+    ld.b [%r13],%r5
+    jp.d .L0000984
+    ld.w %r4,%r11
+.L000096C:
+    add %r4,%r10
+    ld.ub %r4,[%r4]
+    ld.b [%r13],%r4
+    ld.w %r4,%r9
+    add %r4,%r3
+    ld.ub %r4,[%r4]
+    ld.b [%r13],%r4
+    ld.w %r4,%r9
+    add %r4,%r2
+    ld.ub %r4,[%r4]
+    ld.b [%r13],%r4
+    ld.w %r4,%r11
+.L0000984:
+    add %r4,0x1
+    ld.ub %r11,%r4
+    cmp %r11,%r0
+    jrule.d .L00008E4
+    ld.w %r4,%r12
+.L000098E:
+    ld.w %r8,[%sp+0x3]
+    add %r4,%r8
+    ld.uh %r12,%r4
+    ld.w %r4,%r14
+    add %r4,0x1
+    ld.ub %r14,%r4
+    ld.w %r4,[%sp+0x1]
+    cmp %r14,%r4
+    jrule .L00008C0
+.L00009A0:
+    add %sp,0x5
+    popn %r3
+    ret
+    .section .iram, "ax"
+    .align 1
+    .global func_00009A6
+func_00009A6:
+    ext gfx_dirty_main_y0@m
+    ld.w %r4,gfx_dirty_main_y0@l
+    ld.ub %r6,[%r4]
+    ext gfx_dirty_main_y1@m
+    ld.w %r4,gfx_dirty_main_y1@l
+    ld.ub %r7,[%r4]
+    ext gfx_dirty_main_x0@m
+    ld.w %r4,gfx_dirty_main_x0@l
+    ld.ub %r8,[%r4]
+    ext gfx_dirty_main_x1@m
+    ld.w %r4,gfx_dirty_main_x1@l
+    ld.ub %r9,[%r4]
+    scall func_000081A
+    ext gfx_dirty_bar_y0@m
+    ld.w %r4,gfx_dirty_bar_y0@l
+    ld.ub %r6,[%r4]
+    cmp %r6,0x1b
+    jrugt .L00009DE
+    ext gfx_dirty_bar_x0@m
+    ld.w %r4,gfx_dirty_bar_x0@l
+    ld.ub %r8,[%r4]
+    ext gfx_dirty_bar_x1@m
+    ld.w %r4,gfx_dirty_bar_x1@l
+    ld.ub %r9,[%r4]
+    scall.d func_00006B8
+    ld.w %r7,0x1b
+.L00009DE:
+    ext gfx_dirty_bar_y1@m
+    ld.w %r4,gfx_dirty_bar_y1@l
+    ld.ub %r7,[%r4]
+    xcmp %r7,0x63
+    jrule .L00009FE
+    ext gfx_dirty_bar_x0@m
+    ld.w %r4,gfx_dirty_bar_x0@l
+    ld.ub %r8,[%r4]
+    ext gfx_dirty_bar_x1@m
+    ld.w %r4,gfx_dirty_bar_x1@l
+    ld.ub %r9,[%r4]
+    xld.w %r6,0x64
+    scall func_00006B8
+.L00009FE:
+    xcall sys_apply_backlight
+    xld.w %r6,0x7f
+    ext gfx_dirty_main_y0@m
+    ld.w %r4,gfx_dirty_main_y0@l
+    ld.b [%r4],%r6
+    ld.w %r5,0x0
+    ext gfx_dirty_main_y1@m
+    ld.w %r4,gfx_dirty_main_y1@l
+    ld.b [%r4],%r5
+    ext gfx_dirty_main_x0@m
+    ld.w %r4,gfx_dirty_main_x0@l
+    ld.b [%r4],%r6
+    ext gfx_dirty_main_x1@m
+    ld.w %r4,gfx_dirty_main_x1@l
+    ld.b [%r4],%r5
+    ext gfx_dirty_bar_y0@m
+    ld.w %r4,gfx_dirty_bar_y0@l
+    ld.b [%r4],%r6
+    ext gfx_dirty_bar_y1@m
+    ld.w %r4,gfx_dirty_bar_y1@l
+    ld.b [%r4],%r5
+    ext gfx_dirty_bar_x0@m
+    ld.w %r4,gfx_dirty_bar_x0@l
+    ld.b [%r4],%r6
+    ext gfx_dirty_bar_x1@m
+    ld.w %r4,gfx_dirty_bar_x1@l
+    ld.b [%r4],%r5
+    ret
+    ld.ub %r6,%r6
+    xld.w %r4,0x600000
+    ld.b [%r4],%r6
+    ret
+    ld.ub %r6,%r6
+    xld.w %r4,0x600001
+    ld.b [%r4],%r6
+    ret
+    .section .iram, "ax"
+    .align 1
+    .global func_0000A54
+func_0000A54:
+    pushn %r3
+    sub %sp,0x1
+    ld.w %r1,%r6
+    ld.w [%sp+0x0],%r8
+    ld.w %r8,0x0
+    ld.w %r3,0x1
+    ld.w %r2,%r7
+    cmp %r7,%r8
+    jrne.d .L0000A70
+    sub %r2,0x1
+    ld.w %r3,%r8
+    ld.w %r4,0x1
+    ld.w [%sp+0x0],%r4
+    ld.w %r2,%r8
+.L0000A70:
+    ld.w %r4,%r1
+    xand %r4,0xffff
+    cmp %r4,0x0
+    jrne.d .L0000B4A
+    ld.w %r5,0x6
+    cmp %r7,0x3f
+    jreq.d .L0000B4A
+    ld.w %r5,0x5
+    xcmp %r7,0x87
+    jrugt.d .L0000B4A
+    ld.w %r5,0x3
+    ld.w %r4,[%sp+0x0]
+    xcmp %r4,0x87
+    jrugt.d .L0000B4A
+    ld.w %r5,0x4
+    xld.w %r4,0xf0
+    ld.h [%r1],%r4
+    ld.w %r5,[%sp+0x0]
+    cmp %r2,%r5
+    jruge.d .L0000B4A
+    ld.w %r5,%r8
+    ld.w %r4,%r2
+.L0000AA4:
+    sll %r4,0x2
+    xld.w %r5,flash_sector_offsets
+    add %r4,%r5
+    ld.w %r7,[%r4]
+    ld.w %r0,%r1
+    add %r0,%r7
+    ld.w %r6,%r1
+    scall.d func_0000BE6
+    ld.w %r8,%r3
+    ld.w %r6,%r0
+    add %r6,0x8
+    cmp %r0,%r6
+    jruge.d .L0000B3E
+    ld.w %r8,%r4
+    xld.w %r9,0xf0
+    xld.w %r7,999999
+.L0000AD0:
+    ld.uh %r4,[%r0]
+    ld.uh %r5,%r4
+    ld.w %r4,%r5
+    xand %r4,0x80
+    cmp %r4,0x0
+    jreq.d .L0000AFE
+    cmp %r3,0x1
+    ld.uh %r4,[%r0]
+    ld.uh %r5,%r4
+    xcmp %r5,0xffff
+    jreq .L0000B38
+    ld.w %r8,0x1
+    ld.h [%r1],%r9
+    ld.w %r4,0x0
+    ld.w %r5,%r7
+    add %r4,0x1
+.L0000AF4:
+    cmp %r4,%r5
+    jrle.d .L0000AF4
+    add %r4,0x1
+    jp.d .L0000B3A
+    add %r0,0x2
+.L0000AFE:
+    jrne.d .L0000B18
+    ld.w %r4,%r5
+    and %r4,0x8
+    cmp %r4,0x0
+    jrne.d .L0000B18
+    ld.w %r4,%r5
+.L0000B0A:
+    ld.uh %r4,[%r0]
+    ld.uh %r5,%r4
+    xcmp %r5,0xffff
+    jrne .L0000B0A
+    jp.d .L0000B3A
+    add %r0,0x2
+.L0000B18:
+    xand %r4,0x20
+    cmp %r4,0x0
+    jreq .L0000AD0
+    ld.uh %r4,[%r0]
+    xand %r4,0x80
+    cmp %r4,0x0
+    jrne .L0000AD0
+    ld.w %r8,0x2
+    ld.h [%r1],%r9
+    ld.w %r5,%r7
+    add %r4,0x1
+.L0000B32:
+    cmp %r4,%r5
+    jrle.d .L0000B32
+    add %r4,0x1
+.L0000B38:
+    add %r0,0x2
+.L0000B3A:
+    cmp %r0,%r6
+    jrult .L0000AD0
+.L0000B3E:
+    add %r2,0x1
+    ld.w %r4,[%sp+0x0]
+    cmp %r2,%r4
+    jrult.d .L0000AA4
+    ld.w %r4,%r2
+    ld.w %r5,%r8
+.L0000B4A:
+    ld.w %r4,%r5
+    add %sp,0x1
+    popn %r3
+    ret
+    .section .iram, "ax"
+    .align 1
+    .global func_0000B52
+func_0000B52:
+    pushn %r3
+    ld.w %r0,%r6
+    ld.w %r2,%r8
+    ld.uh %r1,%r7
+    xcmp %r1,0xffff
+    jreq.d .L0000BE0
+    ld.w %r3,0x0
+    ld.uh %r4,[%r6]
+    ld.uh %r6,%r4
+    xcmp %r6,0xffff
+    jreq.d .L0000B76
+    cmp %r6,%r1
+    jreq.d .L0000BE2
+    ld.w %r4,%r3
+    jp.d .L0000BE2
+    ld.w %r4,0x1
+.L0000B76:
+    xld.w %r4,0xf0
+    ld.h [%r8],%r4
+    ld.w %r6,%r0
+    call.d .L0000C28
+    ld.w %r7,%r1
+    xld.w %r7,0x80
+    ld.w %r5,%r1
+    and %r5,%r7
+    xld.w %r8,0xf0
+    xld.w %r9,999999
+.L0000B94:
+    ld.uh %r4,[%r0]
+    ld.uh %r6,%r4
+    ld.w %r4,%r6
+    and %r4,%r7
+    cmp %r5,%r4
+    jrne.d .L0000BBE
+    ld.w %r4,%r6
+    ld.uh %r4,[%r0]
+    ld.uh %r6,%r4
+    cmp %r1,%r6
+    jreq.d .L0000BE2
+    ld.w %r4,%r3
+    ld.w %r3,0x1
+    ld.h [%r2],%r8
+    ld.w %r4,0x0
+    ld.w %r5,%r9
+.L0000BB4:
+    add %r4,0x1
+    cmp %r4,%r5
+    jrle .L0000BB4
+    jp.d .L0000BE2
+    ld.w %r4,%r3
+.L0000BBE:
+    xand %r4,0x20
+    cmp %r4,0x0
+    jreq .L0000B94
+    ld.uh %r4,[%r0]
+    xand %r4,0x80
+    cmp %r5,%r4
+    jreq .L0000B94
+    ld.w %r3,0x2
+    ld.h [%r2],%r8
+    ld.w %r4,0x0
+    ld.w %r5,%r9
+    add %r4,0x1
+.L0000BDA:
+    cmp %r4,%r5
+    jrle.d .L0000BDA
+    add %r4,0x1
+.L0000BE0:
+    ld.w %r4,%r3
+.L0000BE2:
+    popn %r3
+    ret
+    .global func_0000BE6
+func_0000BE6:
+    ld.w %r9,%r6
+    ld.w %r11,%r6
+    xadd %r11,0xaaa
+    xld.w %r6,0xaa
+    xld.h [%r9+0xaaa],%r6
+    xld.w %r5,0x55
+    xld.h [%r9+0x554],%r5
+    xld.w %r4,0x80
+    xld.h [%r9+0xaaa],%r4
+    xld.h [%r9+0xaaa],%r6
+    xld.h [%r9+0x554],%r5
+    cmp %r8,0x1
+    jrne.d .L0000C20
+    ld.w %r5,%r7
+    add %r5,%r9
+    xld.w %r4,0x30
+    ld.h [%r5],%r4
+    jp.d .L0000C26
+    ld.w %r4,0x0
+.L0000C20:
+    ld.w %r4,0x10
+    ld.h [%r11],%r4
+    ld.w %r4,0x0
+.L0000C26:
+    ret
+.L0000C28:
+    ld.uh %r7,%r7
+    xld.w %r4,0xaa
+    xld.h [%r8+0xaaa],%r4
+    xld.w %r4,0x55
+    xld.h [%r8+0x554],%r4
+    xld.w %r4,0xa0
+    xld.h [%r8+0xaaa],%r4
+    ld.h [%r6],%r7
+    ret
+    .section .iram, "ax"
+    .align 1
+    .global func_0000C46
+func_0000C46:
+    pushn %r3
+    ld.w %r10,0x0
+    cmp %r8,%r10
+    jreq.d .L0000D02
+    ld.w %r1,%r9
+    xld.w %r3,sys_ram_data_start
+    xld.w %r2,D_2000AAA
+.L0000C5C:
+    ld.uh %r13,[%r6]
+    xcmp %r13,0xffff
+    jrne .L0000C6C
+    ld.w %r4,[%r3]
+    add %r4,0x1
+    ld.w [%r3],%r4
+    jp .L0000CF0
+.L0000C6C:
+    xld.w %r5,0xf0
+    xld.w %r4,flash_base
+    ld.h [%r4],%r5
+    xld.w %r4,0xaa
+    ld.h [%r2],%r4
+    xld.w %r5,0x55
+    xld.w %r4,D_2000554
+    ld.h [%r4],%r5
+    xld.w %r4,0xa0
+    ld.h [%r2],%r4
+    ld.h [%r7],%r13
+    xld.w %r12,0x80
+    ld.w %r11,%r13
+    and %r11,%r12
+    xld.w %r9,flash_base
+    xld.w %r14,0xf0
+    xld.w %r0,999999
+.L0000CAA:
+    ld.uh %r4,[%r7]
+    ld.uh %r5,%r4
+    ld.w %r4,%r5
+    and %r4,%r12
+    cmp %r11,%r4
+    jrne.d .L0000CD0
+    ld.w %r4,%r5
+    ld.uh %r4,[%r7]
+    ld.uh %r5,%r4
+    cmp %r13,%r5
+    jreq .L0000CF0
+    ld.w %r10,0x1
+    ld.h [%r9],%r14
+    ld.w %r4,0x0
+    ld.w %r5,%r0
+.L0000CC8:
+    add %r4,0x1
+    cmp %r4,%r5
+    jrle .L0000CC8
+    jp .L0000CF0
+.L0000CD0:
+    xand %r4,0x20
+    cmp %r4,0x0
+    jreq .L0000CAA
+    ld.uh %r4,[%r7]
+    xand %r4,0x80
+    cmp %r11,%r4
+    jreq .L0000CAA
+    ld.w %r10,0x2
+    ld.h [%r9],%r14
+    ld.w %r4,0x0
+    ld.w %r5,%r0
+.L0000CEA:
+    add %r4,0x1
+    cmp %r4,%r5
+    jrle .L0000CEA
+.L0000CF0:
+    cmp %r10,0x0
+    jrne.d .L0000D02
+    cmp %r1,0x1
+    jreq .L0000CFA
+    add %r6,0x2
+.L0000CFA:
+    sub %r8,0x1
+    cmp %r8,0x0
+    jrne.d .L0000C5C
+    add %r7,0x2
+.L0000D02:
+    ld.w %r4,%r10
+    popn %r3
+    ret
+
+/* the targets of the switch at .L00001A2 on the object's drawing mode (addresses in this
+   code, which runs at 0) */
+    .section .rodata
+    .align 2
+    .global D_255C7DC
+D_255C7DC:
+    .long 0x2d0, 0x1bc, 0x1da, 0x21c, 0x2d0, 0x222, 0x28a

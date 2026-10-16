@@ -1,0 +1,3736 @@
+# The names the sources use and the original firmware addresses they stand for (D_X / func_X =
+# address X), struct types (Type or Type@FILE) and fields (Type.field): KEY NAME [# note]. A reference for
+# reading the original firmware or emulator traces of it; the build does not use this file.
+D_0000000	sys_iram_code
+D_0000D08	sys_iram_bss_start
+D_0000D09	ir_block_kind
+D_0000D0C	ir_tx_ptr	# 3 of 4: the packet pointer
+D_0000D10	ir_send_data_ptr	# opus-1
+D_0000D14	ir_rx_status
+D_0000D18	ir_rx_record
+D_0000D1C	comm_gift_item
+D_0000D20	ir_session_flags
+D_0000D21	ir_point_gift_active
+D_0000D22	ir_saved_timer_ints
+D_0000D24	ir_xfer_started
+D_0000D28	ir_xfer_failed
+D_0000D2C	ir_result
+D_0000D30	ir_port_ptr
+D_0000D34	sys_saved_psr
+D_0000D38	ir_last_error
+D_0000D3A	ui_picture_screen_obj
+D_0000D3C	btn_samples
+D_0000D3F	ir_session_busy
+D_0000D40	ir_test_counter
+D_0000D4C	ir_rx_hunting
+D_0000D4D	ir_marker_matched
+D_0000D50	ir_rx_buf_ptr
+D_0000D54	sys_trap_state	# like sys_trap_*
+D_0000D55	sys_trap_last
+D_0000D56	ir_answer_only
+D_0000D58	ir_carrier_ram
+D_0000D94	ir_ram_routines
+D_0000DB4	ir_edge_count
+D_0000DB8	ir_edge_count2	# second edge counter
+D_0000DBC	ir_rx_packet
+D_0000DD0	ir_tx_packet
+D_0000DE4	tmr_t5_ticks	# counter of the RAM timer-5 handler (opus-1 high)
+D_0000DE8	ir_rx_buf_count
+D_0000DEC	test_rtc_count_mode
+D_0000DED	test_rtc_seconds
+D_0000DEE	town_place_aborted	# set only by the game-corner menu quit; town menu skips the leaving scene
+D_0000DEF	btn_click_played
+D_0000DF0	ui_message_frames_kept
+D_0000DF1	ui_message_shown
+D_0000DF2	room_visitor_scene
+D_0000DF4	evo_stage_bonus_points	# points of the last stage change
+D_0000DF6	lcd_palette_set
+D_0000DF7	room_clock_notice	# T9: clock-check notice after continuing a save (4/4 meaning)
+D_0000DF9	comm_menu_choice
+D_0000DFA	comm_submenu_choice
+D_0000DFB	ir_gift_amount	# rule: legacy IR
+D_0000DFD	comm_game_choice
+D_0000E00	ir_gift_menu_done	# rule: legacy IR
+D_0000E0F	town_visit_flag
+D_0000E10	friend_event
+D_0000E24	visit_partner
+D_0000E44	visit_wish2_id_lo	# majority "wish"
+D_0000E45	visit_wish1_kind
+D_0000E46	visit_wish2_kind
+D_0000E47	visit_wish_count
+D_0000E48	ir_partner_id_lo	# T3: partner owner id bits 0-5; legacy IR (ir_ prefix rule)
+D_0000E49	ir_partner_id_hi	# T3: bits 8-13
+D_0000E4A	ir_partner_name
+D_0000E4F	visit_diary_page_mark	# 3 of 4
+D_0000E50	visit_diary_full	# opus-1 (high)
+D_0000E54	outing
+D_0000E58	job
+D_0000E70	ir_coupon_flag	# legacy IR exchange
+D_0000E74	game_session
+D_0000E7C	friend_book_state
+D_0000E84	comm_menu_active	# majority
+D_0000E88	comm_mail_queue
+D_0000E8C	pet_sitter_state
+D_0000E90	diary_draft
+D_0000E94	diary_images
+D_0000E9C	friend_list
+D_0000E9D	friend_list_b1
+D_0000E9E	friend_list_b2
+D_0000E9F	friend_list_b3
+D_0001108	sys_heap_end
+D_0001146	mail_friend_msg_count
+D_0001147	mail_unread_pending
+D_0001148	album_order
+D_000119C	pet
+D_00011BC	pet_bath_request_timer	# 19:00 request
+D_00011BE	pet_cleaning_request_timer	# 18:00 request
+D_00011C0	pet_praise_timer
+D_00011C2	pet_neglect_minutes
+D_00011C4	pet_ten_day_minutes	# consistent with S_000119C.x028
+D_00011C6	pet_ten_day_event_due	# like S_000119C.x02a
+D_00011C8	pet_gone_minutes
+D_00011CA	pet_age_days
+D_00011CC	pet_weight
+D_00011CD	pet_generation
+D_00011CE	pet_idle_pose
+D_00011D0	pet_saved_idle_pose
+D_00011D2	pet_hunger_loss_parity
+D_00011DE	owner_id	# rule: owner
+D_00011E0	owner_bday_day	# rule: owner (field owner_bday_day)
+D_00011E1	owner_bday_month	# rule: owner
+D_00011E2	pet_life_stage	# 0 egg, 1 baby, 2 child, 3 adult, 4 special form, 5 downloaded (owner-confirmed)
+D_00011FC	item_app_lock	# field app_item_lock; no non-zero writer found
+D_00011FF	pet_clover_leaves	# status page 3 four-leaf clover (screenshot r2-fable-1 E4, picture 0x20F2C88)
+D_0001200	room_weather_now	# rule: room
+D_0001201	room_weather_today	# rule: room
+D_0001202	room_living_design	# rule: room
+D_0001203	room_kitchen_design	# the kitchen design byte (field kitchen_design); restaurants borrow it
+D_0001207	pet_whim_call_timer
+D_0001208	pet_worn_accessory
+D_0001209	pet_worn_clothes
+D_000120A	pet_companion
+D_000120B	rtc_second	# majority
+D_000120C	owner_name	# rule: owner (fable-2 alone read it as the pet's name)
+D_000121F	rtc_month
+D_0001220	rtc_day
+D_0001221	rtc_hour
+D_0001222	rtc_minute	# majority
+D_0001224	comm_fortune_name_len
+D_0001225	comm_fortune_gender
+D_0001226	comm_fortune_mood
+D_0001227	comm_fortune_digit
+D_0001250	album_photo_base	# rule: album
+D_0001258	room_living_dirt	# rule: room
+D_0001259	room_kitchen_dirt	# rule: room
+D_000125A	room_toilet_dirt	# rule: room
+D_000125B	room_bath_dirt	# rule: room
+D_000125C	room_bedroom_dirt	# rule: room
+D_000125D	comm_kind4_count
+D_000125E	pet_toilet_count
+D_000125F	pet_meal_count	# majority; field meal_count
+D_0001260	pet_game_count	# field game_count
+D_0001261	ui_theme	# majority
+D_0001262	pet_clover1_id_hi
+D_0001263	pet_clover2_id_hi
+D_0001264	pet_clover1_id_lo
+D_0001265	pet_clover2_id_lo
+D_0001266	pet_clover1_kind
+D_0001267	pet_clover2_kind
+D_000126A	ir_owner_profile
+D_000127A	ir_owner_profile_birth_month
+D_000127B	ir_owner_profile_birth_day
+D_00012B5	pet_dominant_trait
+D_00012B6	pet_traits
+D_00012B7	pet_trait1
+D_00012B8	pet_trait2	# field trait2
+D_00012B9	pet_trait3
+D_00012BA	pet_trait4
+D_00012C1	pet_activity0_count
+D_00012C2	pet_shop_count
+D_00012C3	pet_tamamori_count
+D_00012C4	pet_restaurant_count
+D_00012C9	evo_young_item_count_a
+D_00012CA	evo_young_item_count_b
+D_00012E1	pet_stamp_count
+D_00012E2	pet_stamp_liked_count
+D_00012E5	room_window_flower	# rule: the window belongs to room
+D_00012EE	friend_event_mask1
+D_00012EF	friend_event_mask2
+D_00012F0	friend_event_pending
+D_00012F1	diary_unseen_page
+D_00012F2	spot_bingo_board	# rule: bingo belongs to spot (field S_000119C.x156 bingo_board)
+D_00012F4	owner_profile_bytes
+D_00012F5	owner_mood
+D_00012F6	owner_age
+D_00012F7	owner_star_sign
+D_00012F8	owner_profile_texts	# rule: owner profile
+D_0001348	pet_toilet_training
+D_0001349	pet_bath_training
+D_000134A	pet_cleaning_training
+D_0001387	pet_discipline_flags
+D_0001388	pet_revive_talks
+D_0001389	pet_family_continues	# field family_continues
+D_000138A	comm_count
+D_000138C	evo_route
+D_000138D	evo_park_meeting	# T6
+D_000138E	evo_bath_count	# prefix evo (field evo_bath_count)
+D_000138F	evo_pending_days	# prefix evo
+D_0001390	evo_met_orenetchi
+D_0001391	evo_snack_count	# like evo_cond_snacks
+D_0001392	evo_goods15_count	# uses of goods id 15
+D_0001393	evo_goods6_count	# uses of goods id 6
+D_0001394	evo_game_count
+D_000139C	evo_special_item	# field special_evo_item
+D_00013A0	evo_special_slot0	# field special_evo_slots
+D_00013A1	evo_special_slot1
+D_00013A2	evo_special_slot2
+D_00013A3	evo_special_slot3
+D_00013A4	town_club_records	# field club_records
+D_00013B3	town_club_mastered	# field club_mastered
+D_00013B8	pet_house_level
+D_00013BA	pet_baby_id
+D_00013BC	pet_child_id
+D_00013BE	pet_adult_id	# T1
+D_00013BF	dl_chara_affection_base
+D_00013C0	pet_special_id	# T1
+D_00013CA	spot_bingo_plays_today
+D_00013CB	pet_next_egg_kind
+D_00013CC	pet_alert_call_timer	# majority (array view: [1..] are the icon marks)
+D_00013CD	ui_mark_food	# like the marks of the pet block
+D_00013CE	ui_mark_touch
+D_00013CF	ui_mark_town
+D_00013D0	ui_mark_special
+D_00013D1	ui_mark_notebook
+D_00013D2	ui_mark_mail	# like the other marks
+D_00013D3	ui_mark_special2
+D_00013D4	room_poops_at_save
+D_00013D5	town_farm_stage
+D_00013D6	town_farm_tended_today
+D_00013D7	town_farm_neglect_days	# field farm_neglect_days
+D_00013DE	comm_count_mod10
+D_00013DF	comm_traveller_due	# set every 10th communication for the next idle-touch event (traveller vs present disputed)
+D_00013E0	comm_book_notice_mode	# 1 held back (marriage), 2 forced at hatch, 0 normal
+D_00013F2	snd_enabled
+D_00013F3	sys_backlight_level
+D_00013F4	pet_poops_drawn
+D_00013F5	pet_life_paused
+D_00013F6	chara_pet_sprite_set	# chara vocabulary like chara_other_sprite_set
+D_00013F8	chara_other_sprite_set	# one term "other" for the second character slot (api_draw_other_chara)
+D_00013FA	chara_other_row	# consistent with chara_third_row
+D_00013FC	chara_third_sprite_set
+D_00013FE	chara_third_row
+D_0001400	chara_fourth_sprite_set
+D_0001402	chara_fourth_row
+D_0001404	chara_fifth_sprite_set
+D_0001406	chara_fifth_row
+D_0001408	save_request
+D_0001414	mail_card_line_objs
+D_0001420	btn_a_presses
+D_0001421	btn_b_presses
+D_0001422	btn_c_presses
+D_0001423	tmr_flags
+D_0001424	sys_debug_fast_forward
+D_0001425	sys_idle_seconds
+D_0001426	rtc_seconds
+D_0001428	sys_battery_level
+D_000142A	sys_awake_seconds
+D_000142C	ui_timeout
+D_000142D	sys_debug_strap_count
+D_000142E	room_idle
+D_000142F	btn_events
+D_0001430	gfx_objects_before	# the slot one object before gfx_objects
+D_0001432	btn_a_debounce
+D_0001434	btn_b_debounce
+D_0001436	btn_c_debounce
+D_000143C	sys_battery_check_due
+D_0001440	sys_display_state
+D_0001444	gfx_objects
+D_0001494	gfx_object4
+D_0001804	gfx_object_count
+D_0001805	gfx_dirty_main_y0
+D_0001806	gfx_dirty_main_y1
+D_0001807	gfx_dirty_main_x0
+D_0001808	gfx_dirty_main_x1
+D_0001809	gfx_dirty_bar_y0
+D_000180A	gfx_dirty_bar_y1
+D_000180B	gfx_dirty_bar_x0
+D_000180C	gfx_dirty_bar_x1
+D_0001810	gfx_frame_buffer	# majority
+D_0003C10	gfx_pal_blue
+D_0003D50	gfx_pal_green
+D_0003E90	gfx_pal_red
+D_0003FD2	ui_main_icon
+D_0003FD4	room_view
+D_0003FDC	ui_bubble_line_idx
+D_0003FDD	sys_battery_dead	# 3 of 4: set by the battery-empty power-down
+D_0003FE0	room_scene_current	# the current room scene list (room_scene_* are the lists)
+D_0003FE4	room_scene_objs
+D_0003FE8	ui_icon_drawn
+D_0003FEA	room_view_at_sleep	# like room_view
+D_0003FEB	room_poops_at_sleep	# rule: room
+D_0003FEC	room_scene_obj_idx
+D_0003FED	ui_call_icon_obj
+D_0003FEE	ui_icon_cursor_obj
+D_0003FEF	room_status_icon_obj
+D_0003FF0	sys_sleep_request
+D_0003FF1	room_calls_drawn
+D_0003FF2	room_status_drawn
+D_0003FF3	room_period_drawn
+D_0003FF4	room_last_sleep_state	# 3 of 4
+D_0003FF5	lcd_asleep
+D_0003FF6	ui_attention_icon_state	# consistent with ui_call_icon_*
+D_0003FF9	pet_toilet_expired	# majority; parallel to pet_praise_expired / pet_cleaning_expired
+D_0003FFA	pet_bath_expired
+D_0003FFB	pet_cleaning_expired
+D_0003FFC	pet_praise_expired
+D_0003FFD	room_mood_question_due	# T9
+D_0004000	spot_last_uid
+D_000400A	spot_bingo_number
+D_000400B	pet_cleaning_reminder	# opus-1 (high)
+D_000400C	pet_request_bits
+D_000400D	ui_bubble_frame_obj
+D_000400E	ui_bubble_line1_obj	# majority
+D_000400F	ui_bubble_line2_obj	# majority
+D_0004010	ui_choice_cursor_l_obj
+D_0004011	ui_choice_cursor_r_obj
+D_0004012	ui_arrow1_obj	# majority
+D_0004013	ui_arrow2_obj	# majority
+D_0004014	sys_battery_empty
+D_0004016	comm_count_before
+D_0004018	nfc_ticks
+D_000401C	nfc_tx_fifo
+D_0004034	nfc_rx_fifo
+D_0004050	nfc_id3	# majority
+D_000405C	sys_backlight_request
+D_000405D	sys_backlight_applied
+D_0004062	comm_storing_gift
+D_0004064	nfc_field_irq
+D_0004068	comm_tx_packet
+D_00041E8	comm_rx_packet
+D_0004247	comm_peer_gender
+D_0004248	comm_peer_name
+D_000425A	comm_peer_owner_id
+D_00042CC	comm_peer_profile_off
+D_0004368	comm_tx_record	# majority; exchange records are comm
+D_000436C	comm_rx_record	# majority
+D_0004370	comm_outcome_record	# comm_rx_record is D_000436C
+D_0004374	nfc_session
+D_0004394	nfc_result
+D_0004395	nfc_cancel_request
+D_0004396	comm_friendbook_updated
+D_00043B0	comm_peer_ident
+D_00043C2	comm_peer_id
+D_00043C4	comm_phase1_peer
+D_00043E0	nfc_snep_odd_byte
+D_00043E4	nfc_snep_payload_len	# opus-1 / opus-2
+D_00043E8	nfc_tx_fifo_buf
+D_00044E8	nfc_rx_fifo_buf
+D_00045E8	nfc_cmd_buf
+D_0004608	nfc_cmd_reg16
+D_0004609	nfc_cmd_val16
+D_000460A	nfc_cmd_buf_34
+D_000460B	nfc_cmd_buf_35
+D_000460C	nfc_cmd_buf_36
+D_000460D	nfc_cmd_buf_37
+D_000460E	nfc_cmd_buf_38
+D_000460F	nfc_cmd_buf_39
+D_0004610	nfc_cmd_buf_40
+D_0004611	nfc_cmd_buf_41
+D_0004612	nfc_cmd_buf_42
+D_0004613	nfc_cmd_buf_43
+D_0004614	nfc_cmd_buf_44
+D_0004615	nfc_cmd_buf_45
+D_0004616	nfc_cmd_buf_46
+D_0004617	nfc_cmd_buf_47
+D_0004618	nfc_cmd_buf_48
+D_0004619	nfc_cmd_buf_49
+D_000461A	nfc_cmd_buf_50
+D_000461B	nfc_cmd_buf_51
+D_000461C	nfc_cmd_buf_52
+D_000461D	nfc_cmd_buf_53
+D_000461E	nfc_cmd_buf_54
+D_000461F	nfc_cmd_buf_55
+D_0004620	nfc_cmd_buf_56
+D_0004621	nfc_cmd_buf_57
+D_0004622	nfc_cmd_buf_58
+D_0004623	nfc_cmd_buf_59
+D_0004624	nfc_cmd_buf_60
+D_0004625	nfc_cmd_buf_61
+D_0004626	nfc_cmd_buf_62
+D_0004627	nfc_cmd_buf_63
+D_0004628	nfc_cmd_buf_64
+D_0004629	nfc_cmd_buf_65
+D_0004728	nfc_rx_data_buf	# fable-1 (high)
+D_0004868	nfc_abort
+D_000486C	nfc_peer_nfcid3
+D_0004876	card_file_no
+D_0004878	card_auth_key
+D_0004880	card_auth_answer
+D_0004884	card_status_word
+D_0004886	nfc_last_frame_len
+D_0004888	nfc_last_frame
+D_00049DC	sys_adc_busy
+D_0004AD4	ir_test_mode
+D_0004ADC	comm_flash_write_ptr
+D_0004AE4	sys_iram_bss_end
+D_0084000	sys_ram_bss_start
+D_0084004	anim_scene_bg
+D_0084008	anim_scene_fg
+D_008400C	anim_scene_extra	# third scene picture next to anim_scene_bg / anim_scene_fg
+D_008401C	chara_accessory_pics	# worn accessory pictures (chara draws them)
+D_0084038	chara_clothes_pics	# the seven clothes pictures
+D_00840A8	chara_accessory_offsets	# majority
+D_00840B4	ir_owner_id_lo	# T3
+D_00840B5	ir_owner_id_hi	# T3
+D_00840B8	comm_gift_source
+D_00840D8	food_party_state
+D_00840DC	food_birthday_info
+D_00840ED	txt_input_charset
+D_00840F0	txt_input_char_objs
+D_00840F8	txt_input_grid_objs
+D_0084100	txt_input_max_len
+D_0084101	txt_input_pos
+D_0084102	txt_input_page_count
+D_0084103	txt_input_grid_len
+D_0084104	txt_input_grid_chars
+D_0084169	txt_input_hold_count
+D_008416A	txt_input_prompt
+D_0084174	comm_game_result
+D_0084175	visit_reward_pic_idx
+D_0084176	ir_peer_has_code
+D_0084177	comm_exchange_kind
+D_0084178	comm_friend_is_new
+D_0084179	comm_is_initiator	# T4 (4/4 meaning)
+D_008417A	comm_partner_slot
+D_008417C	ir_exchange_flag
+D_0084183	item_no_full_dialog
+D_0084188	anim_pic_slots
+D_00841AC	anim_pic_slot_3_0
+D_00841B0	anim_pic_slot_3_1
+D_00841B4	anim_pic_slot_3_2
+D_00841D0	room_poop_objects
+D_00841DA	room_poop_blink	# majority
+D_00841DC	room_poop_count
+D_00841E4	ui_mark_objs
+D_00841ED	ui_cursor_obj
+D_00841EE	ui_label_obj
+D_00841F8	room_window_tick
+D_00841FC	room_window_sky_obj
+D_00841FD	room_window_sky_anim
+D_0084200	room_window_passer_objs
+D_0084204	room_window_passer_palettes
+D_0084218	town_locked_jump
+D_0084230	ui_dialog_cursor_obj
+D_0084234	rtc_last_weekday
+D_0084250	shop_discount_mode
+D_0084254	snd_finished
+D_0084258	snd_period_table
+D_008425C	anim_busy
+D_008425D	anim_window_mode
+D_008425E	gfx_tint_first
+D_008425F	gfx_tint_end
+D_0084261	anim_queued_sound
+D_0084262	anim_first_slot_idx
+D_0084263	anim_bg_activity
+D_0084264	anim_keep_ab_presses
+D_0084265	lcd_is_st7735
+D_0084276	pet_poop_overflow
+D_008427C	room_overlay_objs
+D_0084280	pet_care_poops_at_entry	# x01c is the poop count (opus-1)
+D_0084281	pet_care_entry
+D_0084290	owner_work_copy
+D_0084294	owner_page_objs
+D_00842A5	spot_reader_result
+D_00842A8	spot_record_magic
+D_00842AC	spot_record_info
+D_00842B0	spot_record_class
+D_00842C9	rtc_clock_blink
+D_00842CA	rtc_clock_ampm_obj
+D_00842CB	rtc_clock_month_tens_obj
+D_00842CC	rtc_clock_month_ones_obj
+D_00842CD	rtc_clock_day_tens_obj
+D_00842CE	rtc_clock_day_ones_obj
+D_00842CF	rtc_clock_hour_tens_obj
+D_00842D0	rtc_clock_hour_ones_obj
+D_00842D1	rtc_clock_min_tens_obj
+D_00842D2	rtc_clock_min_ones_obj
+D_00842D3	rtc_clock_sec_tens_obj
+D_00842D4	rtc_clock_sec_ones_obj
+D_00842E0	game_menu_cursor
+D_00842E1	game_menu_cursor_obj
+D_00842E5	game_timing_hits	# opus-1 (high)
+D_00842E8	game_training_level
+D_00842EC	game_training_choices
+D_008430D	game_slot_score	# family game_cards_ -> game_slot_
+D_0084310	game_slot_frame_objs
+D_0084313	game_slot_round_obj	# family game_cards_ -> game_slot_
+D_0084314	game_slot_reel_objs
+D_0084317	game_slot_level_obj	# family game_cards_ -> game_slot_
+D_0084318	game_slot_reel_pos
+D_008431B	game_slot_reels_stopped
+D_008431C	game_slot_reel_state
+D_008431F	game_slot_reel_speed	# T11; the game is a three-reel slot (family renamed game_cards_ -> game_slot_)
+D_0084320	game_slot_round	# family game_cards_ -> game_slot_
+D_0084324	game_cake_level
+D_0084328	game_cake_choices
+D_0084334	game_treasure_finds	# +1 on outcome 0, rank = count (F65 func_252366C)
+D_0084335	game_treasure_text_obj
+D_0084338	game_quiz_obj
+D_008433C	game_quiz_objs
+D_0084340	game_quiz_answer_order
+D_0084344	game_quiz_questions
+D_0084345	game_quiz_correct
+D_0084346	game_quiz_current
+D_0084348	game_quiz_choice
+D_0084430	snd_saved_psr
+D_008443C	snd_voice_notes
+D_0084440	snd_end_callback
+D_0084444	snd_voices
+D_0084474	sys_ram_data_start
+D_0084478	room_window_passer_steps
+D_008447C	shop_offer_item
+D_0084480	shop_offer_kind
+D_0084484	shop_offer_index
+D_0084488	visit_garden_visitor_ids
+D_0084494	town_last_street_chara
+D_00844B0	town_club_tool_names	# opus-1 / opus-2 (high)
+D_00844C4	town_club_common_tool_name	# opus-2 (high)
+D_00844DC	town_club_backgrounds	# opus-1 (high)
+D_00844F0	owner_gender_labels
+D_00844FC	owner_mood_label_tbl
+D_0084518	owner_star_sign_labels
+D_008454C	test_rom_sum_ref
+D_0084550	game_slot_round_tbl	# family game_cards_ -> game_slot_
+D_0084568	nfc_flash_base
+D_008456C	nfc_unused_word
+D_0084570	nfc_wake_on_field_off
+D_0084571	card_block_number	# rule: card
+D_0084572	card_auth_enable
+D_0084574	nfc_snep_put_template
+D_00845AC	nfc_snep_response_template
+D_00845B8	sys_ram_data_end
+D_2000000	flash_base
+D_2080000	flash_graphics_start
+D_208830C	gfx_bg_park	# T10
+D_20B1704	gfx_bg_tama_depa	# T10: Tama Depa hall (item / toy shop floor)
+D_20B292C	gfx_bg_game_corner	# T10
+D_20CDCC8	gfx_bg_closet	# T10: closet / dressing room (3 of 4)
+D_2199FF0	spot_bingo_card_pic	# rule: bingo belongs to spot
+D_226AF9C	chara_sprite_sets
+D_226B398	chara_sprite_lovesoratchi_pose0
+D_226B3A0	chara_sprite_lovesoratchi_pose2
+D_226B3D4	chara_sprite_memetchi_pose0
+D_226B410	chara_sprite_himespetchi_pose0
+D_226B44C	chara_sprite_lovelitchi_pose0
+D_226B500	chara_sprite_candypaku2_pose0
+D_226B508	chara_sprite_candypaku2_pose2
+D_226B760	chara_sprite_set33_pose2	# 15 pointers per set
+D_226B9F4	chara_sprite_set44_pose2
+D_226BA28	chara_sprite_merchant_pose0
+D_226BA30	chara_sprite_merchant_pose2
+D_226BA48	chara_sprite_merchant_pose8
+D_226BA4C	chara_sprite_merchant_pose9
+D_226BB90	chara_sprite_waiter_pose0
+D_226BB98	chara_sprite_waiter_pose2
+D_226BBB0	chara_sprite_waiter_pose8
+D_226BBB4	chara_sprite_waiter_pose9
+D_226BBCC	chara_sprite_game_clerk_pose0
+D_226BBD4	chara_sprite_game_clerk_pose2
+D_226BC00	friend_portrait_placeholder	# majority
+D_226BC08	chara_sprite_depa_clerk_pose0
+D_226BC10	chara_sprite_depa_clerk_pose2
+D_226BC28	chara_sprite_depa_clerk_pose8
+D_226BC2C	chara_sprite_depa_clerk_pose9
+D_226BC44	chara_sprite_shop3_clerk_pose0
+D_226BC4C	chara_sprite_shop3_clerk_pose2
+D_226BC64	chara_sprite_shop3_clerk_pose8
+D_226BC68	chara_sprite_shop3_clerk_pose9
+D_226BC80	chara_sprite_shop1_clerk_pose0
+D_226BC88	chara_sprite_shop1_clerk_pose2
+D_226BCBC	chara_sprite_reform_staff_pose0
+D_226BCDC	chara_sprite_reform_staff_pose8
+D_226BCE0	chara_sprite_reform_staff_pose9
+D_226BCF8	chara_sprite_reform_staff2_pose0
+D_226BD00	chara_sprite_reform_staff2_pose2
+D_226BD18	chara_sprite_reform_staff2_pose8
+D_226BD1C	chara_sprite_reform_staff2_pose9
+D_226BD34	chara_sprite_lottery_staff1_pose0
+D_226BD3C	chara_sprite_lottery_staff1_pose2
+D_226BD54	chara_sprite_lottery_staff1_pose8
+D_226BD58	chara_sprite_lottery_staff1_pose9
+D_226BD70	chara_sprite_lottery_staff2_pose0
+D_226BD78	chara_sprite_lottery_staff2_pose2
+D_226BD90	chara_sprite_lottery_staff2_pose8
+D_226BD94	chara_sprite_lottery_staff2_pose9
+D_226BDAC	chara_sprite_lottery_staff3_pose0
+D_226BDB4	chara_sprite_lottery_staff3_pose2
+D_226BDCC	chara_sprite_lottery_staff3_pose8
+D_226BDD0	chara_sprite_lottery_staff3_pose9
+D_226BE24	chara_sprite_outing3_pose0
+D_226BE2C	chara_sprite_outing3_pose2
+D_226BE38	chara_sprite_outing3_pose5
+D_226BE44	chara_sprite_outing3_pose8
+D_226BE48	chara_sprite_outing3_pose9
+D_226BE68	chara_sprite_set63_pose2
+D_226BEA4	chara_sprite_set64_pose2
+D_226BEBC	chara_sprite_outing2_pose8
+D_226BEC0	chara_sprite_outing2_pose9
+D_226BEE0	chara_sprite_set65_pose2
+D_226BF14	chara_sprite_outing5_pose0
+D_226BF1C	chara_sprite_set66_pose2
+D_226BF34	chara_sprite_outing5_pose8
+D_226BF38	chara_sprite_outing5_pose9
+D_226BFC8	chara_sprite_relative1_pose0
+D_226BFD0	chara_sprite_relative1_pose2
+D_226BFE8	chara_sprite_relative1_pose8
+D_226BFEC	chara_sprite_relative1_pose9
+D_226C004	chara_sprite_relative2_pose0
+D_226C00C	chara_sprite_relative2_pose2
+D_226C024	chara_sprite_relative2_pose8
+D_226C028	chara_sprite_relative2_pose9
+D_226C048	chara_sprite_set71_pose2
+D_226C130	chara_sprite_coach_pose0
+D_226C138	chara_sprite_coach_pose2
+D_226C150	chara_sprite_set75_pose8	# sprite alias vocabulary
+D_226C154	chara_sprite_coach_pose9
+D_226C220	chara_sprite_set79_pose0
+D_226C228	chara_sprite_set79_pose2
+D_226C240	chara_sprite_set79_pose8
+D_226C244	chara_sprite_set79_pose9
+D_226C25C	chara_sprite_set80_pose0
+D_226C264	chara_sprite_set80_pose2
+D_226C27C	chara_sprite_set80_pose8
+D_226C280	chara_sprite_set80_pose9
+D_226C330	chara_sprite_set83_pose8
+D_226C334	chara_sprite_set83_pose9
+D_226C34C	chara_sprite_matchmaker_pose0
+D_226C354	chara_sprite_matchmaker_pose2
+D_226C36C	chara_sprite_matchmaker_pose8
+D_226C370	chara_sprite_matchmaker_pose9
+D_226C3CC	chara_sprite_set86_pose2	# sprite alias vocabulary
+D_226C3D0	chara_sprite_set86_pose3
+D_226C3E8	chara_sprite_set86_pose9
+D_226C568	chara_sprite_set93_pose0
+D_226C570	chara_sprite_set93_pose2
+D_226C588	chara_sprite_set93_pose8
+D_226C58C	chara_sprite_set93_pose9
+D_226C5A4	chara_sprite_sitter_pose0
+D_226C5AC	chara_sprite_sitter_pose2
+D_226C5C4	chara_sprite_sitter_pose8
+D_226C5C8	chara_sprite_sitter_pose9
+D_226C5E0	chara_sprite_traveller_pose0	# sprite set 95 is drawn by the traveller scenes
+D_226C5E8	chara_sprite_traveller_pose2
+D_226C600	chara_sprite_traveller_pose8
+D_226C604	chara_sprite_traveller_pose9
+D_226CE9C	chara_default_outfits
+D_226D890	flash_graphics_end_a
+D_22D0000	mail_records
+D_2340000	flash_graphics_start_b
+D_2393550	item_builtin_records
+D_2393748	item_fortune_cookie	# pointer cell to the うらないクッキー record 0x23929D0
+D_23D92B0	flash_graphics_end_b
+D_2400000	flash_program_start
+func_2400B50	api_get_btn_a
+func_2400B5A	api_get_btn_b
+func_2400B64	api_get_btn_c
+func_2400B6E	api_set_btn_a
+func_2400B78	api_set_btn_b
+func_2400B82	api_set_btn_c
+func_2400B8C	api_idle_tick
+func_2400B94	api_get_btn_events
+func_2400B9E	api_set_btn_events
+func_2400BA8	api_rand_except
+func_2400BB4	api_shuffle
+func_2400BBA	api_get_happiness
+func_2400BC4	api_get_hunger
+func_2400BCE	api_get_weight
+func_2400BD6	api_get_points
+func_2400BE0	api_add_happiness
+func_2400BF8	api_add_hunger
+func_2400C0A	api_add_weight
+func_2400C22	api_add_points
+func_2400C36	api_get_month
+func_2400C40	api_get_day
+func_2400C4A	api_get_hour
+func_2400C54	api_get_minute
+func_2400C5E	api_delay_ms
+func_2400C68	api_delay_ms_ch5
+func_2400C72	api_timeout_start
+func_2400C7C	api_timeout_start_ch5
+func_2400C86	api_timeout_elapsed
+func_2400C92	api_timeout_elapsed_ch5
+func_2400C9E	api_timeout_clear
+func_2400CA6	api_timeout_clear_ch5
+func_2400CAE	api_play_sound
+func_2400CB8	api_wait_sound
+func_2400CC0	api_new_screen	# majority
+func_2400CC6	api_present
+func_2400CCE	api_draw_pet
+func_2400CE8	api_set_scene_busy
+func_2400CF4	api_display_reset
+func_2400CFA	api_object_set_image_sized
+func_2400D12	api_object_set_image
+func_2400D1E	api_object_set_image_clipped
+func_2400D36	api_object_move
+func_2400D42	api_object_move_dirty
+func_2400D4E	api_object_set_image_attr
+func_2400D58	api_object_create
+func_2400D74	api_object_create_plain
+func_2400D90	api_object_draw_glyph
+func_2400D9C	api_object_set_flags
+func_2400DA6	api_scene_game_corner	# same background as anim_scene_fixed_bg1 (identity disputed)
+func_2400DAE	api_anim_draw_image
+func_2400DC2	api_anim_queue_sound
+func_2400DCA	api_anim_frame
+func_2400DD2	api_draw_other_chara
+func_2400DEC	api_draw_chara_by_id
+func_2400E0A	api_draw_text	# majority
+func_2400E28	api_select_other_chara
+func_2400E34	api_anim_draw_companion
+func_2400E4A	api_picture_address
+func_2401BAC	api_scene_room
+func_2401BB4	api_scene_window
+func_2401BBC	api_scene_window_mode
+func_2401BC6	api_scene_window2
+func_2401BCE	api_scene_living
+func_2401BD6	api_scene_living_poops
+func_2401BDE	api_scene_kitchen
+func_2401BE6	api_scene_tama_depa	# no hex in names; background identity disputed
+func_2401BEE	api_scene_park	# no hex in names; background identity disputed
+func_2401BF6	api_scene_blank
+func_2401BFE	api_scene_bath
+func_2401C06	api_scene_toilet
+func_2401C0E	api_scene_bedroom
+func_2401C16	api_anim_draw_pet
+func_2401C2C	api_anim_draw_other_chara
+func_2401C42	api_anim_draw_fifth_chara
+func_2401C58	api_anim_draw_digit
+func_2401C6E	api_anim_text_line
+func_2401C82	api_anim_glyph_text
+func_2401C96	api_anim_frame_wait
+func_2401C9E	api_select_fifth_chara
+func_2401CA6	api_pet_sprite_set
+func_2401CDE	api_chara_sprite_set
+func_2401CF0	api_digit_font
+func_2401CF8	api_reaction_anim
+func_2401D6A	api_show_message
+func_2401D72	api_set_pic_slot
+func_2401D82	api_get_pic_slot
+func_2401D92	api_store_item
+func_2401DA0	api_chara_pose_image
+func_2401DD8	lcd_init
+func_2401EEE	gfx_display_reset
+func_2401F54	gfx_set_tint_range
+func_2401FD0	gfx_object_set
+func_2402014	gfx_object_set_image
+func_2402082	gfx_object_set_image_attr
+func_24020E4	gfx_object_set_image_clipped
+func_2402156	gfx_object_move
+func_2402188	gfx_object_move_dirty
+func_24021C2	gfx_object_create
+func_2402248	gfx_object_draw_glyph
+func_2402266	gfx_draw_text_line
+func_2402296	gfx_draw_text_centered
+func_24022C0	gfx_object_set_flags
+func_24022F2	anim_scene_room
+func_240237A	anim_scene_window
+func_24023FE	anim_scene_window_mode
+func_240247E	anim_draw_fifth_chara	# slot vocabulary (D_0001404/6 = fifth)
+func_2402506	anim_scene_window2
+func_2402582	anim_scene_living
+func_24025F2	anim_scene_living_poops	# majority; consistent with api_scene_living_poops
+func_240266A	anim_scene_kitchen
+func_2402754	anim_scene_game_corner
+func_24027D6	anim_scene_tama_depa
+func_2402874	anim_scene_park
+func_2402912	anim_scene_blank
+func_240299A	anim_scene_bath
+func_2402A7A	anim_scene_toilet
+func_2402B4C	anim_scene_bedroom
+func_2402C2C	gfx_palette_slot_for
+func_2402C90	anim_draw_pet
+func_2402CEA	anim_draw_other_chara	# one term "other" for the second character slot
+func_2402D44	anim_draw_third_chara	# slot vocabulary
+func_2402DA0	anim_draw_fourth_chara	# slot vocabulary
+func_2402DFC	anim_draw_pic
+func_2402EAA	anim_draw_companion
+func_2402F7E	anim_draw_digit
+func_2403024	anim_draw_text
+func_240304A	anim_draw_glyph
+func_2403070	anim_queue_sound
+func_240308C	anim_frame_wait
+func_24031D6	anim_frame
+func_2403256	gfx_palette_set
+func_24032B0	gfx_set_background
+func_2403306	chara_render_pose_set
+func_2403316	chara_render_poses_to_flash
+func_2403740	chara_render_pose_set_flip
+func_2403752	chara_render_poses_to_flash_flip	# like chara_render_poses_to_flash
+func_2403BAC	txt_set_glyph
+func_2403E20	gfx_draw_glyph_obj
+func_2403EA8	txt_render_line
+func_2403F98	anim_draw_text_line
+func_2404068	txt_draw_centered
+func_24040C0	anim_scene_closet
+func_240413C	anim_first_slot
+func_2404146	item_apply_attributes
+func_240418A	item_chara_preference
+func_2404264	item_partner_preference
+func_2404348	item_pet_preference_raw
+func_2404446	item_pet_preference
+func_240444E	item_pet_preference_by_index
+func_240445C	item_happiness_effect
+func_240451E	item_happiness_effect_by_index
+func_240452C	item_hunger_effect
+func_240456A	item_hunger_effect_by_index
+func_2404578	item_use_anim_id
+func_240459E	item_use_anim_id_by_index
+func_24045AC	item_inv_find_owned_id
+func_24045FA	item_apply_effects
+func_240463E	item_apply_effects_by_index
+func_240464A	item_is_unusable	# majority
+func_240467A	item_id_is_coupon
+func_24046A2	item_use
+func_24048C4	item_use_record
+func_2404920	item_draw_name
+func_2404966	item_draw_name_by_index
+func_2404984	item_draw_card
+func_2404E3C	item_draw_card_by_index	# majority; like item_draw_name_by_index
+func_240513C	item_use_dialog
+func_240532E	item_special_count	# special items (item_special_menu)
+func_240534E	item_special_next
+func_240536E	item_special_show
+func_240547E	item_special_browser
+func_24055C0	item_inv_usable_count
+func_24055F2	item_inv_owned_count
+func_2405624	item_inv_next_usable
+func_240564C	item_inv_picker_b
+func_2405652	item_inv_picker
+func_24057F8	item_builtin_find
+func_2405882	pet_clover_leaf_count
+func_24058A4	gfx_draw_number
+func_240590A	gfx_draw_number_b
+func_2405970	chara_is_unlocked
+func_24059C8	chara_list_unlocked
+func_2405A16	chara_list_marriage_candidates
+func_2405AA0	ui_theme_nth
+func_2405AD8	ui_theme_count
+func_2405AFC	ui_theme_draw_list
+func_2405B8A	ui_status_menu
+func_2405CDA	item_drop_event_items
+func_2405CF8	pet_raise_call
+func_2405ECA	pet_choose_adult_pose
+func_2405F4A	pet_clear_call
+func_2406008	pet_id_low_byte_grown
+func_2406020	pet_get_id
+func_2406028	pet_get_gender
+func_2406068	item_get_count
+func_240608C	item_spare_count
+func_24060FC	item_set_count
+func_2406134	item_acquire
+func_2406158	item_consume
+func_2406182	item_consume_shared
+func_24061C0	pet_get_unlock_flag
+func_24061E6	pet_set_unlock_flag
+func_240624A	pet_add_happiness
+func_24062FC	pet_sub_happiness
+func_2406322	chara_value_lookup
+func_2406332	visit_note_partner_wish
+func_240640E	pet_fill_clover_leaf
+func_240665A	pet_clear_album_bits
+func_2406666	chara_canonical_id
+func_2406690	chara_family_index
+func_24067B2	pet_clover_complete
+func_24067CE	album_register
+func_24069F8	album_update_snapshot
+func_2406A92	album_count
+func_2406AB8	album_count_others
+func_2406AE8	pet_feed
+func_2406BD8	pet_can_eat
+func_2406BFE	pet_count_meal
+func_2406C3C	pet_add_points
+func_2406C5E	pet_spend_points
+func_2406C78	pet_cannot_afford
+func_2406C8C	pet_add_weight
+func_2406CAE	pet_sub_weight
+func_2406D34	pet_get_sick
+func_2406E0C	pet_make_poop
+func_2406E9C	pet_sleep_state
+func_2407028	pet_charm
+func_2407130	chara_fit_class
+func_2407160	dl_code_to_class
+func_24072E8	chara_class
+func_2407364	chara_trait_caps
+func_24073D4	pet_care_mistake
+func_24074D2	pet_clock_events
+func_24077C8	pet_minute_tick
+func_2407F42	util_rand_except
+func_2407F6C	util_rand_shuffle
+func_2407FC6	dl_chara_text
+func_2408068	chara_builtin_text
+func_2408180	chara_text
+func_2408198	chara_find_adult_by_birthday
+func_2408222	chara_birthday_match
+func_2408344	chara_bday_month
+func_24083B6	chara_bday_day
+func_2408422	chara_club_class
+func_240848E	chara_class_field
+func_24084F8	chara_index_by_id
+func_2408560	chara_index_by_sprite_set
+func_24085FC	chara_gender
+func_2408638	item_type
+func_240863E	item_category
+func_2408644	item_sub_kind
+func_240864A	item_id
+func_2408696	pet_clear_traits
+func_24086B0	pet_count_activity
+func_240870A	pet_clear_activities
+func_2408734	chara_album_key	# table field x004 used as the album key (opus-1)
+func_24087A0	chara_find_by_codes
+func_240883A	chara_family_in_album
+func_24088C0	ui_update_mail_mark
+func_240891C	ui_show_attention_icon
+func_240895A	ui_call_icon_hide
+func_240897C	ui_call_icon_sync
+func_24089BC	ui_icon_cursor_draw
+func_2408B42	ui_draw_icon_bars
+func_2408C36	ui_new_screen
+func_2408C40	ui_bubble_alloc
+func_2408D2C	ui_bubble_next_line
+func_2408D5A	ui_bubble_fill
+func_2408E48	ui_bubble_hide
+func_2408E84	ui_choice_cursors_create
+func_2408EE4	ui_arrows_create
+func_2408F3E	ui_arrows_move
+func_2408F7C	ui_choice_cursors_bob
+func_2408FCC	pet_try_daily_care_leaf
+func_2409030	sys_display_off
+func_2409068	sys_display_wake
+func_240912E	sys_idle_tick
+func_2409138	lcd_init_ili9163_old
+func_240921A	lcd_init_st7735
+func_240935A	ui_sound_menu
+func_2409526	room_draw_away
+func_2409656	ui_clock_check_msg
+func_24096FA	pet_poke_animation
+func_24098DA	ui_main_icon_blocked
+func_2409942	pet_is_away
+func_2409960	ui_run_away_screen	# majority
+func_240999A	ui_main_pending_hook
+func_2409A96	pet_away_minute_check
+func_2409AF4	pet_special_mode_active
+func_2409B20	nfc_may_arm
+func_2409B86	comm_notebook_unlock_check
+func_2409BC8	comm_remember_count	# majority
+func_2409BD6	nfc_idle_touch
+func_2409C2A	pet_asleep_refuse
+func_2409C68	nfc_arm_after_draw
+func_2409C76	sys_main
+func_240C51C	sys_power_down
+func_240C616	pet_care_event_dispatch
+func_240C730	pet_wear_accessory
+func_240C738	pet_wear_clothes
+func_240C740	chara_special_accessory_stub
+func_240C744	chara_draw_accessory
+func_240CAA4	chara_draw_clothes
+func_240CD6C	chara_draw_pet
+func_240CEEE	chara_draw_second
+func_240CFAA	chara_draw_third
+func_240D066	chara_draw_fourth
+func_240D122	chara_draw_any
+func_240D210	item_next_owned_accessory
+func_240D24E	item_next_owned_clothes
+func_240D28C	ui_wardrobe_accessories
+func_240D4DE	ui_wardrobe_clothes
+func_240D734	item_first_owned_accessory
+func_240D73C	item_next_owned_accessory_wrap
+func_240D742	item_owned_accessory_count
+func_240D74E	item_first_owned_clothes
+func_240D756	item_next_owned_clothes_wrap
+func_240D75C	item_owned_clothes_count
+func_240D768	ui_wardrobe_menu
+func_240D976	pet_bath
+func_240DA0A	room_draw_bedroom
+func_240DB0A	anim_christmas_play	# plays the Christmas scene
+func_240DB16	food_share_pics	# opus-1 / opus-2
+func_240DB86	room_set_kitchen_design
+func_240DBBE	food_owner_birthday_today
+func_240DC00	food_chara_birthday_today
+func_240DC9C	food_meal_kitchen_style_b
+func_240DCB0	food_meal_kitchen_style
+func_240DCC4	food_party_table_pic
+func_240DCDE	food_party_table_pic_chara
+func_240DCF6	food_order_guest_list
+func_240DD8C	food_load_party_guests
+func_240DF10	food_load_candidate_guests
+func_240E046	food_party_scene
+func_240E11E	food_party_scene_b
+func_240E28E	food_party_dish_screen
+func_240E438	food_eat_meal
+func_240E4EC	food_eat_snack
+func_240E60E	food_eat_restaurant_meal
+func_240E748	food_eat_restaurant_snack
+func_240E8DA	food_pick_friend_cook	# majority
+func_240E93C	food_restaurant_visit
+func_240EE18	food_menu_entry_available
+func_240EE3E	food_menu
+func_240F184	food_meal_or_snack_choice
+func_240F2DE	chara_birthday_on
+func_240F2E8	pet_event_chara_birthday
+func_240F40E	room_draw_decorations
+func_240F57A	room_draw_background
+func_240F632	room_draw_poops
+func_240F784	room_blink_poops
+func_240F818	room_weather_update_now
+func_240F840	room_weather_draw_daily
+func_240F94E	comm_house_level
+func_240FA1C	room_window_draw
+func_240FF0C	room_window_animate
+func_24101D0	town_visit_active
+func_24101E2	town_visit_begin
+func_24101EC	town_visit_end
+func_2410204	outing_signpost
+func_2410452	outing_signpost_random
+func_241045A	outing_park_gate
+func_24104B0	util_shuffle_u8
+func_24104FC	outing_random
+func_2410570	room_window_seasonal_flower
+func_241065E	util_nonzero_or_one
+func_2410668	pet_event_random_daily
+func_2410818	pet_event_random_daily_wrapper
+func_2410820	shop_tamamori
+func_2410902	shop_tamamori_card
+func_2410AE4	shop_tamamori_pick
+func_2410C44	shop_reform
+func_2410DF8	shop_reform_card
+func_2410F86	shop_reform_pick
+func_24110A6	town_award_care_mark	# majority
+func_24110FC	job_select_chara
+func_2411136	job_clear
+func_241114E	job_clear_all
+func_241117E	job_start
+func_2411194	job_is_finished
+func_24111AE	job_check_hours
+func_24111E2	job_minute_tick
+func_241129C	job_reward_item	# majority
+func_24112A4	job_diary_page
+func_24113DA	job_end
+func_2411654	pet_activity_done	# majority
+func_24116A4	pet_activity_done_count	# majority
+func_24116EA	pet_activity_done_bool	# majority
+func_2411730	anim_place_enter_blank
+func_2411756	town_street_encounter
+func_241184C	shop_pick_featured_item
+func_24118FC	town_park_event_nobody	# park square event 0 (opus-1)
+func_2411900	town_park_greeting
+func_24119A6	item_give_builtin
+func_24119E8	town_visitor_entry	# visitor gift item and lines (fable-2 / opus-1, high)
+func_2411A28	town_list_unlocked_visitors	# fable-2 (high)
+func_2411AFA	town_park_event_friend	# park square event 2 (opus-1)
+func_2411C60	town_park_meet_contact	# T6
+func_2411D48	shop_sell
+func_2411EA6	shop_tama_depa
+func_2411FAA	town_lottery
+func_2412080	town_park_square_event
+func_24121C8	town_sports_ground
+func_2412366	town_park_menu
+func_2412410	chara_id_alias
+func_2412436	util_shuffle_u16	# rule: util
+func_2412498	pet_life_story
+func_2412528	town_match_candidates
+func_2412782	town_match_choose
+func_2412A32	town_matchmaking
+func_2412ABA	chara_transform_target	# majority
+func_2412C18	chara_transform
+func_2412CF2	util_pick_one_of_two	# rule: util
+func_2412D14	outing_story_chara
+func_2412D80	outing_return_diary
+func_2412F6C	outing_pick_destination
+func_2412FBC	outing_setup
+func_2413074	outing_return_handler
+func_2413308	outing_screen
+func_24133B8	outing_text_number
+func_24134EE	town_club_background
+func_241352A	town_club_teacher_load
+func_24135D2	town_club_teacher_line	# majority
+func_2413644	town_club_missing_tool
+func_24136AA	town_club_practice_anim
+func_2413710	town_club_progress_scene
+func_2413788	town_club_first_visit
+func_24137F6	town_club_visit
+func_24139C0	town_club_choose
+func_24139FC	town_school
+func_2413B08	town_travel_scene
+func_2413BF4	town_game_center_greeting
+func_2413C18	town_enter_park	# opus-1 (consistent with the prize-car variant on Tama Depa)
+func_2413C3C	town_enter_school	# opus-1
+func_2413C54	town_enter_tamadepa	# opus-1
+func_2413C6E	shop_floor_menu
+func_2413C9E	town_enter_matchmaking	# fable-2 / opus-1
+func_2413CB0	town_enter_nopic
+func_2413CBE	town_enter_nopic_b
+func_2413CD6	town_hook_stub_a
+func_2413CD8	town_hook_stub_b
+func_2413CDA	town_hook_stub_call
+func_2413CE2	town_always_open	# majority
+func_2413CE6	town_always_open_b
+func_2413CEA	town_always_open_c
+func_2413CEE	town_always_open_d
+func_2413CF2	town_app_slot_state	# majority
+func_2413D12	town_app_slot0_state
+func_2413D18	town_app_slot1_state
+func_2413D1E	town_app_slot2_state
+func_2413D24	town_app_slot3_state
+func_2413D2A	town_car_slot_pic
+func_2413D4E	town_place_state	# majority
+func_2413D6C	town_entry_app_slot
+func_2413D9C	town_next_visible_entry
+func_2413DCE	town_place_count
+func_2413DEA	town_menu_draw_page
+func_24140BE	town_menu
+func_2414496	ui_place_entry_avail
+func_24144AE	ui_place_next_avail
+func_24144CE	ui_place_draw_page
+func_2414638	ui_place_menu_run
+func_24147C8	town_depa_floor_enter
+func_24147DA	town_game_corner
+func_24147E8	town_reform_shop
+func_2414818	town_item_shop
+func_2414852	town_fashion_shop
+func_241488C	town_place_leave
+func_241489E	ui_question_do_screen
+func_2414976	ui_question_yes_screen
+func_2414A4E	ui_set_dialog_cursor
+func_2414A58	ui_two_choice_run
+func_2414AF4	ui_confirm_yes_no	# ui_yes_no is func_25072E8
+func_2414B08	ui_question_two_line_screen
+func_2414BFE	ui_yes_no_two_lines
+func_2414C14	pet_can_pay
+func_2414CAC	shop_reform_pay	# reform transactions are shop_reform (data getters stay room_)
+func_2414CDE	room_next_design
+func_2414DA0	shop_reform_browser
+func_24150EC	shop_reform_living
+func_24151D6	room_living_design_at
+func_241526A	room_living_design_count
+func_24152BE	shop_reform_browser_living
+func_24154DC	item_pick_slot_to_overwrite
+func_24157E0	album_free_photo_entry
+func_2415804	album_store_record
+func_241585C	item_price_field
+func_24158E8	item_price
+func_2415998	item_price_by_index	# majority
+func_24159A4	shop_buy_confirm
+func_2415B72	shop_set_discount_mode
+func_2415B7C	shop_get_discount_mode
+func_2415B86	item_bank_next_occupied
+func_2415BF6	item_bank_count
+func_2415C5E	item_bank_browser
+func_2415DEE	ui_small_menu
+func_2415F28	shop_browser
+func_24161B4	shop_fashion
+func_2416230	shop_play_tools
+func_241628E	diary_hook_layout_done
+func_2416290	gfx_count_used_objects
+func_24162C4	diary_copy_template
+func_24162E6	diary_page_meal_a	# T2: event 2000 (dead)
+func_24163E2	diary_page_meal_b
+func_24164F2	diary_page_meal_c
+func_24165EE	diary_page_school_lesson
+func_24166B2	diary_page_school_friend
+func_2416794	diary_page_nursery_drawing	# empty stub
+func_2416796	diary_page_nursery_story	# empty composition
+func_2416798	diary_page_make_success	# events 1000..1002 variant 0 (dead)
+func_241686E	diary_page_make_failure	# UNSURE
+func_2416946	diary_page_play_a	# empty stub
+func_2416948	diary_page_play_b	# empty stub
+func_241694A	diary_page_job_depa	# empty composition
+func_241694C	diary_page_job_tamamori	# empty composition
+func_241694E	diary_page_job_cafe	# empty composition
+func_2416950	diary_page_meal_d
+func_2416A36	diary_page_meal_e
+func_2416B30	diary_page_meal_f
+func_2416C16	diary_page_park_athletic
+func_2416CEC	diary_page_park_sand
+func_2416DCC	diary_page_park_slide
+func_2416E70	diary_page_job_patrol
+func_2416F22	diary_page_together_a
+func_2416FC2	diary_page_together_b
+func_2417062	diary_page_garden	# UNSURE
+func_24170EE	diary_page_comm
+func_241717A	diary_page_bath
+func_2417242	friend_loop_noop_a
+func_241724E	friend_portrait_slot	# rule: friend
+func_24172AC	friend_loop_noop_b
+func_24172B8	friend_loop_noop_c
+func_24172C6	friend_count	# rule: friend
+func_24172E8	ui_confirm_really
+func_24172F8	friend_delete	# rule: friend
+func_2417410	friend_draw_portrait	# rule: friend list
+func_24174D6	mail_notice_from_friend	# majority
+func_2417598	friend_submenu	# rule: friend
+func_24178C2	mail_count
+func_2417924	mail_find
+func_2417AA4	mail_dialog
+func_2417E38	mail_deleted_notice
+func_2417E42	mail_drop_oldest
+func_2417EA4	mail_store
+func_2418034	mail_renumber_friends
+func_24180D4	friend_page	# rule: friend
+func_2418514	friend_book	# rule: friend list
+func_241884E	friend_book_open	# rule: friend list
+func_2418856	ui_notebook_decorations
+func_2418864	album_photo_count
+func_241888C	album_prev_photo
+func_24188AE	album_photo_browser
+func_2418ADC	album_special_charas
+func_2418CA2	mail_friend_index	# majority
+func_2418CB2	mail_mark_all_read	# majority
+func_2418D84	mail_read_unread
+func_2418F0C	ui_notebook_photos
+func_2418F14	ui_notebook_childcare
+func_2418F22	ui_notebook_friends_enable
+func_2418F34	ui_notebook_photos_enable
+func_2418F46	ui_notebook_childcare_enable
+func_2418F4A	ui_notebook_decorations_enable
+func_2418F5E	ui_notebook_menu
+func_2418FB2	diary_snapshot_images
+func_2418FD0	diary_compose_draft
+func_241910A	diary_reset
+func_241911C	diary_write_comm_page
+func_24191B0	diary_writing_scene
+func_2419436	diary_page_count
+func_2419454	diary_prev_page
+func_241946C	diary_delete_page
+func_241951E	diary_viewer	# unreferenced
+func_24197CC	snd_wait_end_b
+func_24197D4	diary_drop_oldest
+func_2419890	diary_delete_last
+func_24199B8	diary_render_store
+func_2419B1A	diary_assign_partner_pics	# majority
+func_2419B8C	diary_compose_page
+func_241A434	diary_can_write
+func_241A454	diary_store_page
+func_241A510	diary_rasterize_page
+func_241A6E6	gfx_raster_pixel
+func_241A7E0	gfx_image_pixel	# gfx_object_pixel is func_25020EC
+func_241A886	util_cmp_desc
+func_241A88E	util_swap_entries8	# majority
+func_241A8BA	util_sort_desc
+func_241A92E	album_sort_records
+func_241AA12	gfx_object_create_centered	# majority; gfx_object_* vocabulary
+func_241AA40	album_draw_overview
+func_241AD5C	album_browser
+func_241AF9A	mail_farewell_letter
+func_241B084	mail_show_letter_item
+func_241B19E	item_description_card
+func_241B2CA	mail_letter_from_friend
+func_241B3EA	mail_letter_read_flag
+func_241B3FA	mail_set_letter_read
+func_241B408	mail_unread_letter_count
+func_241B448	mail_letter_count
+func_241B482	mail_next_letter
+func_241B4AC	mail_letter_box
+func_241B73C	mail_coupon_box
+func_241B8A2	mail_letter_box_screen
+func_241B91C	pet_toilet	# the toilet action (comment issue), like pet_bath / pet_cleaning
+func_241B9E2	anim_falling_object
+func_241BA86	rtc_clock_draw	# rule: the clock screen belongs to rtc
+func_241BD1A	rtc_clock_show_now
+func_241BD5E	rtc_clock_blink_toggle
+func_241BD72	rtc_clamp_day
+func_241BDA8	rtc_clock_setting
+func_241C28A	rtc_clock_create
+func_241C3D2	lcd_brightness_setting	# rule: the brightness screen belongs to lcd
+func_241C5FA	anim_unused_park_text
+func_241C694	anim_unused_text_a
+func_241C710	anim_unused_text_b
+func_241C78C	anim_item_get
+func_241C7F4	anim_now_printing
+func_241C85A	anim_clover_complete
+func_241DCE2	anim_clover_leaf_get
+func_241F8CE	anim_visitor_arrive
+func_241F9FC	anim_msg_visitor_a
+func_241FA70	anim_msg_visitor_b
+func_241FAE4	anim_msg_visitor2_a
+func_241FB58	anim_msg_visitor2_b
+func_241FBCC	anim_visitor_ask_item
+func_242070C	anim_visitor_show
+func_2420E2E	anim_visitor_chat
+func_242179A	anim_visitor_pleased
+func_2421B5C	anim_visitor_let_down
+func_2421C5C	anim_unused_living_a
+func_24220B0	anim_new_egg
+func_2422184	anim_hatch
+func_2423B94	anim_unused_living_poops_a
+func_2423BDC	anim_unused_living_poops_b
+func_2423C24	anim_unused_living_poops_c
+func_2423E26	anim_msg_profile_talk_a
+func_2423E8A	anim_msg_profile_talk_b
+func_2423EEE	anim_unused_living_setup
+func_2424824	anim_growth_start
+func_2424CE4	anim_growth_end
+func_2425340	anim_points_gain
+func_242596E	anim_points_gain_outdoor
+func_2425F9C	anim_unused_points_guest
+func_2426672	anim_merchant_arrive
+func_24268A8	anim_unused_outdoor_a
+func_2426936	anim_unused_outdoor_b
+func_24269C4	anim_merchant_browse
+func_2426DE4	anim_merchant_sold
+func_242702E	anim_unused_collapsed_talk
+func_24276EA	anim_collapsed_talk
+func_2427CC2	anim_unused_room_a
+func_2427D62	anim_pet_leaving
+func_2428532	anim_pet_gone
+func_2428DA8	anim_pet_revive
+func_2429230	anim_msg_journey_a
+func_2429294	anim_msg_journey_b
+func_24292F8	anim_pet_revive_end
+func_2429364	anim_search_1
+func_2429382	anim_search_2
+func_24293AE	anim_search_3
+func_2429510	anim_search_4
+func_24297C4	anim_search_5
+func_24298B0	anim_search_6
+func_242998C	anim_search_7
+func_2429A58	anim_search_found
+func_2429F22	anim_msg_found_a
+func_2429FB2	anim_msg_found_b
+func_242A042	anim_search_return
+func_242A5CC	anim_christmas
+func_242C1BC	anim_happy
+func_242C2DA	anim_unused_happy_kitchen
+func_242C3F8	anim_unused_happy_living
+func_242C516	anim_happy_outdoor
+func_242C634	anim_sad
+func_242C7C2	anim_unused_sad_outdoor_bg
+func_242C950	anim_unused_sad_outdoor
+func_242CADE	anim_sad_park
+func_242CCF0	anim_puzzled
+func_242CEA6	anim_unused_puzzled_outdoor
+func_242D05C	anim_scold	# majority
+func_242D47C	anim_praise	# majority
+func_242D544	anim_refuse
+func_242D67A	anim_refuse_food
+func_242D7B0	anim_refuse_food_table
+func_242D968	anim_toilet_nothing
+func_242DA9E	anim_visitor_gift
+func_242DC84	anim_msg_house_a
+func_242DCFE	anim_msg_house_b
+func_242DD74	anim_visitor_gift_end
+func_242DE4A	anim_life_baby
+func_242E098	anim_life_child
+func_242EA08	anim_life_child_habits
+func_242ED0E	anim_life_adult
+func_242F1CC	anim_life_adult_end
+func_2430DDC	anim_life_special
+func_2431702	anim_msg_pet_a
+func_2431766	anim_msg_pet_b
+func_24317CA	anim_drowsy
+func_24318C4	anim_unused_outdoor_c
+func_24319C6	anim_unused_outdoor_d
+func_2431ACE	anim_seeoff_start
+func_2432B58	anim_seeoff_goodbye
+func_2433024	anim_msg_farewell_a
+func_24330C2	anim_msg_farewell_b
+func_2433160	anim_seeoff_leave
+func_24334EA	anim_owner_birthday
+func_24340C0	anim_char_birthday_start
+func_2434368	anim_msg_char_birthday_a
+func_24343CC	anim_msg_char_birthday_b
+func_2434430	anim_char_birthday_party
+func_2434B62	anim_char_birthday_end
+func_2435BD6	anim_friend_visit
+func_2435EB2	anim_spot_visitor_arrive
+func_24366EC	anim_msg_spot_visitor_a
+func_24367A2	anim_msg_spot_visitor_b
+func_2436858	anim_spot_visitor_leave
+func_24370E6	anim_comm_game_intro1	# cgame spelled out
+func_2437458	anim_comm_game_intro2
+func_2437C08	anim_unused_cgame_a
+func_2437D06	anim_comm_game_round_start
+func_2437F66	anim_unused_cgame_b
+func_2438056	anim_comm_game_round_end
+func_24385B0	anim_comm_game_result
+func_24389E8	anim_comm_game_result_good
+func_2438F58	anim_comm_game_result_bad
+func_24395EA	anim_comm_game_result_great
+func_243A446	anim_comm_game_result_fair
+func_243AA36	anim_comm_game_result_poor
+func_243B04A	anim_comm_game_win
+func_243B20C	anim_comm_game_lose
+func_243B372	anim_dl_chars_full
+func_243EEF8	anim_receive_item_outdoor
+func_243F2CC	anim_receive_item
+func_243F658	anim_photo_session
+func_2440C40	anim_unused_outdoor_long
+func_2441974	anim_comm_done
+func_2441ACC	anim_good_result
+func_2441B5C	anim_comm_wait
+func_2441B90	anim_gift_given
+func_2442176	anim_result_alt
+func_2442206	anim_present_box
+func_244242A	anim_capsule_prize
+func_2442DFA	anim_proposal
+func_24431D0	anim_msg_comm_a
+func_2443250	anim_msg_comm_b
+func_24432D0	anim_just_married
+func_244380A	anim_wedding_couple
+func_2443CD6	anim_gift_bonus
+func_2443F5A	anim_comm_item_received
+func_2444A00	anim_fortune_running
+func_2444A6E	anim_notebook_get
+func_2447214	anim_notebook_get2
+func_2448D62	anim_quiz_start
+func_2448F14	anim_quiz_wrong
+func_24491CE	anim_quiz_right
+func_2449480	anim_quiz_points
+func_2449B4C	anim_traveller_arrive
+func_244A3C4	anim_msg_traveller_a
+func_244A48C	anim_msg_traveller_b
+func_244A554	anim_traveller_gift
+func_244C46A	anim_phrase_guest
+func_244C7D2	anim_msg_phrase_a
+func_244C88A	anim_msg_phrase_b
+func_244C93E	anim_phrase_guest_end
+func_244CAF6	anim_idle_random_0
+func_244CFA8	anim_idle_random_1
+func_244DB88	anim_idle_random_2
+func_244E8E2	anim_idle_random_3
+func_244EF36	anim_idle_random_4
+func_244F556	anim_fortune_start
+func_244FA0A	anim_fortune_open
+func_2450C54	anim_fortune_jackpot
+func_2451A94	anim_eat_neutral
+func_2451DBC	anim_eat_liked
+func_2452BE6	anim_eat_disliked
+func_245392E	anim_eat_table_neutral
+func_2453E3A	anim_eat_table_liked
+func_24550B4	anim_eat_table_disliked
+func_2456332	anim_restaurant_arrive
+func_24564F6	anim_msg_restaurant_a
+func_24565BA	anim_msg_restaurant_b
+func_2456684	anim_restaurant_order
+func_245682C	anim_party_alone
+func_245691E	anim_party_guest
+func_2456AD4	anim_party_neglected
+func_2459276	anim_party_extra
+func_2459FDC	anim_birthday_party
+func_245BAFC	anim_party_meal
+func_245C31C	anim_reaction0
+func_245C3D2	anim_reaction1
+func_245C50A	anim_reaction2
+func_245C68A	anim_reaction3
+func_245C85A	anim_msg_kind34_a
+func_245C8EE	anim_msg_kind34_b
+func_245C97C	anim_msg_kind35_a
+func_245CA22	anim_msg_kind35_b
+func_245CAC2	anim_msg_kind36_a
+func_245CB7A	anim_msg_kind36_b
+func_245CC2C	anim_reaction4
+func_245CDB0	anim_reaction5
+func_245CF8E	anim_reaction6
+func_245D1D0	anim_reaction7
+func_245D526	anim_reaction8
+func_245D91E	anim_unused_living_d
+func_245D99C	anim_unused_living_e
+func_245DA1A	anim_unused_living_f
+func_245DA96	anim_unused_living_g
+func_245DB14	anim_comfort
+func_245DBCA	anim_food_refused
+func_245E736	anim_item_refused
+func_245EBD4	anim_scold_collapsed
+func_245EE2E	anim_sitter_arrive
+func_245EF6C	anim_msg_sitter_a
+func_245EFE6	anim_msg_sitter_b
+func_245F060	anim_sitter_report
+func_245F262	anim_msg_sitter_report_a
+func_245F308	anim_msg_sitter_report_b
+func_245F3AE	anim_sitter_leave
+func_245F58E	anim_sitter_report2
+func_245F790	anim_msg_sitter_report2_a
+func_245F80E	anim_msg_sitter_report2_b
+func_245F8B2	anim_room_messy
+func_24603E2	anim_unused_living_h
+func_24606DA	anim_unused_living_i
+func_24609D2	anim_unused_living_j
+func_2460ACC	anim_talk_toilet_hint
+func_2460C92	anim_talk_bath_hint
+func_2460E58	anim_talk_cleaning_hint
+func_2461238	anim_cleaning_missed
+func_246143E	anim_unused_done
+func_2461680	anim_unused_living_k
+func_2461848	anim_habit_learned
+func_2461C5E	anim_club_mastered
+func_246243A	anim_bath
+func_2462C94	anim_dress_start
+func_2463116	anim_dress_done
+func_2463320	anim_dress_neutral
+func_24636F6	anim_dress_favourite
+func_24640CC	anim_dress_disliked
+func_246462C	anim_dress_cannot
+func_2464A80	anim_cleaning
+func_24650EC	anim_unused_living_l
+func_2465186	anim_unused_living_m
+func_24651D8	anim_unused_living_n
+func_24653C2	anim_toilet
+func_246559C	anim_shop3_enter
+func_24656B0	anim_tamamori_shop
+func_2465AD4	anim_msg_shop3_a
+func_2465B68	anim_msg_shop3_b
+func_2465BFC	anim_street_meet
+func_2465D02	anim_msg_street_a
+func_2465D8E	anim_msg_street_b
+func_2465E1E	anim_street_happy
+func_2466036	anim_street_leave
+func_2466154	anim_street_wedding	# played by the street visit func_250913A: wedding ceremony (fable-1, high)
+func_246856C	anim_street_wedding_party	# fable-1 (high)
+func_246A866	anim_street_i_love_you	# text "I LOVE YOU" (fable-1 / fable-2)
+func_246CB00	anim_street_play
+func_246D908	anim_street_friendship	# fable-1
+func_246ED2A	anim_street_love	# fable-1
+func_246FF28	anim_shop1_enter
+func_2470036	anim_reform_preview
+func_247077A	anim_reform_done
+func_247122E	anim_reform_living
+func_2471584	anim_msg_shop1_a
+func_2471614	anim_msg_shop1_b
+func_24716A8	anim_game_center_enter
+func_247177C	anim_msg_game_center_a
+func_2471810	anim_msg_game_center_b
+func_24718A4	anim_game_corner_start
+func_247197C	anim_game_corner_points
+func_2471E60	anim_game_corner_lose
+func_2472094	anim_game_corner_win
+func_2472256	anim_game_corner_win2
+func_2472418	anim_game_corner_best
+func_247262C	anim_travel_walk
+func_2472838	anim_travel_walk_short
+func_247293C	anim_travel_ride
+func_2472A20	anim_travel_ride2
+func_2472B04	anim_farm_farmer
+func_2472CF6	anim_msg_farm_a
+func_2472D98	anim_msg_farm_b
+func_2472E3E	anim_msg_farm_withered_a
+func_2472EDE	anim_msg_farm_withered_b
+func_2472F7E	anim_farm_plant
+func_24749AE	anim_farm_walk
+func_2474B3E	anim_farm_grow
+func_2475660	anim_farm_harvest
+func_2477B58	anim_farm_withered
+func_2478196	anim_matchmaking_enter	# English for omiai
+func_24782AC	anim_msg_matchmaking_a	# English for omiai (town_match)
+func_2478340	anim_msg_matchmaking_b
+func_24783D4	anim_matchmaking_intro
+func_247862A	anim_matchmaking_candidate
+func_2478858	anim_unused_room_c
+func_2478930	anim_unused_room_d
+func_2478A74	anim_matchmaking_candidate2
+func_2478CAE	anim_msg_matchmaking_candidate_a
+func_2478D3A	anim_msg_matchmaking_candidate_b
+func_2478DCA	anim_matchmaking_candidate_leave
+func_2478FBA	anim_wedding
+func_247A326	anim_wedding_end
+func_247AA2A	anim_matchmaking_parlour
+func_247C196	anim_park_guest_enter	# family anim_town_guest_ -> anim_park_guest_
+func_247C39E	anim_park_guest2_enter
+func_247C5EC	anim_lottery_enter
+func_247C8F0	anim_sports_enter
+func_247CBD8	anim_park_enter
+func_247CD58	anim_msg_town_guest_a
+func_247CDE4	anim_msg_town_guest_b
+func_247CE70	anim_msg_relative_a
+func_247CF12	anim_msg_relative_b
+func_247CFB4	anim_msg_lottery_a
+func_247D074	anim_msg_lottery_b
+func_247D134	anim_unused_outdoor_i
+func_247D1C2	anim_unused_outdoor_j
+func_247D250	anim_park_guest_leave	# family anim_town_guest_ -> anim_park_guest_
+func_247D562	anim_park_guest2_leave
+func_247D942	anim_lottery_leave
+func_247DE86	anim_park_guest_happy	# family anim_town_guest_ -> anim_park_guest_
+func_247E082	anim_park_guest2_happy
+func_247E30A	anim_lottery_prize
+func_247E6EE	anim_visitor_list_event
+func_247F600	anim_shopkeeper_buy
+func_247FBCC	anim_shopkeeper_sell
+func_2480198	anim_lottery_draw
+func_24811DC	anim_lottery_result
+func_248160C	anim_visitor_list_end
+func_24818EA	anim_sports_start
+func_2481A64	anim_sports_lose
+func_2481D1E	anim_sports_ok
+func_2481F5A	anim_sports_win
+func_2482196	anim_sports_prize
+func_2482448	anim_sports_points
+func_24829C2	anim_school_closed
+func_2482AC6	anim_msg_school_a
+func_2482B52	anim_msg_school_b
+func_2482BE2	anim_msg_school2_a
+func_2482C6E	anim_msg_school2_b
+func_2482CFE	anim_club_teacher
+func_2482F82	anim_msg_club_a
+func_2483038	anim_msg_club_b
+func_24830EA	anim_club_lesson
+func_24834CA	anim_club_practice_invention
+func_248449A	anim_club_practice_fashion
+func_24856A8	anim_club_practice_sports
+func_24866A8	anim_club_practice_art
+func_2487522	anim_club_practice_cooking
+func_2488B12	anim_club_not_ready
+func_248917C	anim_msg_tamadepa_a
+func_248922A	anim_msg_tamadepa_b
+func_24892D8	anim_tamadepa_floor_enter
+func_2489442	anim_shop2_enter
+func_248964E	anim_toy_shop
+func_2489B78	anim_use_item_4
+func_248A8DE	anim_use_item_5
+func_248B62A	anim_use_item_liked_5
+func_248CC9A	anim_use_item_14
+func_248D538	anim_use_item_6
+func_248DFDA	anim_use_item_7
+func_248F106	anim_use_item_8
+func_24902D2	anim_use_item_15
+func_24912A6	anim_item_disliked
+func_2491752	anim_use_item_17
+func_2492AAC	anim_use_item_18
+func_2493770	anim_use_item_20
+func_2494400	anim_use_item_liked_20
+func_2494E4C	anim_use_item_21
+func_2495894	anim_use_item_22
+func_2496B20	anim_use_item_23
+func_2497A34	anim_use_item_24
+func_24982CE	anim_use_item_liked_24
+func_2499092	anim_use_item_25
+func_2499B82	anim_use_item_liked_25
+func_249AF8E	anim_use_item_26
+func_249C15A	anim_use_item_27
+func_249C716	anim_use_item_liked_27
+func_249F9D8	anim_use_item_28
+func_24A0306	anim_use_item_29
+func_24A123A	anim_use_item_30
+func_24A2014	anim_use_item_31
+func_24A2B5A	anim_use_item_liked_31
+func_24A39B6	anim_use_item_32
+func_24A4460	anim_use_item_33
+func_24A55A4	anim_use_item_liked_33
+func_24A6B5A	anim_use_item_34
+func_24A70C0	anim_use_item_50
+func_24A7FD8	anim_use_item_44
+func_24A8854	anim_use_item_51
+func_24A9288	anim_use_item_liked_51
+func_24AA2D0	anim_use_item_52
+func_24AAEF0	anim_use_item_liked_52
+func_24AC030	anim_use_item_53
+func_24AC70A	anim_use_item_liked_53
+func_24AE6D0	anim_use_item_54
+func_24AEFCC	anim_use_item_liked_54
+func_24AFB4E	anim_use_item_55
+func_24B0626	anim_use_item_liked_55
+func_24B1CA0	anim_use_item_56
+func_24B2B3C	anim_use_item_liked_56
+func_24B3B42	anim_use_item_57
+func_24B56B2	anim_use_item_liked_57
+func_24B68DC	anim_use_item_58
+func_24B6F2A	anim_use_item_liked_58
+func_24B7BE4	anim_use_item_59
+func_24B8B12	anim_use_item_liked_59
+func_24BAA12	anim_use_item_60
+func_24BB530	anim_use_item_liked_60
+func_24BC974	anim_use_item_61
+func_24BD030	anim_use_item_liked_61
+func_24BE1C2	anim_use_item_62
+func_24BECB6	anim_use_item_liked_62
+func_24BFD12	anim_use_item_63
+func_24C10AC	anim_use_item_liked_63
+func_24C207E	anim_use_item_64
+func_24C2448	anim_use_item_liked_64
+func_24C377A	anim_use_item_65
+func_24C465C	anim_use_item_liked_65
+func_24C5D58	anim_use_item_66
+func_24C69AE	anim_use_item_liked_66
+func_24C8134	anim_use_item_67
+func_24C94F0	anim_use_item_liked_67
+func_24CA206	anim_use_item_68
+func_24CAE5C	anim_use_item_liked_68
+func_24CBE4A	anim_use_item_69
+func_24CCAA0	anim_use_item_liked_69
+func_24CE484	anim_use_item_16
+func_24CED80	anim_use_item_2
+func_24D071E	anim_use_item_3
+func_24D135E	anim_use_item_9
+func_24D1BB0	anim_use_item_10
+func_24D1F8A	anim_use_item_41
+func_24D214A	anim_use_item_70
+func_24D4C6E	anim_use_item_71
+func_24D60A8	anim_use_item_72
+func_24D7EE8	anim_use_item_73
+func_24DABC4	anim_poke_a
+func_24DAE8A	anim_poke_b
+func_24DB208	anim_poke_c
+func_24DB59E	anim_poke_mamelabotchi
+func_24DC3BC	anim_poke_yanchamametchi
+func_24DCBC4	anim_poke_kuchipatchin
+func_24DD984	anim_poke_jeanistkuchipa
+func_24DF560	anim_poke_kirarispacy
+func_24E0606	anim_poke_kingspacy
+func_24E1096	anim_poke_kuromamesenpai
+func_24E19A8	anim_poke_otakuromame
+func_24E2EC6	anim_poke_oreotonatchi
+func_24E48AE	anim_poke_gurumemequeen
+func_24E5DC0	anim_poke_memechanobatchi
+func_24E6A78	anim_poke_mamelovehimespe
+func_24E7670	anim_poke_lovelyfire
+func_24E82E2	anim_poke_pocharabritchi
+func_24E8CA2	anim_poke_oyamerojitchi
+func_24EB7D2	anim_poke_slimneene
+func_24EBFEC	anim_poke_astrosoratchi
+func_24EE484	anim_poke_fairypakupaku
+func_24F1DF6	anim_poke_melodymuse
+func_24F2CCE	anim_poke_petitdevihimespe
+func_24F507E	anim_fortune_press
+func_24F51C8	ui_text_banner
+D_24F529C	snd_period_table_main	# data in code, the period table for 30 MHz (round-1 name; D_0084258 is snd_period_table)
+func_24F61BC	sys_adc_setup
+func_24F61F2	sys_adc_set_limits
+func_24F621C	sys_adc_irq_setup
+func_24F6256	sys_reset
+func_24F6316	sys_init
+func_24F6390	sys_bus_setup
+func_24F63B6	sys_itc_init
+func_24F644A	sys_gpio_init
+func_24F64F4	tmr_init
+func_24F6514	sys_copy_iram_code
+func_24F6536	sys_copy_data
+func_24F655E	sys_clear_bss_ram
+func_24F657E	sys_clear_bss_iram
+func_24F659A	sys_irq_enable
+func_24F659E	sys_irq_disable
+func_24F65A2	evo_count_item_use
+func_24F663A	evo_count_game
+func_24F6660	evo_count_bath	# majority
+func_24F6686	evo_flag_met_chara
+func_24F66B4	evo_note_park_meeting	# T6
+func_24F66F0	evo_daily_countdown
+func_24F670C	evo_reset_counters
+func_24F674C	evo_reset_counters_all
+func_24F6792	evo_reset_special_counters
+func_24F67C6	evo_cond_fat
+func_24F67DA	evo_cond_thin
+func_24F67EC	evo_cond_snacks	# majority
+func_24F6802	evo_cond_park_meeting	# T6
+func_24F681A	evo_cond_games20
+func_24F683E	evo_cond_item6
+func_24F6862	evo_cond_item15
+func_24F6878	item_owned_slot_by_id
+func_24F6938	evo_cond_baths
+func_24F697C	evo_cond_met
+func_24F6994	evo_cond_trait0	# D_00012B6 = pet_traits
+func_24F69E0	evo_cond_trait1
+func_24F6A2A	evo_cond_unhappy
+func_24F6A3E	evo_cond_happy_clubs
+func_24F6A9E	evo_slot_unused
+func_24F6ABC	evo_clear_slots
+func_24F6AE8	evo_check_special
+func_24F6B7C	evo_check_special_mask
+func_24F6C06	evo_choose_next
+func_24F6E54	evo_route_lost
+func_24F6FCC	evo_revert_special_form	# T7
+func_24F7072	evo_evolve_now
+func_24F70DC	evo_evolve_now_twice
+func_24F70EC	evo_stage_change_reset	# majority
+func_24F714C	sys_sleep_osc1
+func_24F717E	sys_sleep_osc3
+func_24F71B0	sys_leave_low_power
+func_24F71DA	comm_prepare
+func_24F7202	comm_result_wait
+func_24F7344	comm_result_wait_book
+func_24F7492	comm_menu_app
+func_24F74C8	comm_menu_item_send
+func_24F74FE	comm_result_unused
+func_24F751C	ir_menu_hidden_session	# rule: legacy IR
+func_24F753E	ir_session5_unused	# rule: legacy IR (unreferenced)
+func_24F7594	comm_give_item
+func_24F7614	ir_session3_unused	# rule: legacy IR (unreferenced)
+func_24F766E	comm_menu_debug_set
+func_24F7676	comm_photo_session
+func_24F76EE	comm_menu_photo
+func_24F7758	pet_debug_set_age_5days	# debug helper on the pet age
+func_24F7764	ir_session3_check_stub	# rule: legacy IR
+func_24F7768	comm_session_menu
+func_24F77F2	comm_menu_proposal
+func_24F7898	comm_stub_one
+func_24F789C	comm_ask_marry
+func_24F78EA	ir_show_proposal_refusal	# rule: legacy IR
+func_24F7934	comm_result_anim_hook
+func_24F7936	comm_result_anim
+func_24F796E	comm_result_pre_hook
+func_24F7970	comm_show_proposal_line	# majority
+func_24F799A	comm_show_rx_message
+func_24F79D2	comm_record_result
+func_24F79E0	ir_partner_hook_a
+func_24F79E2	comm_result_show_record
+func_24F79FC	ir_partner_hook_b
+func_24F79FE	comm_load_rx_pictures
+func_24F7A12	comm_find_portrait
+func_24F7A6C	comm_show_rx_item
+func_24F7ADE	comm_gift_received
+func_24F7B3A	item_capsule_prize_class
+func_24F7BB8	item_select_presenter
+func_24F7BFC	pet_count_stamp_liked
+func_24F7C18	item_use_capsule
+func_24F7CA4	item_stamp_index
+func_24F7CCA	item_store_received
+func_24F7D56	item_can_give
+func_24F7DCA	item_receive_letter
+func_24F7DF2	item_receive_letter2
+func_24F7E1A	item_receive_presentation
+func_24F7FB8	comm_item_exchange_result
+func_24F8082	item_bank_has_items
+func_24F80CA	comm_give_shop_item
+func_24F818C	item_list_has_owned
+func_24F81DC	comm_give_inventory_item
+func_24F82D0	comm_give_menu	# majority
+func_24F8342	comm_menu_item_exchange
+func_24F83AC	comm_menu_enable_zero
+func_24F83B0	comm_set_game_choice
+func_24F83E0	comm_game_session
+func_24F8458	comm_menu_games
+func_24F84C2	comm_submenu_enable
+func_24F84F8	comm_menu_tama4u
+func_24F8568	ir_point_gift	# rule: legacy IR (dead)
+func_24F863E	ir_set_gift_amount	# rule: legacy IR point gift
+func_24F8666	ir_menu_point_gift	# rule: legacy IR point gift
+func_24F86E2	comm_set_gift_kind
+func_24F86FC	comm_greeting_session
+func_24F8774	comm_menu_greeting
+func_24F87DE	comm_menu_enable
+func_24F8832	comm_main_menu
+func_24F8958	comm_put_pet_name
+func_24F899E	util_lowest_set_bit
+func_24F89BE	tmr_t5_wait_100ms	# tmr_t5 vocabulary
+func_24F89F0	btn_clear
+func_24F8A06	flash_begin
+func_24F8A10	flash_end
+func_24F8A16	util_bswap32	# majority (util_swap_* exchange two values)
+func_24F8A32	util_read_be16
+func_24F8A42	anim_clear_pic_slot
+func_24F8A58	anim_clear_pic_slots
+func_24F8A74	anim_clear_pic_slots_n
+func_24F8A9C	anim_clear_pic_slots2
+func_24F8AAE	visit_load_partner_pics
+func_24F8AF4	item_list_blobs	# fable-2 / opus-2 (high)
+func_24F8B48	util_rand_advance
+func_24F8B88	visit_active
+func_24F8B9C	sys_stub_zero
+func_24F8BA0	visit_partner_add_traits
+func_24F8CD4	pet_add_traits
+func_24F8E2E	comm_apply_partner_record
+func_24F8F8A	pet_calc_dominant_trait
+func_24F904E	pet_clear_growth_items
+func_24F906E	chara_base_id	# majority
+func_24F9086	anim_set_busy
+func_24F90A2	util_rand_choice	# majority
+func_24F90FE	flash_program_raw
+func_24F913A	ir_session
+func_24F91D6	visit_tick
+func_24F9218	visit_leave_message
+func_24F9312	visit_end
+func_24F93AC	ir_stamp_card_messages
+func_24F94A0	ir_session_run
+func_24F96F2	ir_session_cleanup
+func_24F9704	ir_exchange
+func_24FA2AE	ir_record_sum
+func_24FA2D2	ir_validate_record
+func_24FA33C	ir_render_section	# renders pictures, the comment's "validate" is wrong (opus-1)
+func_24FA3B8	ir_abort_and_store_status
+func_24FA3CC	ir_session_receive_only
+func_24FA5A8	ir_receive_record_step
+func_24FA708	item_is_special_builtin
+func_24FA768	item_is_special_category	# no numbers in the name
+func_24FA7A8	ir_check_rx_record
+func_24FA84C	ir_check_rx_sum
+func_24FA8BE	ir_cancel_sound
+func_24FA8CE	ir_apply_point_gift
+func_24FA926	ir_point_gift_packets
+func_24FAEE8	ir_point_gift_session
+func_24FB0AA	ir_test_exchange
+func_24FB30E	ir_test_session
+func_24FB614	ir_test_entry
+func_24FB64E	ir_test_hello
+func_24FBB38	ir_test_packets
+func_24FC05A	visit_start	# starts a visit (comment issue; opus-1 high)
+func_24FC3B2	ir_visit_pair_check	# legacy IR
+func_24FC4F4	ui_bubble_button_pressed
+func_24FC538	ui_show_message
+func_24FDE8E	anim_msg_merchant_a	# message background kind 3: the merchant (opus-1)
+func_24FDF1C	anim_msg_merchant_b
+func_24FDFAA	anim_msg_training_a	# message background kind 25
+func_24FE038	anim_msg_training_b
+func_24FE0C6	pet_search_question
+func_24FE21C	pet_gone_screen	# the "pet has gone" screen (comment issue; opus-1 high)
+func_24FE82A	txt_input	# F11 is the text-input keyboard (comment issue; opus-1 / opus-2 high)
+func_24FED98	txt_input_confirm
+func_24FF0BA	txt_input_pick_char
+func_24FF32A	txt_input_cursor_loop
+func_24FF5A2	txt_input_load_grid
+func_24FF904	btn_rearm
+func_24FF928	sys_sample_debug_strap
+func_24FF958	sys_idle_housekeeping
+func_24FF966	rtc_isr	# majority
+func_2500052	sys_isr_halt_a
+func_2500058	sys_trap_halt	# exception vector 2 (opus-1)
+func_250005E	sys_trap_wait	# exception vector 3 (opus-1)
+func_250007E	sys_address_error_trap	# exception vector 6 (opus-1)
+func_250009E	sys_nmi_trap	# vector 7 NMI (opus-1)
+func_25000A4	sys_trap_record	# vector 11 (opus-1)
+func_25000C4	tmr_t16_23_isr
+func_25000DC	tmr_t16_45_isr
+func_25000F4	btn_a_isr
+func_25001E4	btn_b_isr
+func_25002D6	btn_c_isr
+func_25003FA	sys_adc_isr
+func_250043A	flash_pad_record
+func_250048A	flash_write_text_record
+func_2500910	test_program_sample_tamago
+func_250096C	comm_fill_record
+func_2500A06	ir_anim_pause_a
+func_2500A34	ir_anim_pause_b
+func_2500A62	ir_anim_pause_c
+func_2500A90	ir_clear_flags
+func_2500A9C	ir_pause_short
+func_2500AAA	comm_gift_bonus	# majority
+func_2500B06	comm_clear_pose_list
+func_2500B3A	comm_render_pose_list	# T8
+func_2500BD2	comm_render_poses_or_room	# T8
+func_2500C9A	comm_render_record_poses
+func_2500E7E	comm_gift_sector_init	# opus-1
+func_2500EC8	comm_render_picture_records	# T8
+func_250158C	gfx_index_to_palette_slot
+func_25015BA	chara_render_poses_flash
+func_2501B0A	chara_render_pic_set
+func_2501B1C	chara_render_poses_flash_flip
+func_25020A6	chara_render_pic_set_flip
+func_25020BA	gfx_fullscreen_object
+func_25020EC	gfx_object_pixel
+func_2502192	gfx_screen_pixel	# pixel read-back, not a hit test (comment issue)
+func_250226C	ir_store_received_letter
+func_2502298	sys_battery_low
+func_2502352	album_photo_slot	# category-10 slots are the photo album
+func_2502366	album_make_photo	# composes the commemorative photo (comment issue; opus-1 / opus-2 high)
+func_250268C	album_photo_write	# category-10 slots are the photo album
+func_2502860	gfx_photo_pixel	# the photo writer's copy of the read-back
+func_2502934	gfx_object_pixel_b
+func_25029DA	ir_send_data_stub
+func_25029DE	ir_stub_zero_c
+func_25029E4	ir_stub_zero_d
+func_25029E8	ir_stub_zero_e
+func_25029EC	ir_stub_zero_f
+func_25029F2	ir_stub_zero_g
+func_25029F6	ir_stub_zero_h
+func_25029FA	ir_send_data_stub_b
+func_25029FE	rtc_irq_rearm	# majority
+func_2502A2C	comm_stop_ms_timers
+func_2502A3E	comm_exclusive_timing_on
+func_2502A56	comm_exclusive_timing_off
+func_2502A68	comm_erase_tx_sectors
+func_2502A96	comm_erase_rx_sectors
+func_2502AC4	comm_erase_session_buffers
+func_2502B30	comm_select_rx_write_pointer
+func_2502B72	comm_flash_append
+func_2502BE2	comm_flash_append_fill
+func_2502C4C	comm_flash_append_marker
+func_2502C6C	ir_rx_store_block	# IR receive path
+func_2502CF0	ir_rx_bytes
+func_2502DCE	ir_rx_find_marker	# majority
+func_250300A	ir_rx_feed
+func_25031AC	ir_rx_reset
+func_25031C2	ir_dir_entry_write
+func_250323A	ir_status_word_write
+func_250325E	ir_xfer_enter
+func_250328A	comm_redraw_hook
+func_250328C	ir_count_tier	# opus-1 / opus-2: maps a count to a tier
+func_25032A4	ir_apply_points	# majority
+func_2503324	ir_session_leave
+func_2503334	ir_stub_zero_a
+func_2503338	ir_stub_zero_b
+func_250333C	friend_find_or_add
+func_250344C	ir_locate_partner_pics	# F16 is the IR receive path
+func_25034C0	friend_new_hook
+func_25034C2	comm_write_default_partner_image
+func_2503584	friend_portrait_hook
+func_2503586	friend_event_hook_a
+func_2503588	friend_event_hook_b
+func_250358A	friend_event_pick
+func_25035CE	friend_event_fire
+func_250363A	friend_event_run_pending
+func_25036B6	friend_event_minute_check
+func_25037BC	friend_add_hook
+func_25037C0	friend_clear_hook
+func_25037C2	friend_portrait_file
+func_2503832	friend_portrait_file_received
+func_250387A	friend_add_after_exchange
+func_25038D0	friend_mark_new
+func_250392C	visit_record_clear
+func_25039B0	ir_stamp_peers_clear	# only peer records 31/32 (opus-2, high; comment issue)
+func_2503A14	ir_stamp_peer_register	# opus-2 (high)
+func_2503B4C	ir_stamp_peers_confirm	# opus-2
+func_2503B82	comm_gift_is_special_coupon
+func_2503BDE	ir_stamp_card_result
+func_2503C82	item_kind_whitelist
+func_2503D16	ir_item_validate
+func_2503E24	ir_check_rx_version	# majority
+func_2503E7A	ir_msg_pair_check
+func_2503EFC	ir_next_packet_kind
+func_2503F2E	ir_clamp_code
+func_2503F44	ir_build_request_packet
+func_25040E0	ir_fill_packet_mode_fields
+func_2504132	ir_stub_return7
+func_2504136	ir_build_request_answer
+func_2504188	ir_build_item_packet
+func_250423A	ui_new_screen_with_picture
+func_2504270	comm_load_visitor_pictures
+func_2504278	flash_write_sector_86
+func_25042CE	ir_check_kinds_pair	# ir_ is already legacy
+func_250437E	ir_store_attached_file
+func_2504400	comm_attached_file
+func_2504406	comm_show_item_get
+func_250440C	comm_show_now_printing
+func_2504412	save_with_short_sound
+func_250445A	comm_peer_allows_game
+func_25044CA	util_random_clear_bit	# returns a random clear bit (comment issue)
+func_250452A	ir_stub_return0
+func_250452E	ir_write_owner_profile_chunk
+func_25045A8	ir_write_message_chunk
+func_2504622	ir_store_received_diary	# 3 of 4: diary page
+func_25046F8	ir_store_received_message
+func_2504824	diary_write_pending_page
+func_2504844	ir_port_setup
+func_250489C	ir_edge_isr
+func_25048D0	tmr_t5_start_tick
+func_2504924	tmr_t5_wait_period
+func_250494C	ir_count_low
+func_2504984	sys_clock_osc3
+func_25049B2	ir_power_up
+func_25049DE	ir_power_down
+func_2504A14	ir_rx_start
+func_2504A48	ir_detect_start
+func_2504B64	ir_decode_bytes
+func_2504C44	ir_recv_packet
+func_2504D6E	ir_send_packet
+func_2504E44	ir_send_ping
+func_2504EB2	tmr_t5_pause
+func_2504EE2	tmr_t5_pause_restore
+func_2504F16	sys_copy_ram_routines	# majority (IR carrier and timer-5 handler)
+func_2504F68	ir_carrier_burst
+D_2504F68	ir_carrier_code
+func_2504FA0	btn_wait_press_or_timeout	# rule: buttons
+func_2504FF6	ir_checksum
+func_2505012	sys_irq_save_disable
+func_2505026	sys_irq_restore
+func_2505034	btn_history_init
+func_2505070	btn_history_sample
+func_25050AC	btn_disable
+func_25050C6	btn_enable
+func_2505112	tmr_t5_start_raw
+func_2505164	tmr_t5_standard_tick
+func_25051A2	tmr_t5_cmpa_vector
+func_25051AE	tmr_t5_tick_handler
+D_25051AE	tmr_t5_handler_code
+func_25051CE	ir_stop
+func_25051F0	owner_mood_setting
+func_2505414	dl_chara_count
+func_2505438	dl_chara_file
+func_2505468	dl_chara_record
+func_250549C	dl_chara_record_by_id
+func_25054DC	dl_chara_slot_by_name
+func_250551E	dl_chara_sprites
+func_2505552	dl_chara_pose_pic
+func_2505594	dl_chara_large_pic
+func_25055B0	dl_chara_description
+func_25055D0	dl_chara_affection_update
+func_250571A	dl_chara_class
+func_250573A	dl_chara_gender_mark
+func_250575A	dl_chara_slot_write
+func_2505934	dl_chara_name_protected
+func_250596C	dl_chara_store	# majority
+func_2505A28	dl_chara_read_menu
+func_2505C54	dl_chara_pick_slot	# majority
+func_2505E44	txt_center_x	# majority
+func_2505E8E	dl_chara_profile_card
+func_25060EC	dl_chara_added_screen
+func_250629E	dl_chara_list
+func_2506658	dl_pet_by_codes
+func_250669A	ui_set_mark
+func_25066A8	ui_draw_marks
+func_25067E2	ui_create_marks
+func_25068E2	ui_menu_draw
+func_2506AE6	ui_menu_draw_framed
+func_2506D82	ui_menu_run
+func_2506EEC	ui_menu_run_plain
+func_2506EF6	ui_menu_run_framed
+func_2506F00	ui_message_box
+func_250709A	ui_question_two_lines
+func_25072E8	ui_yes_no
+func_25074FA	ui_use_no_delete
+func_2507710	ui_question_two_lines_b
+func_250794C	ui_three_entry_menu
+func_2507C06	ui_paged_list
+func_2507FBE	item_copy_affinities
+func_2507FE0	item_copy_name
+func_2508016	item_strongest_affinity
+func_250807C	visit_garden_item_price
+func_25080D6	item_pick_random_owned
+func_250819C	item_delete_from_bank
+func_25081F4	item_browse_inventories
+func_25085DE	visit_garden_visitor
+func_2508826	visit_merchant_browse
+func_2508920	item_owned_position	# majority
+func_2508970	item_code_and_add_copy
+func_250899A	visit_merchant_purchase
+func_2508AB6	visit_merchant
+func_2508B14	visit_scheduled_visitor
+func_2508D68	visit_gift
+func_2508DC0	visit_friend	# avoid visit_friend_visit
+func_2508EEC	visit_friend_message_scene
+func_2508FEE	town_farm_state_cb
+func_2509000	town_street_state_cb
+func_2509020	town_enter_farm
+func_2509034	town_enter_street
+func_2509048	town_pick_street_chara
+func_25090C0	town_select_street_chara
+func_25090FC	town_street_friendship_add
+func_250911C	town_street_friendship_clear
+func_250913A	town_street_visit
+func_250934A	town_farm_midnight
+func_2509388	town_farm_event
+func_25093DA	town_farm_plant_pic
+func_250944E	town_farm_visit
+func_25096D4	outing_clear_counters
+func_25096E4	outing_end
+func_25096F6	outing_time_to_return
+func_2509710	outing_hours_check
+func_2509756	outing_minute_tick
+func_25097AE	town_fountain_button
+func_2509814	town_fountain_result
+func_2509858	ui_question_four_lines_choice
+func_25099EE	item_find_same_kind	# opus-2 (high)
+func_2509A7C	town_fountain_owned_item
+func_2509AFC	town_fountain_pick_items
+func_2509D62	town_fountain_honesty_test
+func_2509EA0	town_fountain_visit
+func_2509FD4	town_visit_place
+func_250A044	pet_become_character
+func_250A21A	pet_set_character_id
+func_250A2E2	chara_select_pet_sprites_by_id
+func_250A374	pet_select_sprite_set
+func_250A3EA	chara_select_other_by_set
+func_250A426	chara_select_third_by_set
+func_250A462	chara_select_fourth_by_set
+func_250A49E	chara_select_other_by_id
+func_250A4FA	chara_select_third_by_id
+func_250A556	chara_select_fourth_by_id
+func_250A5B2	chara_select_fifth_by_id
+func_250A604	chara_select_fifth_by_set
+func_250A640	pet_reset_for_new_egg
+func_250A7F8	pet_new_game_init
+func_250A8E0	pet_new_egg_random
+func_250A938	evo_baby_to_child
+func_250A970	evo_pick_adult_boy	# pairs with evo_pick_adult_girl
+func_250AB18	evo_pick_adult_girl
+func_250ACE0	evo_next_by_care_boy
+func_250AD2E	evo_next_by_care_girl
+func_250AD8C	evo_child_to_adult	# T1: child -> adult step
+func_250ADEA	evo_stage_change	# rule: stage transitions are evo
+func_250AFCC	evo_stage_change_silent	# rule: evo
+func_250B116	pet_pick_egg_kind
+func_250B188	pet_start_next_generation
+func_250B26C	pet_start_new_egg
+func_250B316	evo_count_item_use_young
+func_250B3EA	sys_apply_patch_list	# majority
+func_250B444	util_swaph
+func_250B448	util_swap_bytes
+func_250B44C	util_swap_u8
+func_250B456	util_swap_u16
+func_250B460	util_swap_u32
+func_250B46A	rtc_reset
+func_250B51A	rtc_acquire
+func_250B534	rtc_irq_off
+func_250B540	rtc_irq_on
+func_250B54C	rtc_get_month
+func_250B554	rtc_get_day
+func_250B55C	rtc_get_hour
+func_250B564	rtc_get_minute
+func_250B56C	rtc_get_second
+func_250B574	rtc_day_period
+func_250B5A6	rtc_set_time
+func_250B670	rtc_next_day_leap
+func_250B6A6	rtc_next_day
+func_250B6DC	rtc_read_clock
+func_250B78E	flash_sector_addr
+func_250B7B6	item_bank_slot
+func_250B7FA	item_bank_record
+func_250B874	item_bank_has
+func_250B8F4	save_factory_reset
+func_250B9AA	save_confirm_erase
+func_250BB96	ui_show_startup_picture
+func_250BBC0	test_check_entry_code
+func_250BC60	sys_power_on
+func_250BF80	save_game
+func_250C000	flash_backup_sector
+func_250C06E	flash_restore_sector_except
+func_250C0FA	item_same_identity
+func_250C1BC	item_find_in_bank
+func_250C1F2	item_find_in_inventory
+func_250C246	flash_first_erased_record
+func_250C288	item_bank_free_slot
+func_250C324	flash_program_record
+func_250C366	ui_show_items_full
+func_250C450	item_bank_next_slot
+func_250C4E0	item_bank_discard_browser
+func_250C678	item_special_class
+func_250C8AA	item_seasonal_decoration
+func_250C9C2	spot_new_bingo_card
+func_250C9E4	item_bank_is_app_data
+func_250CA02	dl_erase_program_area
+func_250CA22	item_store_in_bank
+func_250CD56	ui_light_mark_for_bank
+func_250CD8E	item_receive
+func_250CE62	item_discard_from_inventory
+func_250CF0C	item_add_to_inventory
+func_250D24A	dl_install_program
+func_250D304	item_record_by_index
+func_250D39A	item_load_pictures
+func_250D44A	item_prize_record
+func_250D522	item_body_value
+func_250D5C8	spot_app_record
+func_250D6A0	item_data_block
+func_250D740	spot_gashapon_rarity_pick
+func_250D79A	item_get_id
+func_250D7D0	friend_portrait_backup	# rule: friend
+func_250D7EE	friend_portrait_store	# rule: friend
+func_250D866	flash_erase_sector
+func_250D886	flash_sector_to_scratch
+func_250D914	flash_sector_from_scratch
+func_250D9A4	flash_program
+func_250DA08	item_load_stamp_pictures
+func_250DA4C	item_store_received_stamp
+func_250DB16	snd_end_callback_fn
+func_250DB42	snd_init
+func_250DB8E	snd_play
+func_250DC10	snd_wait_end
+func_250DC28	snd_error_beep
+func_250DC30	spi_init_hook
+func_250DC34	spi_enable
+func_250DC42	spi_disable
+func_250DC50	spi_cs_assert
+func_250DC5A	spi_cs_release
+func_250DC64	spi_send_byte	# vestigial SPI stubs by role (opus)
+func_250DC66	spi_send_bytes	# majority
+func_250DC68	spi_recv_byte
+func_250DC6A	spi_recv_bytes	# opus-1
+func_250DC6C	spi_flash_setup
+func_250DC80	spi_flash_read_id
+func_250DC98	spi_flash_write_enable
+func_250DD10	spi_flash_command_zero_arg
+func_250DDA4	spi_flash_sector_command
+func_250DE3E	spi_flash_read_page
+func_250DE78	spi_flash_program_page
+func_250DF1A	spi_clock_on
+func_250DF3C	spi_flash_read_status
+func_250DF58	sys_startup_flow	# the power-on flow (opus-1)
+func_250E980	test_debug_set_character
+func_250ECDC	comm_count_tenth
+func_250ED06	item_souvenir_flag
+func_250ED4E	spot_traveller_souvenir
+func_250EDE0	spot_fortune_line
+func_250EE06	spot_fortune_event	# jackpot = うらないクッキー (D_2393748 is a pointer cell to that record)
+func_250EEC8	pet_event_idle_random
+func_250EEFC	spot_profile_talk
+func_250F046	pet_event_phrase
+func_250F122	game_score_reward
+func_250F1EE	pet_care_room_menu	# user: care stays visible (toilet / bath / cleaning / closet)
+func_250F46A	pet_cleaning	# parallel to pet_bath (func_240D976)
+func_250F4F2	ui_wardrobe_menu_cleared
+func_250F506	pet_habit_learned	# a habit training is complete (comment issue; opus-1 / opus-2 high)
+func_250F616	pet_care_menu
+func_250F910	pet_care_praise	# user: care must stay visible
+func_250F980	pet_care_scold
+func_250FA5C	pet_care_talk
+func_250FC10	pet_care_comfort
+func_250FCDA	pet_sitter_call	# user: sitter must stay visible
+func_250FE96	pet_sitter_question
+func_2510058	pet_sitter_return
+func_25101D8	pet_sitter_takeover_question
+func_2510368	pet_sitter_hours
+func_251038C	pet_sitter_due
+func_25103A8	pet_care_flags_reset
+func_25103D8	room_sitter_overlay
+func_251067A	room_toilet_request_overlay
+func_2510736	room_bath_request_overlay
+func_25107F2	room_cleaning_request_overlay
+func_25109EE	room_praise_overlay
+func_2510B0A	spot_bingo_gashapon_menu	# rule: spot
+func_2510E24	ui_status_browser	# opus-1 / opus-2 (high): the status pages browser
+func_2510EDE	pet_status_pages
+func_2510F16	ui_status_page_hearts
+func_25110EE	ui_status_page_profile
+func_25111F0	ui_status_page_marks
+func_2511372	pet_status_page_clover
+func_251149E	owner_editor
+func_2511690	owner_empty_pages
+func_251176C	owner_draw_page
+func_2511E2A	owner_edit_page0
+func_2512246	owner_edit_page1
+func_25127E0	owner_edit_page2
+func_2512ABC	owner_mood_icon_value
+func_2512AE8	owner_digit_pic
+func_2512B1A	friend_profile_view	# rule: friend list
+func_2512CBC	friend_profile_draw_page	# rule: friend list
+func_25133C4	ui_settings_menu
+func_2513592	ui_settings_blocked
+func_25135C8	ui_settings_theme	# settings menu entries: ui_settings_*
+func_25136BE	ui_settings_brightness
+func_25136CC	ui_settings_sound
+func_25136DA	item_special_menu
+func_2513A66	spot_bingo_card_viewer
+func_2513B02	item_coupon_viewer
+func_2513C2C	item_special_delete_confirm
+func_2513DAC	item_coupon_erase
+func_2513DD8	item_special_missing
+func_2513E1C	ui_yes_no_question
+func_2513FC6	pet_see_off
+func_2514036	spot_bingo_read	# majority
+func_25140B4	spot_touch_menu_entry
+func_25140E8	spot_reader_mode2
+func_25140F0	test_spot_show_ver
+func_2514164	test_spot_show_inf
+func_25141EC	test_spot_show_cls
+func_2514274	test_spot_screen	# majority
+func_25146E6	test_spot_read
+func_25146F0	test_spot_check
+func_25146FA	test_spot_write
+func_2514704	spot_touch_any_reader	# majority
+func_2514846	nfc_restore_game_timing
+func_2514854	spot_reader
+func_251674A	spot_check_sum	# majority
+func_2516780	spot_sum	# majority
+func_251679C	spot_visitor_sprite
+func_2516B58	item_coupon_class	# majority
+func_2516CF2	spot_bingo_card_kind
+func_2516E1A	spot_bingo_id_matches
+func_2516E3A	spot_is_gashapon_ticket
+func_2516F02	spot_content_entry_count
+func_25171D2	spot_content_header_field
+func_251722E	spot_content_character
+func_2517248	spot_content_picture
+func_2517252	spot_content_name
+func_251725C	spot_content_file
+func_25172A0	spot_content_file_length
+func_25172E4	spot_content_file_record
+func_25172EE	spot_content_file_picture
+func_2517328	spot_content_file_name
+func_2517332	spot_content_file_kind
+func_25173D0	spot_content_browser
+func_2517C8C	spot_bingo_card_screen
+func_2517E28	spot_show_message
+func_2517F60	spot_gift_points
+func_2517F94	spot_visitor_message	# majority
+func_2517FEA	spot_visitor_scene	# majority
+func_2518036	chara_is_builtin
+func_2518068	ui_question_four_lines
+func_2518296	spot_ask_downloaded_all	# majority
+func_25182EC	spot_items_full_notice	# opus-1 / opus-2: "items full" notice
+func_25183D2	spot_replace_card_dialog
+func_2518534	spot_install_gashapon_ticket
+func_25185BC	spot_install_bingo_card
+func_2518658	spot_wait_reader	# majority
+func_2518760	mail_count_for_friend
+func_251878E	mail_card
+func_2518958	mail_edit_message
+func_2518C60	mail_draw_card_line
+func_2518CE6	mail_draw_card
+func_2518F1C	mail_load_message
+func_2518F58	mail_edit_dialog
+func_25191AC	friend_prev_used
+func_25191DC	friend_picture_record
+func_251926E	friend_draw_page
+func_25193BE	item_special_area_count
+func_251943C	item_bank_next_record	# majority
+func_25194CC	item_record_browser
+func_25196A4	item_special_area_browser
+func_25196DC	test_rom_sum_program
+func_251970A	test_rom_sum_graphics
+func_2519748	test_mode
+func_2519F2E	test_flash_erase_all
+func_251A062	test_battery_check
+func_251A258	test_clear_buttons	# test-mode copy of btn_clear (fable-1)
+func_251A26E	btn_wait_release
+func_251A28C	test_sound_draw	# majority
+func_251A364	test_sound
+func_251A41E	test_rtc_count
+func_251A566	tmr_t3_start_timeout
+func_251A5B4	tmr_t5_start_timeout
+func_251A602	tmr_delay_ms
+func_251A620	tmr_delay_ms_t5
+func_251A648	sys_set_backlight
+func_251A650	sys_apply_backlight
+func_251A6E0	game_menu_state
+func_251A72C	game_menu_draw
+func_251A96C	game_menu_next
+func_251A9BA	game_menu
+func_251AF66	game_timing
+func_251AF84	game_timing_run
+func_251B220	game_timing_scene_intro
+func_251B39E	game_timing_scene_marker
+func_251B6C2	game_timing_scene_a
+func_251B9FC	game_timing_scene_b
+func_251BDE4	game_timing_scene_c
+func_251C186	game_timing_round
+func_251C1AE	game_timing_result_anim
+func_251C29A	game_timing_play
+func_251C5DC	game_training
+func_251C600	game_training_pick
+func_251C64E	game_training_loop
+func_251C850	game_training_intro
+func_251CBC0	game_training_scene_a
+func_251CC90	game_training_scene_b
+func_251CD66	game_training_result_a
+func_251CEA8	game_training_result_b
+func_251CFEE	game_training_scene_c
+func_251D2E4	game_training_scene_d
+func_251D666	spot_bingo_screen
+func_251D67E	spot_bingo_mark	# spot_bingo_board is the board D_00012F2
+func_251D9F0	spot_bingo_draw_card
+func_251DB6E	spot_bingo_card_erase
+func_251DB9A	spot_gashapon
+func_251DBB0	spot_gashapon_draw
+func_251DD00	spot_gashapon_scene_open
+func_251E362	spot_gashapon_scene_item
+func_251E824	spot_gashapon_scene_points
+func_251F184	spot_gashapon_scene_message
+func_251F41A	ui_scroll_text_with_pet
+func_251F560	game_slot_init_reels
+func_251F618	game_slot_screen	# family game_cards_ -> game_slot_
+func_251F7B2	game_slot_light_match
+func_251F8CA	game_slot_score_pair
+func_251FA7A	game_slot_loop	# family game_cards_ -> game_slot_
+func_251FF4E	game_cake
+func_251FF72	game_cake_pick_order
+func_251FFC0	game_cake_loop
+func_252019E	game_cake_intro
+func_2520298	game_cake_scene0
+func_2520510	game_cake_scene1
+func_2520884	game_cake_scene2
+func_2520BF2	game_cake_scene3
+func_2520F60	game_cake_scene4
+func_25212B2	game_cake_scene5
+func_2521700	game_cake_scene6
+func_2521B78	game_cake_scene7
+func_25220EA	game_cake_scene8
+func_2522670	game_cake_scene9
+func_2522BEA	game_cake_success
+func_252308C	game_cake_fail
+func_252365E	game_treasure
+func_252366C	game_treasure_loop
+func_252398C	game_treasure_scene_a
+func_2523DC6	game_treasure_scene_b
+func_2523EE6	game_treasure_scene_c
+func_2524158	game_treasure_scene_d
+func_2524364	game_treasure_scene_e
+func_25245E6	game_treasure_scene_f
+func_2524932	game_treasure_scene_g
+func_2524DA2	game_treasure_play
+func_2525B16	game_treasure_scene_h
+func_2525D02	game_treasure_found_scene	# outcome 0: a find is counted (3 = rank 3)
+func_25261AE	game_treasure_bust_scene	# outcome 1: ends the game
+func_25272C2	game_quiz_setup
+func_2527334	game_quiz_question_screen	# majority
+func_2527516	game_quiz
+func_25276F8	game_quiz_ask
+func_2527918	item_find_builtin_match
+func_2527AA0	comm_take_gift_item
+func_2527B16	comm_show_msg
+func_2527B60	comm_get_profile
+func_2527BDC	comm_get_peer_profile
+func_2527C5A	owner_gender_text
+func_2527C82	owner_mood_icon
+func_2527CAE	owner_mood_text
+func_2527D04	comm_draw_profile_card
+func_2527E9C	comm_info_screen
+func_2527F6C	comm_ask_fortune
+func_2527FC2	comm_fortune_number
+func_25280A8	comm_show_fortune
+func_2528176	comm_outcome_greeting
+func_2528228	comm_load_section_pics
+func_252827A	comm_outcome_gift
+func_25283B8	evo_after_marriage
+func_25283FA	comm_proposal_refused_msg
+func_2528456	comm_can_marry
+func_2528578	comm_outcome_marriage
+func_2528628	comm_outcome_app
+func_2528658	comm_retry_msg
+func_25286BE	comm_outcome_game1
+func_2528736	comm_outcome_game2
+func_25287F2	comm_outcome_photo
+func_252888C	comm_run_outcome
+func_252893A	comm_idle_touch_event
+func_2528A4A	comm_trace
+func_2528A4C	comm_trace2
+func_2528A4E	comm_user_cancelled
+func_2528A68	nfc_short_delay
+func_2528A78	nfc_power_off
+func_2528A8C	comm_apply_points
+func_2528ACE	btn_mask
+func_2528AE0	btn_unmask
+func_2528AFA	ui_wait_ticks
+func_2528B1E	ui_wait_ticks_hold_a
+func_2528B52	comm_erase_banks
+func_2528B7C	flash_fill
+func_2528BCA	util_fill16
+func_2528BEC	flash_program_bytes
+func_2528C4A	flash_program_halfwords
+func_2528CAE	comm_record_item
+func_2528CC0	save_after_sound	# rule: save
+func_2528CF8	snd_wait_before_flash
+func_2528D18	comm_same_peer
+func_2528D70	comm_remember_peer
+func_2528DA2	friend_lookup_or_add	# rule: friend list (friend_find_or_add is func_250333C)
+func_2528F18	friend_portrait	# rule: friend list
+func_2528F92	friend_book_update	# rule: friend list
+func_25290F6	comm_store_pending_friend
+func_2529144	comm_make_random_friend
+func_2529484	pet_pick_variant_flag
+func_25294CE	chara_family
+func_25294F4	comm_validate_record
+func_25295E6	comm_check_item_flag
+func_2529610	comm_check_app_food
+func_252967E	comm_check_peer_phase
+func_252979C	comm_count_and_save
+func_25297BE	comm_count_add	# comm_count is the counter D_000138A
+func_25297DC	comm_store_peer_mail
+func_25298CA	ir_transfer_abort
+func_25298CC	ir_transfer
+func_25298CE	nfc_show_session_screen
+func_2529B78	test_nfc_loopback	# rule: factory test
+func_2529C48	nfc_session_clear
+func_2529C72	comm_reset_records
+func_2529CA4	nfc_user_abort
+func_2529CB4	nfc_wait_field_on	# majority
+func_2529CC4	nfc_sleep_field_off_set
+func_2529CD4	nfc_wait_field_off	# majority
+func_2529CE4	nfc_rearm_if_field
+func_2529CF2	nfc_field_seen
+func_2529D0A	nfc_find_peer_target	# consistent with nfc_find_peer_initiator
+func_2529D8C	nfc_find_peer_initiator	# majority
+func_2529DE0	nfc_power_up
+func_2529E2E	nfc_init_if_enabled	# majority
+func_2529E42	nfc_send
+func_2529F0C	nfc_receive
+func_2529FEE	test_nfc_init_check
+func_252A018	test_nfc_link
+func_252A266	nfc_session_initiator
+func_252A496	nfc_session_target
+func_252A690	nfc_menu_session
+func_252A74A	comm_reset_records_wrapper
+func_252A752	nfc_idle_target_session
+func_252AA4C	nfc_idle_session
+func_252AAC2	comm_record_sum
+func_252AAEC	comm_record_check_sum
+func_252AB30	comm_check_codes_paired
+func_252AB76	comm_check_same_type
+func_252AB9C	comm_check_pair_and_type
+func_252ABB6	comm_build_header
+func_252AEB4	comm_build_section_mail
+func_252AF64	comm_build_section_profile
+func_252B01E	comm_program_profile_blob
+func_252B084	comm_build_section_images
+func_252B0F4	comm_build_section_poses
+func_252B144	comm_build_section_images2
+func_252B194	comm_build_section_proposal
+func_252B20E	comm_build_section_item
+func_252B2C6	comm_describe_given_item
+func_252B34E	comm_payload_gift_init	# session types by meaning: 5 gift, 6 proposal, 7 photo, 8 app
+func_252B3E0	comm_payload_gift_target
+func_252B440	comm_payload_app_init
+func_252B482	comm_payload_app_target
+func_252B486	comm_payload_proposal_init
+func_252B582	comm_payload_proposal_target
+func_252B62C	comm_payload_game_init	# session types by meaning
+func_252B714	comm_payload_game_target
+func_252B7DA	comm_payload_photo_init
+func_252B89C	comm_payload_photo_target
+func_252B8FC	comm_build_payload
+func_252B9A8	comm_build_phase1
+func_252BBF2	comm_phase2_code
+func_252BC96	comm_build_phase2
+func_252BDAE	comm_build_phase3
+func_252BE66	comm_exchange_initiator
+func_252C1B6	comm_exchange_target
+func_252C57C	comm_exchange
+func_252C5A6	nfc_irq_isr
+func_252C5CE	nfc_link_open
+func_252C8CA	nfc_link_open_921k
+func_252CBEA	nfc_link_close
+func_252CE54	nfc_uart_send
+func_252CF4C	nfc_uart_recv
+func_252CFD8	nfc_rearm_field_detect
+func_252D204	nfc_uart_tx_isr
+func_252D2A2	nfc_uart_rx_isr
+func_252D2D6	nfc_uart_err_isr
+func_252D2FC	nfc_tick_start
+func_252D340	nfc_tick_stop
+func_252D366	nfc_tick_isr
+func_252D39C	nfc_power_delay
+func_252D3AC	nfc_hw_power_on	# nfc_power_off is func_2528A78
+func_252D3CC	nfc_hw_power_off	# majority
+func_252D3F2	nfc_init
+func_252D75E	nfc_get_unused_word
+func_252D76A	nfc_sleep_until_field
+func_252D79E	nfc_request_abort
+func_252D7AC	card_set_params	# majority
+func_252D7E0	nfc_poll_tag
+func_252D882	nfc_tag_read	# majority
+func_252D9C0	nfc_tag_write	# majority
+func_252DAE4	card_apdu_f5_session	# the session around card_apdu_f5 (its purpose is a guess in the comment)
+func_252DB8A	card_last_result
+func_252DBB6	card_apdu_c4_session
+func_252DC6E	nfc_detect_initiator
+func_252E1B6	nfc_detect_target
+func_252E5D0	nfc_dep_receive
+func_252ECE0	nfc_dep_send
+func_252F292	nfc_snep_server
+func_252FE2C	nfc_snep_client
+func_25305C2	nfc_copy_last_frame
+func_25305F6	nfc_activate_type_a
+func_2530E9A	nfc_identify_type2_tag
+func_2530F1A	nfc_poll_felica
+func_253122C	nfc_mifare_read	# majority
+func_2531864	nfc_type2_read	# majority
+func_2531BD8	card_read	# rule: card
+func_25320AE	nfc_mifare_write	# majority
+func_2532650	nfc_type2_write	# majority
+func_253284A	card_write	# rule: card
+func_2532BF8	card_activate	# rule: card
+func_25332B6	card_deselect	# rule: card
+func_2533426	card_apdu_f5	# T5: 90 F5; "get file info" guess stays in the comment
+func_25336EE	card_apdu_c4	# T5
+func_2533976	nfc_error_code	# majority
+func_25339E8	nfc_send_sensf_req
+func_2533A5E	nfc_send_sensf_res
+func_2533B90	nfc_send_atr_req
+func_2533DBE	nfc_send_atr_res
+func_2534000	nfc_send_dep_res_atn
+func_2534066	nfc_llcp_send_symm_req	# nfc_llcp_send_* like nfc_llcp_send_cc
+func_25340DE	nfc_llcp_send_symm_res
+func_2534158	nfc_llcp_send_connect
+func_25341D4	nfc_llcp_send_cc
+func_2534276	nfc_llcp_send_dm_sdp
+func_2534300	nfc_snep_send_put	# majority
+func_25344EC	nfc_snep_send_response
+func_253459A	nfc_llcp_send_rr
+func_2534650	nfc_llcp_send_disc
+func_25346CC	nfc_llcp_send_disc_server
+func_253474C	nfc_llcp_send_dm
+func_25347D6	nfc_snep_store_fragment	# opus-2 (high)
+func_25349B2	nfc_poll_type_a
+func_2534FBE	nfc_setup_passive_initiator	# majority; like nfc_setup_active_initiator
+func_25350DE	nfc_setup_active_initiator
+func_253520C	snd_tick_start
+func_2535270	snd_tick_timer_stop
+func_25352A2	snd_tick_ack
+func_25352AE	snd_ch0_on
+func_2535304	snd_ch1_on
+func_253535A	snd_ch2_on
+func_25353B2	snd_ch3_on
+func_253540A	snd_ch_on
+func_253545E	snd_ch0_off
+func_2535488	snd_ch1_off
+func_25354B2	snd_ch2_off
+func_25354DE	snd_ch3_off
+func_253550A	snd_ch_off
+func_2535542	snd_set_pitch_0
+func_2535554	snd_set_pitch_1
+func_2535566	snd_set_pitch_2
+func_2535578	snd_set_pitch_3
+func_253558A	snd_set_pitch
+func_25355E6	snd_restart_ch0
+func_25355F4	snd_restart_ch1
+func_2535602	snd_restart_ch2
+func_2535610	snd_restart_ch3
+func_253561E	snd_channel_restart
+func_2535656	snd_preset_timers
+func_253569E	snd_tick_isr
+func_25356C6	snd_irq_save_disable
+func_25356D6	snd_irq_restore
+func_25356E2	snd_voice_note
+func_25356EE	snd_set_voice_note
+func_25356FA	snd_sequencer_tick
+func_25359EE	snd_sequencer_init	# snd_init is func_250DB42
+func_2535A22	snd_tick_stop
+func_2535A2A	snd_set_end_callback
+func_2535A32	snd_voice_load
+func_2535AC2	snd_voice_start
+func_2535B06	snd_voice_pause
+func_2535B3E	snd_voice_stop
+func_2535B6C	snd_voice_state
+D_2536D08	chara_own_accessory_offsets	# fable-2 (high) / opus-2
+D_2536DB8	ui_wardrobe_menu_tbl
+D_2536E6C	comm_proposal_texts	# majority
+D_2537EB4	comm_give_shop_menu_items	# rule: the subsystem's menu tables
+D_2537F2C	comm_give_inventory_menu_items
+D_253802C	comm_tama4u_menu_items
+D_2538080	ir_point_gift_menu_items	# the point gift is the dead IR feature
+D_2538130	comm_main_menu_items
+D_2538190	comm_main_menu_debug_items
+D_2538F24	flash_sector_offsets
+D_253A388	food_venues_meals
+D_253A3F4	food_venues_snacks
+D_253A454	food_menu_tbl
+D_253A47C	food_fridge_inventory
+D_253A4C8	food_meal_snack_labels
+D_253B250	test_sample_tamago
+D_253B778	chara_pic_set_table
+D_253C020	item_use_anims
+D_253C148	item_liked_anims
+D_253C2C8	item_inv_daily
+D_253C2D4	item_inv_tools
+D_253C2E0	item_inv_clothes
+D_253C2EC	item_inv_accessories
+D_253C2F8	item_inv_fridge
+D_253C304	item_inv_stamps
+D_253C310	item_inv_app_items	# item_inv_* vocabulary
+D_253C31C	visit_reward_pics
+D_253C3E4	item_builtin_class_ranges
+D_253C49C	owner_mood_labels
+D_253C4C0	owner_mood_pics
+D_253C564	dl_chara_protected_names
+D_253C838	room_poop_positions
+D_253E7BC	room_egg_pics
+D_253E7CC	room_scene_egg
+D_253E8D0	room_egg_step_ms
+D_253E97C	room_scene_call_child
+D_253E9A8	room_scene_call_adult
+D_253E9EC	room_scene_walk_objs
+D_253EA60	room_scene_walk
+D_253EAEC	room_scene_unused_a	# handled by main but never selected (opus-1)
+D_253EB14	room_arrow_pics
+D_253EB28	room_scene_request	# 3 of 4: a request (toilet / bath / cleaning) pending
+D_253EB3C	room_scene_baby_sick
+D_253EB50	room_sick_icon_pos_baby
+D_253EB5C	room_scene_neglected
+D_253EB70	room_neglect_icon_pos
+D_253EB7C	room_scene_baby_asleep	# majority
+D_253EB9C	room_scene_unused_b
+D_253EBB0	room_scene_collapsed
+D_253EC24	room_scene_collapsed_path	# collapsed scene positions
+D_253ECBC	room_scene_sick
+D_253ECD0	room_sick_icon_pos
+D_253ECDC	room_scene_departing
+D_253ECF0	room_depart_icon_pos
+D_253ECFC	room_scene_asleep	# majority
+D_253ED1C	room_scene_arrows
+D_253ED60	ui_arrow1_positions
+D_253ED74	ui_arrow2_positions
+D_253ED88	room_scene_unused_c
+D_253EDA8	room_scene_leaving
+D_253EFFC	room_weather_by_period
+D_253F060	room_weather_month_ids
+D_253F0A8	room_weather_month_odds
+D_253F0F0	room_window_scene_a	# like room_window_passers_a
+D_253F1DC	room_window_passers_a
+D_253F728	room_window_scene_b	# like room_window_passers_b
+D_253F7FC	room_window_passers_b
+D_253FCB4	room_window_scene_c
+D_253FD98	room_window_passers_c
+D_25402B4	room_window_scene_bad_weather
+D_2540358	room_window_passers_bad_weather
+D_2540E58	shop_tamamori_tabs
+D_2540EE4	shop_reform_rooms
+D_2540FE4	item_inventories_four
+D_2541014	item_bank_slots_four
+D_254164C	visit_garden_lines
+D_25416D8	visit_garden_flower_items
+D_25416F8	visit_merchant_goods
+D_2541758	visit_scheduled_charas
+D_254176C	visit_scheduled_lines
+D_254178C	visit_scheduled_requests
+D_2541CF4	town_park_charas_morning
+D_2541CFC	town_park_charas_midday
+D_2541D04	town_park_charas_evening
+D_2541D0C	town_park_charas_night
+D_2541D14	shop_keepers
+D_2541D84	town_places
+D_2541F08	shop_floor_menu_tbl
+D_2541F84	shop_bank_list
+D_25420A4	town_visitor_table	# fable-2 / opus-1 (high)
+D_2542174	town_park_contacts
+D_25422E8	town_match_species_a
+D_25422F4	town_match_species_b
+D_25424EC	town_club_limits
+D_25425BC	town_club_lines	# majority
+D_254264C	town_club_menu_tbl
+D_254289C	ui_theme_names
+D_25428B0	ui_top_bar_pics
+D_25428C4	ui_bottom_bar_pics
+D_25428D8	ui_icon1_pics
+D_25428EC	ui_icon2_pics
+D_2542900	ui_icon3_pics
+D_2542914	ui_icon4_pics
+D_2542928	ui_icon5_pics
+D_254293C	ui_icon6_pics
+D_2542950	ui_icon7_pics
+D_2542964	ui_icon8_pics
+D_2542978	ui_icon9_pics
+D_254298C	ui_call_icon_pics
+D_2542A68	ui_status_menu_labels
+D_2542A74	chara_value_table
+D_2543710	chara_text_bday
+D_2543B90	chara_text_names
+D_2544CAC	chara_text_talk
+D_2545E1C	chara_text_play
+D_2546B60	chara_text_proposal
+D_2547B5C	chara_text_farewell
+D_25486B4	chara_text_crush	# profile string 3 こっそりすきなひと
+D_2549394	chara_text_want_eat
+D_254A06C	chara_text_want_become
+D_254AC40	chara_text_hobby
+D_254BE58	chara_text_journey
+D_254D174	chara_text_forgive
+D_254DE10	chara_text_play_request
+D_254E958	chara_text_hungry
+D_254F544	chara_text_fashion
+D_25575A0	txt_general
+D_2559608	txt_tips
+D_2559854	txt_fortune_results
+D_2559ED4	mail_card_templates	# text list 0x67: message card templates
+D_255A204	mail_friend_templates	# friend-message templates (text list 0x68)
+D_255B158	txt_daily_fortune
+D_255B4DC	chara_table
+D_255BD20	chara_builtin_ids
+D_255BD80	room_tbl
+D_255BDBC	room_living_designs
+D_255BE20	room_kitchen_designs
+D_255BE40	room_toilet_designs
+D_255BE50	room_bath_designs
+D_255BE60	room_bedroom_designs
+D_255BE70	room_kitchen_bg_pics	# scene backgrounds by kitchen design
+D_255BE90	room_kitchen_fg_pics	# scene foregrounds by kitchen design
+D_255BEB0	room_bath_extra_pics
+D_255BEC0	room_bed_pics
+D_255C0A4	item_inv_food	# item_inv_* vocabulary
+D_255C338	item_bank_tbl
+D_255C46C	shop_tbl_daily_tools
+D_255C4A0	shop_tbl_fashion
+D_255C514	snd_bank
+D_255C840	chara_pose_sets
+D_255C8D8	anim_idle_random_table
+D_255C9A8	pet_event_phrase_lines
+D_255CA50	pet_care_room_menu_labels	# user: care stays visible
+D_255CA64	room_scene_sitter
+D_255CB60	room_scene_toilet_pending
+D_255CBA8	room_scene_bath_pending
+D_255CBF0	room_scene_clean_pending
+D_255CC04	room_scene_praise_window
+D_255CC3C	room_scene_toilet_call
+D_255CC74	room_scene_bath_call
+D_255CCAC	room_scene_clean_call
+D_255CD20	pet_care_menu_texts
+D_255CD80	pet_sitter_hours_msg
+D_255CDAC	pet_sitter_question_msg
+D_255CDF0	pet_sitter_busy_msg
+D_255CE34	pet_sitter_takeover_msg
+D_255CE44	room_sitter_path_a
+D_255CEE8	room_sitter_path_b
+D_255CF8C	room_overlay_base_a
+D_255CF90	room_overlay_base_b
+D_255CF94	room_overlay_base_c
+D_255CF98	room_overlay_base_d
+D_255CFA8	room_overlay_base_e
+D_255CFD0	spot_bingo_gashapon_menu_labels	# rule: spot
+D_255D028	ui_status_happiness_pics	# opus-1 (high) / opus-2
+D_255D1E4	owner_mood_icon_tbl
+D_255D288	ui_settings_labels
+D_255D2F8	item_special_delete_texts
+D_255D618	diary_templates
+D_255F048	album_special_names
+D_255F0C0	ui_notebook_menu_tbl
+D_255F288	gfx_digit_pics
+D_255F58C	mail_letter_templates
+D_255F650	test_flash_areas
+D_255F71C	rtc_clock_small_digits
+D_255F744	rtc_clock_big_digits	# like rtc_clock_small_digits
+D_255FA2C	game_menu_tbl
+D_255FA9C	game_training_masks
+D_255FB94	game_cake_order_masks	# majority
+D_2560C08	game_quiz_question_texts	# majority
+D_2561334	game_quiz_answers_a
+D_256198C	game_quiz_answers_b
+D_2561FA4	game_quiz_answers_c
+D_2562134	game_quiz_answer_tbl
+D_25621D0	owner_mood_icons
+D_2562340	comm_forbidden_pairs
+D_2563548	flash_program_end
+D_259E000	diary_area_end
+D_2750000	spot_bingo_card_slot
+D_2760000	spot_gashapon_ticket_slot
+D_2788000	dl_chara_slot1
+D_2790000	dl_slot2_area
+D_2792000	diary_scratch_page1
+D_2798000	dl_chara_slot3
+D_27A0000	dl_chara_slot4
+D_27A8000	dl_chara_slot5
+D_27B0000	dl_chara_slot6
+D_27B8000	dl_chara_slot7
+D_27BE000	diary_scratch_end
+D_27C08E8	comm_tx_message_chunk
+D_27D0000	comm_rx_phase1	# majority; like comm_rx_phase2
+D_27D0072	comm_rx_peer_id
+D_27D0800	comm_rx_phase2
+D_27E0000	flash_sector_86_item
+CF	UartRingCfg
+CF.b1	tx_buf
+CF.b2	rx_buf
+CF.n1	tx_size
+CF.n2	rx_size
+E1	BuiltinItemKeyEntry
+E1.a	category
+E1.b	subkind
+E1.c	item_id
+E1.v	record
+E2	BuiltinItemRecEntry
+E2.rec	key_record	# the record compared; E2.v is the record returned
+E2.v	record
+E3	PoseEntry
+E3.a	width
+E3.b	height
+E3.c	pose	# PoseEntry
+E8068	IdTextEntry
+E8068.id	chara_id
+E_0084478	PasserStep
+E_0084478.a	pic_a
+E_0084478.b	pic_b
+E_0084478.x04	flags_a
+E_0084478.x06	x_a
+E_0084478.x08	y_a
+E_0084478.x10	flags_b
+E_0084478.x12	x_b
+E_0084478.x14	y_b
+E_2408068	CharaText
+E_240E93C	FoodVenue
+E_240E93C.x00	picture
+E_240E93C.x04	label
+E_240E93C.x0c	bank
+E_240E93C.x0d	filter
+E_240E93C.x0e	kind
+E_240E93C.x0f	pad
+E_2417924	MailRecordView
+E_2417924.a	header
+E_2417924.b	text
+E_2417924.id	friend_id
+E_2417924.type	kind
+E_25103D8	PathStep
+E_25103D8.x0	pose	# majority
+E_25103D8.x1	flags
+E_25103D8.x2	x
+E_25103D8.x3	y
+E_7C06	ListRow	# majority
+E_7C06.h	value
+E_7C06.p	label	# majority
+Ent	PoseSetEntryB
+Ent.f	pose	# majority
+Ent.h	height
+Ent.w	width
+Ent_2403316	PoseSetEntry
+Ent_2403316.c	pose	# majority
+Ent_25015BA	PoseSetEntryC
+Ent_25015BA.c	pose	# majority
+H13	PoseList13
+H13.e	entries
+H13.n	count
+H19	PoseList19
+H19.e	entries
+H19.n	count
+H3	PoseList3
+H3.e	entries
+H3.n	count
+H_2502366	RecordDirView
+H_2502366.x0e2	sect_poses	# like ExchangeRecord.sect_*
+H_2502366.x0ec	sect_images	# like ExchangeRecord.sect_*
+H_252AF64	SectionHeader
+H_252AF64.a	type	# majority
+H_252AF64.b	version	# majority
+H_252AF64.c	length	# majority
+Hdr	PoseSetB
+Hdr.e	entries
+Hdr.n	count
+Img	ImageData
+Img.d	data
+Img.h	height
+Img.w	width
+Inventory.x000	name
+Inventory.x004	indexes
+Inventory.x008	count
+K8	ItemKey
+K8.a	category
+K8.b	subkind
+K8.c	item_id
+L_25068E2	MenuTableView	# majority; MenuTable vocabulary
+L_25068E2.e	entries
+L_25068E2.n	count
+L_25068E2_e	MenuEntry
+L_25068E2_e.x000	label
+L_25068E2_e.x004	handler
+L_2506AE6	MenuTableFramed	# opus-1
+L_2506AE6.e	entries
+L_2506AE6.n	count
+L_2506AE6_e	MenuEntryB
+L_2506AE6_e.x000	label
+L_2506AE6_e.x004	handler
+MainRoomItem	RoomStepSigned
+MainRoomItem.c	flags
+MainRoomItem.img	picture
+MainRoomObj	RoomObjStepSigned
+MainRoomObj.c	flags
+MainRoomObj.img	picture
+Menu2506D82	MenuHead	# majority
+NfcRxFifo.cnt	count
+NfcRxFifo.flag	overflow
+NfcRxFifo.st	status
+NfcTxFifo.cnt	count
+P_2400D4E_arg2	XyPair
+P_2400D4E_arg2.x000	x
+P_2400D4E_arg2.x001	y
+P_2411756_arg0	EncounterEntry	# majority
+P_2411756_arg0.x000	sprite_id
+P_2411756_arg0.x002	first_line
+P_2411756_arg0.x003	line_count
+P_2419B1A_arg0	DiaryDraft
+P_2419B1A_arg0.x032	event
+P_2419B1A_arg0.x034	variant
+P_2419B1A_arg0.x036	state
+P_2419B1A_arg0.x038	stored
+P_2419B1A_arg0.x03c	store_result
+P_2527FC2_arg1	OwnerProfile
+P_2527FC2_arg1.x000	gender
+P_2527FC2_arg1.x001	mood
+P_2527FC2_arg1.x002	age
+P_2527FC2_arg1.x003	sign
+P_2528A8C_arg0	GiftPoints
+P_2528A8C_arg0.x0cf	points_mode
+P_2528A8C_arg0.x0d0	points
+P_252B2C6_arg0	CommHeaderItem
+P_252B2C6_arg0.x0c8	item_type
+P_252B2C6_arg0.x0c9	item_category
+P_252B2C6_arg0.x0ca	item_kind
+P_252B2C6_arg0.x0cb	item_subkind
+P_252B2C6_arg0.x0cc	item_id
+P_252B2C6_arg0.x0cf	money_flag
+P_252B2C6_arg0.x0d0	money_amount
+P_252B2C6_arg0.x0d4	item_attr
+P_252B2C6_arg0.x0d8	our_points
+Rec	CommRecord
+Rec.x000	magic
+Rec.x048	length
+Rec.x04c	session_type
+Rec.x04d	version	# majority
+Rec.x052	signature
+Rec.x05f	gender
+Rec.x060	owner_name
+Rec.x072	owner_id
+Rec.x074	chara_id
+Rec.x076	wait_time
+Rec.x078	care_mistakes
+Rec.x079	happiness
+Rec.x07a	generation
+Rec.x07b	stage
+Rec.x07c	trait0
+Rec.x07d	trait1
+Rec.x07e	trait2
+Rec.x07f	trait3
+Rec.x080	trait4
+Rec.x088	family
+Rec.x08a	bday_month
+Rec.x08b	bday_day
+Rec.x08c	proposal_len
+Rec.x0d8	points
+Rec.x0e0	directory
+Rec.x0f8	flags
+Rec.x0ff	complete
+Ring5624	InventoryView
+S1444	GfxObjectView	# majority
+S1444.x04	x
+S1444.x06	y
+S1444.x0c	palette_base	# majority
+S20	VisitorRequestView
+S20.b	kinds
+S20.x004	pics
+S20.x010	unowned_pic
+S20.x014	reward_points	# like S_254178C
+S20.x01a	consolation
+S20.x01c	club	# like S_254178C
+S_0000DBC	IrPacket
+S_0000DBC.x000	sig_code
+S_0000DBC.x001	kind
+S_0000DBC.x002	owner_id_lo	# T3
+S_0000DBC.x003	char_byte
+S_0000DBC.x004	owner_id_hi	# T3
+S_0000DBC.x00b	role
+S_0000DBC.x00c	arg_lo	# T3: message argument (gift amount LE / flag)
+S_0000DBC.x00e	result
+S_0000DBC.x00f	result2
+S_0000DBC.x010	points_hi	# disputed 2:2 (points vs plain parameter); legacy IR, dead code
+S_0000DBC.x011	points_lo	# see x010
+S_0000DBC.x012	flags
+S_0000DBC.x013	checksum
+S_0000DD0	IrPacketTx
+S_0000DD0.x000	sig_code
+S_0000DD0.x001	kind
+S_0000DD0.x002	owner_id_lo
+S_0000DD0.x003	char_byte
+S_0000DD0.x004	owner_id_hi
+S_0000DD0.x00b	role
+S_0000DD0.x00c	arg_lo	# byte order disputed (see S_0000DBC.x00c)
+S_0000DD0.x00d	arg_hi
+S_0000DD0.x00e	result
+S_0000DD0.x00f	result2
+S_0000DD0.x010	points_hi	# see S_0000DBC.x010
+S_0000DD0.x011	points_lo
+S_0000E10	FriendEvent
+S_0000E10.x001	kind1_bit
+S_0000E10.x002	kind2_bit
+S_0000E10.x003	blocked
+S_0000E24	VisitPartner
+S_0000E24.x000	chara_id
+S_0000E24.x002	gender
+S_0000E24.x003	life_stage
+S_0000E24.x004	dominant_trait
+S_0000E24.x005	trait0
+S_0000E24.x014	mode
+S_0000E24.x015	over
+S_0000E24.x016	seconds
+S_0000E24.x018	care_mistakes
+S_0000E24.x01a	hunger
+S_0000E24.x01b	wish_count	# majority; wish vocabulary
+S_0000E24.x01c	class_code	# consistent with CharaEntry.x020 class_code
+S_0000E24.x01d	wish1_id_hi
+S_0000E24.x01e	wish2_id_hi
+S_0000E24.x01f	wish1_id_lo
+S_0000E54	Outing
+S_0000E54.x000	destination
+S_0000E54.x001	minutes
+S_0000E54.x002	come_home	# majority
+S_0000E58	Job
+S_0000E58.x000	kind
+S_0000E58.x001	hours
+S_0000E58.x006	minutes
+S_0000E58.x008	finished
+S_0000E74	GameSession
+S_0000E74.x000	active	# majority
+S_0000E7C	FriendBookState	# friend book vocabulary
+S_0000E7C.x000	open_after_comm
+S_0000E7C.x001	new_friend_waiting
+S_0000E7C.x003	deleted_count
+S_0000E88	MailQueue
+S_0000E88.x000	friend0
+S_0000E88.x001	friend1
+S_0000E88.x002	friend2
+S_0000E8C	Sitter
+S_0000E8C.x000	active
+S_0000E8C.x001	due
+S_0000E9C	Friend
+S_0000E9C.x002	owner_id_lo
+S_0000E9C.x003	gender
+S_0000E9C.x004	name
+S_0000E9C.x014	met_flags
+S_000119C	PetState
+S_000119C.x002	chara_row	# majority; chara vocabulary
+S_000119C.x004	gender
+S_000119C.x005	hunger
+S_000119C.x006	starve_minutes
+S_000119C.x008	hunger_timer
+S_000119C.x009	hungry_call_timer
+S_000119C.x00a	calls
+S_000119C.x00b	meals_today
+S_000119C.x00c	happiness
+S_000119C.x00d	happiness_timer
+S_000119C.x00e	unhappy_call_timer
+S_000119C.x00f	care_mistakes
+S_000119C.x010	sick_count
+S_000119C.x011	status
+S_000119C.x012	decline_minutes
+S_000119C.x014	age_minutes
+S_000119C.x018	gotchi_points
+S_000119C.x01c	poop_count
+S_000119C.x01e	toilet_timer
+S_000119C.x020	bath_timer
+S_000119C.x022	cleaning_timer
+S_000119C.x024	praise_timer
+S_000119C.x026	neglect_minutes
+S_000119C.x028	ten_day_minutes	# 10-day counter (comments wrongly say three days); see pet_ten_day_event
+S_000119C.x02a	ten_day_event_due
+S_000119C.x02c	gone_minutes
+S_000119C.x02e	age_days
+S_000119C.x030	weight
+S_000119C.x031	generation
+S_000119C.x032	idle_pose
+S_000119C.x034	saved_idle_pose
+S_000119C.x036	hunger_loss_parity
+S_000119C.x037	poop_kinds
+S_000119C.x042	owner_id
+S_000119C.x044	owner_bday_day
+S_000119C.x045	owner_bday_month
+S_000119C.x046	life_stage
+S_000119C.x047	item_counts
+S_000119C.x060	app_item_lock
+S_000119C.x063	clover_leaves
+S_000119C.x064	weather_now
+S_000119C.x065	weather_today
+S_000119C.x066	living_design
+S_000119C.x067	kitchen_design
+S_000119C.x068	toilet_design
+S_000119C.x069	bath_design
+S_000119C.x06a	bedroom_design
+S_000119C.x06b	whim_call_timer
+S_000119C.x06c	worn_accessory
+S_000119C.x06d	worn_clothes
+S_000119C.x06e	companion_sprite_set	# sprite set of the adopted companion
+S_000119C.x06f	clock_second
+S_000119C.x083	clock_month
+S_000119C.x084	clock_day
+S_000119C.x085	clock_hour
+S_000119C.x086	clock_minute
+S_000119C.x088	fortune_name_len
+S_000119C.x089	fortune_gender
+S_000119C.x08a	fortune_mood
+S_000119C.x08b	fortune_digit
+S_000119C.x08c	album_days
+S_000119C.x0ac	unlock_flags
+S_000119C.x0b6	photo_slots
+S_000119C.x0bc	living_dirt
+S_000119C.x0bd	kitchen_dirt
+S_000119C.x0be	toilet_dirt
+S_000119C.x0bf	bath_dirt
+S_000119C.x0c0	bedroom_dirt
+S_000119C.x0c1	gift_count
+S_000119C.x0c2	toilet_count
+S_000119C.x0c3	meal_count
+S_000119C.x0c4	game_count
+S_000119C.x0c5	icon_theme	# majority; theme of the icon bars (ui_theme_*)
+S_000119C.x0c6	clover1_id_hi
+S_000119C.x0c7	clover2_id_hi
+S_000119C.x0c8	clover1_id_lo
+S_000119C.x0c9	clover2_id_lo
+S_000119C.x0ca	clover1_kind
+S_000119C.x0cb	clover2_kind
+S_000119C.x0de	profile_bday_month
+S_000119C.x0df	profile_bday_day
+S_000119C.x119	dominant_trait
+S_000119C.x11a	trait0
+S_000119C.x11b	trait1
+S_000119C.x11c	trait2
+S_000119C.x11d	trait3
+S_000119C.x11e	trait4
+S_000119C.x125	activity0_count
+S_000119C.x126	shop_count
+S_000119C.x127	tamamori_count
+S_000119C.x128	restaurant_count
+S_000119C.x12d	growth_item_counts
+S_000119C.x145	stamp_count
+S_000119C.x146	stamp_liked_count
+S_000119C.x149	window_flower	# consistent with room_window_flower
+S_000119C.x152	friend_event_mask1
+S_000119C.x153	friend_event_mask2
+S_000119C.x154	friend_event_pending
+S_000119C.x155	diary_unseen_page	# like D_00012F1
+S_000119C.x156	bingo_board
+S_000119C.x158	profile_gender
+S_000119C.x159	profile_mood
+S_000119C.x15a	profile_age
+S_000119C.x15b	profile_sign
+S_000119C.x1ac	habit_training
+S_000119C.x1eb	discipline_flags
+S_000119C.x1ec	revive_talks
+S_000119C.x1ed	family_continues
+S_000119C.x1ee	comm_count
+S_000119C.x1f0	evo_route
+S_000119C.x1f1	park_meeting	# T6
+S_000119C.x1f2	evo_bath_count
+S_000119C.x1f3	evo_pending_days
+S_000119C.x1f4	met_orenetchi
+S_000119C.x1f5	evo_counters
+S_000119C.x200	special_evo_item
+S_000119C.x204	special_evo_slots
+S_000119C.x208	club_records	# five 3-byte club records
+S_000119C.x209	club_practices
+S_000119C.x20a	club_achievements
+S_000119C.x217	club_mastered
+S_000119C.x21c	house_level
+S_000119C.x21e	baby_id
+S_000119C.x220	child_id
+S_000119C.x222	adult_id	# T1
+S_000119C.x224	special_id	# T1
+S_000119C.x226	dl_affection
+S_000119C.x22e	bingo_plays_today
+S_000119C.x22f	next_egg_kind
+S_000119C.x230	alert_call_timer
+S_000119C.x231	mark_food
+S_000119C.x232	mark_touch	# the touch icon leads to bingo / gashapon (fable-1 touch, opus-1 bingo)
+S_000119C.x233	mark_town
+S_000119C.x234	mark_special
+S_000119C.x235	mark_notebook
+S_000119C.x236	mark_mail
+S_000119C.x237	mark_special2
+S_000119C.x238	saved_poop_display
+S_000119C.x239	farm_stage
+S_000119C.x23a	farm_tended
+S_000119C.x23b	farm_neglect_days
+S_000119C.x23c	street_friendship
+S_00011E0	OwnerBdayBlock
+S_00011E0.x000	bday_day
+S_00011E0.x001	bday_month
+S_00011E0.x002	life_stage	# majority
+S_00011E0.x003	item_counts	# majority
+S_0001430	GfxObjView
+S_0001430.x000	pic
+S_0001430.x00c	pal_slot
+S_0001444	GfxObject	# majority; gfx vocabulary (gfx_objects)
+S_0001444.x00	image
+S_0001444.x04	x
+S_0001444.x06	y
+S_0001444.x08	width
+S_0001444.x09	height
+S_0001444.x0a	frame
+S_0001444.x0c	palette_base
+S_0001444.x0d	palette_base_hi
+S_0001444.x0e	flags
+S_0001444.x10	pixel_offset
+S_0001810	FrameBuffer
+S_0004050	NfcId3
+S_0004050.x000	marker0	# NFCID3 bytes 0/1 and 8/9 are the F0 40 marker
+S_0004050.x001	marker1
+S_0004050.x002	rand0	# random bytes of the NFCID3
+S_0004050.x003	rand1
+S_0004050.x004	rand2
+S_0004050.x005	rand3
+S_0004050.x006	rand4
+S_0004050.x007	rand5
+S_0004050.x008	marker2
+S_0004050.x009	marker3
+S_0004374	NfcSession
+S_0004374.x000	busy
+S_0004374.x004	peer_kind
+S_0004374.x006	detected_peer
+S_0004374.x008	item_file
+S_0004374.x00c	msg_code
+S_0004374.x010	friend_data
+S_0004374.x014	proposal_text
+S_0004374.x018	item_refused
+S_0004374.x01a	score_initiator
+S_0004374.x01c	score_target
+S_0004374.x01e	score_total
+S_00043C4	PeerId
+S_00043C4.x001	owner_id_hi
+S_00043C4.x002	owner_id_lo
+S_00043C4.x004	name
+S_00045E8	NfcCmdBuf	# majority
+S_00045E8.x000	reg0
+S_00045E8.x001	val0
+S_00045E8.x002	reg1
+S_00045E8.x003	val1
+S_00045E8.x004	reg2
+S_00045E8.x005	val2
+S_00045E8.x006	reg3
+S_00045E8.x007	val3
+S_00045E8.x008	reg4
+S_00045E8.x009	val4
+S_00045E8.x00a	reg5
+S_00045E8.x00b	val5
+S_00045E8.x00c	reg6
+S_00045E8.x00d	val6
+S_00045E8.x00e	reg7
+S_00045E8.x00f	val7
+S_00045E8.x010	reg8
+S_00045E8.x011	val8
+S_00045E8.x012	reg9
+S_00045E8.x013	val9
+S_00045E8.x014	reg10
+S_00045E8.x015	val10
+S_00045E8.x016	reg11
+S_00045E8.x017	val11
+S_00045E8.x018	reg12
+S_00045E8.x019	val12
+S_00045E8.x01a	reg13
+S_00045E8.x01b	val13
+S_00045E8.x01c	reg14
+S_00045E8.x01d	val14
+S_00045E8.x01e	reg15
+S_00045E8.x01f	val15
+S_000486C	Nfcid3
+S_000486C.x008	id8
+S_000486C.x009	id9
+S_00840B8	GiftSource
+S_00840B8.x000	flags
+S_00840B8.x004	item_index
+S_00840D8	PartyState
+S_00840D8.x000	kind
+S_00840D8.x001	table_charas
+S_00840D8.x002	variant
+S_00840DC	PartyInfo	# majority
+S_00840DC.x000	party_kind
+S_00840DC.x004	kind
+S_00840DC.x008	month
+S_00840DC.x009	day
+S_0084188	AnimPicSlots
+S_0084188.x000	pic0
+S_0084188.x004	pic1
+S_0084188.x008	pic2
+S_0084188.x00c	pic3
+S_0084188.x010	pic4
+S_0084188.x014	pic5
+S_0084188.x018	pic6
+S_0084188.x01c	pic7
+S_0084188.x020	pic8
+S_0084188.x024	pic9
+S_0084188.x028	pic10
+S_00841D0	PoopObjects
+S_00841D0.x000	obj0
+S_00841D0.x001	obj1
+S_00841D0.x002	obj2
+S_00841D0.x003	obj3
+S_00841E4	MarkObjs
+S_00841E4.x000	top_right
+S_00841E4.x001	touch
+S_00841E4.x002	bottom_left
+S_00841E4.x003	special
+S_00841E4.x004	bottom_right
+S_0084200	PasserObjects
+S_0084200.x000	obj_a
+S_0084200.x001	obj_b
+S_0084204	PasserPalettes
+S_0084204.x000	pal_a
+S_0084204.x001	pal_b
+S_008427C	OverlayObjs
+S_008427C.x000	obj0	# majority
+S_008427C.x001	obj1
+S_008427C.x002	obj2
+S_008427C.x003	obj3
+S_0084294	ProfilePageObjs
+S_0084294.x000	background	# opus-1 / fable-2
+S_0084294.x001	arrow
+S_0084294.x002	mood_icon
+S_0084294.x003	name
+S_0084294.x004	gender
+S_0084294.x005	mood
+S_0084294.x006	age_tens
+S_0084294.x007	age_ones
+S_0084294.x008	age_unit
+S_0084294.x009	sign
+S_0084294.x00a	text1
+S_00842A8	SpotRecordMagic
+S_00842A8.x000	hi
+S_00842A8.x001	lo
+S_00842AC	SpotRecordInfo
+S_00842AC.x000	kind
+S_00842AC.x001	content_type
+S_0084318	SlotReels
+S_0084318.x000	reel0
+S_0084318.x001	reel1
+S_0084318.x002	reel2
+S_008431C	CardFlags
+S_008431C.x000	flag0
+S_008431C.x001	flag1
+S_008431C.x002	flag2
+S_0084550	SlotRound
+S_0084550.x000	pics	# fable-1 / opus-1
+S_0084550.x004	count
+S_13C0	AffectionBlock
+S_13C0.x000	adult_id
+S_13C0.x002	affection
+S_2000000	FlashBase
+S_2050000	PictureSetHdr
+S_2091748	PictureHeader	# majority
+S_2091748.x002	colours
+S_20F5384	PicHeader3
+S_20F5384.x000	width
+S_20F5384.x001	height
+S_20F5384.x002	colours
+S_21435DC	PicHeaderDigits
+S_21435DC.x000	width
+S_21435DC.x001	height
+S_2147CF4	PicHeaderGlyphs
+S_2147CF4.x000	width
+S_2147CF4.x001	height
+S_216359C	PicHeaderBubble
+S_216359C.x000	width
+S_216359C.x001	height
+S_217AF28	PicHeaderBedroomBaby
+S_217AF28.x000	width
+S_217AF28.x001	height
+S_2199FF0	PictureSize	# PictureHeader is S_2091748; width and height only
+S_2199FF0.x000	width
+S_2199FF0.x001	height
+S_226AF9C	SpriteSet
+S_226AF9C.x00	pose0
+S_226AF9C.x04	pose1
+S_226AF9C.x08	pose2
+S_226AF9C.x0c	pose3
+S_226AF9C.x10	pose4
+S_226AF9C.x14	pose5
+S_226AF9C.x18	pose6
+S_226AF9C.x1c	pose7
+S_226AF9C.x20	pose8
+S_226AF9C.x24	pose9
+S_226AF9C.x28	pose10
+S_226AF9C.x2c	pose11
+S_226AF9C.x30	pose12
+S_226AF9C.x34	pose13
+S_226AF9C.x38	pose14
+S_22D0000	MailRecord
+S_22D0000.x000	friend
+S_22D0000.x004	kind
+S_241A88E	AlbumSortEntry
+S_241A88E.x0	key
+S_241A88E.x4	index
+S_2505468	DlCharaRecord
+S_2505468.x000	sprite_set
+S_2505468.x002	id
+S_2505468.x004	album_key	# like chara_album_key
+S_2505468.x007	gender
+S_2505468.x00e	stage
+S_2505468.x010	base_weight
+S_2505468.x011	hunger_period
+S_2505468.x012	happiness_period
+S_2505468.x013	sick_percent	# like CharaEntry.sick_percent
+S_2505468.x014	wake_hour
+S_2505468.x015	sleep_hour
+S_2505468.x017	fit_class	# the record is the built-in row shifted by one byte: x017 = table x018 (chara_fit_class)
+S_2505468.x01c	bday_month	# chara_bday_month reads table x01e / downloaded x01c
+S_2505468.x01d	bday_day
+S_2505468.x02a	fav_item_class
+S_2505468.x02c	fav_item_id
+S_250D740	AppItemRates	# fable-2 (high)
+S_250D740.a	rates	# fable-2 (high)
+S_2536DB8	WardrobeEntry
+S_2536DB8.x000	label
+S_2536DB8.x008	inventory
+S_253802C	MenuTable
+S_253802C.e	entries
+S_253A454	FoodMenuEntry
+S_253A454.x000	label
+S_253A454.x004	venues
+S_253A4C8	LabelPair
+S_253A4C8.x000	first
+S_253A4C8.x004	second
+S_253C31C	PicPair
+S_253C31C.x000	pic_a
+S_253C31C.x004	pic_b
+S_253C3E4	IndexRange
+S_253C3E4.x000	first
+S_253C3E4.x001	last
+S_253E7CC	RoomStep
+S_253E7CC.x000	pose
+S_253E7CC.x001	flags
+S_253E7CC.x002	x
+S_253E7CC.x004	y
+S_253E9EC	RoomObjStep
+S_253E9EC.x000	kind
+S_253E9EC.x001	pic
+S_253E9EC.x002	flags
+S_253E9EC.x003	x
+S_253E9EC.x004	y
+S_253ED60	ArrowPosA	# like ui_arrow1_positions
+S_253ED60.x000	x
+S_253ED60.x001	y
+S_253ED74	ArrowPosB	# like ui_arrow2_positions
+S_253ED74.x000	x
+S_253ED74.x001	y
+S_253F668	WindowStep5
+S_2541014	BankLayout	# majority
+S_2541014.x0	slot_size
+S_2541014.x2	sector
+S_2541014.x3	slot_count
+S_254178C	VisitorRequest
+S_254178C.x000	kinds
+S_254178C.x004	pics
+S_254178C.x010	unowned_pic
+S_254178C.x014	reward_points	# points for a fulfilled request
+S_254178C.x01a	consolation
+S_254178C.x01c	club	# the club whose mastery the request checks (opus-1 high)
+S_2541D14	ShopKeeper
+S_2541D14.x000	sprite_id
+S_2541D14.x002	first_line
+S_2541D14.x003	line_count
+S_2541D84	PlaceEntry
+S_2541D84.x000	name
+S_2542064	PlaceListMenu
+S_2542064.x000	count
+S_2542064.x008	entries
+S_25420A4	VisitorEntry	# consistent with town_visitor_entry
+S_25420A4.x000	chara_id
+S_25420A4.x004	gift_item
+S_25420A4.x008	greeting_line
+S_25420A4.x00c	gift_line
+S_2542174	ParkContact
+S_2542174.x000	chara_id
+S_2542174.x002	visitor_sprite
+S_2542174.x004	first_line
+S_2542174.x005	line_count
+S_25424EC	ClubLimits
+S_25424EC.x001	practice_limit
+S_25424EC.x002	achievement_limit
+S_254264C	ClubListEntry	# majority
+S_254264C.x000	text
+S_254264C.x004	flags
+S_25427CC	AttractionListMenu
+S_25427CC.x000	count
+S_25427CC.x008	entries
+S_255B4DC	CharaEntry
+S_255B4DC.x000	sprite_set
+S_255B4DC.x002	id
+S_255B4DC.x006	family
+S_255B4DC.x008	gender
+S_255B4DC.x00a	trait_caps
+S_255B4DC.x00f	stage
+S_255B4DC.x011	base_weight
+S_255B4DC.x012	hunger_period
+S_255B4DC.x013	happiness_period
+S_255B4DC.x014	sick_percent
+S_255B4DC.x015	wake_hour
+S_255B4DC.x016	sleep_hour
+S_255B4DC.x017	charm
+S_255B4DC.x018	fit_class
+S_255B4DC.x01a	own_accessory	# index of the accessory offset table (fable-2, high)
+S_255B4DC.x01c	default_outfit
+S_255B4DC.x01e	bday_month
+S_255B4DC.x01f	bday_day
+S_255B4DC.x020	class_code
+S_255B4DC.x02a	unlock_flag
+S_255B4DC.x02c	club_class
+S_255BD80	BankListEntry
+S_255BD80.x000	label
+S_255BD80.x004	bank
+S_255BD80.x008	flags
+S_255C338	ItemBank
+S_255C338.x000	slot_size
+S_255C338.x002	first_sector
+S_255C338.x003	slot_count
+S_255C338.x004	builtin_list
+S_255C338.x008	builtin_count
+S_255C668	IramTableEntry
+S_255CFD0	LabelPairB
+S_255CFD0.x000	first
+S_255CFD0.x004	second
+S_255F650	FlashTestArea
+S_255F650.x000	flags
+S_255F650.x004	first_sector
+S_255F650.x008	last_sector
+S_255F650.x00c	address
+S_255F650.x010	fill_value
+S_255F650.x014	halfwords
+S_255FA2C	GameEntry
+S_255FA2C.x000	label
+S_255FA2C.x004	run
+S_27C0020	TxRecordView20
+S_27D0404	RxPacketView404
+S_27D0800	ExchangeRecord
+S_27D0800.x05f	gender
+S_27D0800.x072	owner_id
+S_27D0800.x084	version
+S_27D0800.x0b4	wish_list
+S_27D0800.x0e0	sect_portrait
+S_27D0800.x0e2	sect_poses
+S_27D0800.x0e4	sect_profile
+S_27D0800.x0e6	sect_item
+S_27D0800.x0e8	sect_mail
+S_E9C_bf	FriendRecordBits	# majority
+S_E9C_bf.x003	gender	# majority; like Friend.gender
+S_E9C_bf.x014_lo	met_by
+S_E9C_bf.x015	portrait_slot	# Friend.x014 [1] is the portrait slot + 1
+Set_2403316	PoseSet
+Set_2403316.e	entries
+Set_2403316.n	count
+Set_25015BA	PoseSetC
+Set_25015BA.e	entries
+Set_25015BA.n	count
+T12	ShopCategory
+T12.a	label	# majority
+T12.b	bank
+T12.c	kind
+T_253C2C8b	InventoryNextLabelView
+T_253C2C8b.x00c	next_label
+T_253C31C	PicPairT
+T_253C31C.p	pic_a
+T_253C31C.q	pic_b
+T_25420A4	VisitorEntryView	# like VisitorEntry
+T_25420A4.id	chara_id
+T_25420A4.v	gift_item
+T_25420A4.x	greeting_line
+T_25420A4.y	gift_line
+T_255B4DC	CharaEntryHalfwords
+T_255B4DC.h	halfwords
+T_255B4DC.x000	sprite_set
+T_255B4DE	CharaEntryShifted
+T_255B4DE.x18	own_accessory	# this view starts at row + 2: x18 is row x01a, the character's built-in accessory
+Tamago	TamagoFile
+Tamago.x04c	hdr_word
+Tamago.x050	kind
+Tamago.x051	sub_kind
+Tamago.x058	id_word
+Tamago.x05c	reserved0
+Tamago.x05d	reserved1
+Tamago.x05e	name
+Tamago.x063	legacy_value
+Tamago.x064	legacy_text
+Tamago.x06c	legacy_hunger
+Tamago.x06d	legacy_happiness
+Tamago.x074	price_b3
+Tamago.x075	price_b2
+Tamago.x076	price_b1
+Tamago.x077	price_b0
+Tamago.x079	use_anim
+Tamago.x07a	hunger
+Tamago.x07b	happiness
+Tamago.x09e	app_params
+Tamago.x0ae	entry_b3
+Tamago.x0af	entry_b2
+Tamago.x0b0	entry_b1
+Tamago.x0b1	entry_b0
+Tamago.x0b2	weight
+Tamago.x0b4	prize_percent
+Tamago.x0b8	trait_add
+Tamago.x0f8	code_hi
+Tamago.x0f9	code_lo
+Tamago.x0fa	format_hi
+Tamago.x0fb	format_lo
+Tamago.x0ff	flags
+Unk0E9C	FriendFlagView
+Unk0E9C.flag	used
+Unk119C	PetIdView	# PetState vocabulary
+Unk119C.x00	chara_id
+Unk119C_2406BFE	PetMealView	# PetState vocabulary
+Unk119C_2406BFE.x0b	meals_today
+Unk119C_2406BFE.x0c	happiness
+Unk119C_2407028	PetCharmView	# PetState vocabulary
+Unk119C_2407028.x00	chara_id
+Unk119C_2407028.x02	chara_row	# majority; like S_000119C.x002
+Unk119C_2407028.x0f	care_mistakes
+Unk119C_2407028.x6c	worn_accessory
+Unk119C_2407028.x6d	worn_clothes
+Unk2505468	DlCharaCharmView	# majority
+Unk2505468.x16	charm
+Unk255B4DC	CharaEntryCharmView
+Unk255B4DC.x17	charm
+Unk4368	TxRecordView
+Unk4368.x76	wait_time
+Unk4368.xb4	wish_list
+Voice	SndVoice
+Voice.x000	state
+Voice.x001	countdown	# majority
+Voice.x002	transpose
+Voice.x003	ended
+Voice.x004	periods	# majority
+Voice.x008	sequence	# fable-2 / opus-1
+buf_s	MailStoreBuf
+buf_s.x000	friend_idx
+buf_s.x004	direction

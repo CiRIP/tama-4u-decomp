@@ -1,0 +1,15 @@
+# Firmware image (copyrighted; put your own copy at the repository root)
+*.bin
+
+# Assets extracted from your firmware (tools/extract_assets.py)
+assets/
+
+# Reference material (Epson manuals, SDK; not redistributable)
+docs/
+
+# Generated output
+build/
+__pycache__/
+
+# scratch
+work/

@@ -1,0 +1,503 @@
+address	current	proposed	meaning	confidence	evidence
+24F6256	sys_reset	reset_handler	reset vector: CMU, RAM clear, init, main	high	vectors.s, asm
+24F6390	sys_bus_setup	sramc_init	SRAM controller wait states	high	regs 0x301500..
+24F644A	sys_gpio_init	gpio_init	port directions, pull-ups, function select	high	regs 0x300380..
+24F63B6	sys_itc_init	itc_init	interrupt controller enables/priorities	high	regs 0x300260..
+24F64F4	tmr_init	t16_init	timers advanced mode + reset	high	regs 0x300786..
+24F6316	sys_init	system_init	libc + drivers init, enable interrupts	high	called from reset
+24F6514	sys_copy_iram_code	copy_iram_code	copy 0x2562840.. to 0..0xD08	high	code
+24F6536	sys_copy_data	copy_data_section	copy .data init values to 0x84474	high	code
+24F655E	sys_clear_bss_ram	zero_bss_dst	zero 0x84000..0x84474	high	code
+24F657E	sys_clear_bss_iram	zero_bss_iram	zero 0xD08..0x4AE4	high	code
+24F659A	sys_irq_enable	enable_interrupts	psrset 4	high	asm
+24F659E	sys_irq_disable	disable_interrupts	psrclr 4	high	asm
+24F61BC	sys_adc_setup	adc_init	A/D clock, channel, trigger	high	regs
+24F61F2	sys_adc_set_limits	adc_set_limits	A/D upper/lower compare limits	high	regs
+24F621C	sys_adc_irq_setup	adc_set_int_mode	A/D interrupt config + channel mask	high	regs
+24F714C	sys_sleep_osc1	cmu_sleep_osc1	switch to 32 kHz OSC1 and sleep	high	regs 0x301B08
+24F717E	sys_sleep_osc3	cmu_wake_osc3	back to OSC3 after sleep	high	regs
+24F71B0	sys_leave_low_power	cmu_restore_full_speed	clock to OSC3, restore timers	high	code
+250DF1A	spi_clock_on	cmu_gate_spi_on_tm1_off	gated clock bits	high	regs
+25029FE	rtc_irq_rearm	rtc_rearm_1s_int	pRTCINTMODE = 6 with clock gating	high	regs
+250B46A	rtc_reset	rtc_init	RTC reset and set from D_0001xxx	high	regs
+250B51A	rtc_acquire	rtc_hold	pRTC_CNTL1 hold/busy wait	high	regs
+250B5A6	rtc_set_time	rtc_set_time	write RTC counters	high	regs
+250B6DC	rtc_read_clock	rtc_read_time	read RTC counters to RAM	high	regs
+24FF966	rtc_isr	isr_rtc_1s	one-second game tick	high	vector 65
+25000F4	btn_a_isr	isr_button_a	port input 0 (P00)	high	vector 16
+25001E4	btn_b_isr	isr_button_b	port input 1 (P01)	high	vector 17
+25002D6	btn_c_isr	isr_button_c	port input 2 (P02); long press -> 2529CA4	high	vector 18
+25003FA	sys_adc_isr	isr_adc_done	store A/D result in sys_battery_level	high	vector 64
+25000C4	tmr_t16_23_isr	isr_t16_3_cmpb	tmr_flags |= 4	high	vector 42
+252D366	nfc_tick_isr	isr_t16_3_cmpa_nfc_tick	nfc_ticks++ (10 ms NFC tick)	high	vector 43
+253569E	snd_tick_isr	isr_t16_4_cmpb_sound	sound sequencer step	high	vector 46
+25000DC	tmr_t16_45_isr	isr_t16_5_cmpb	tmr_flags |= 0x20	high	vector 50
+25051A2	tmr_t5_cmpa_vector	isr_t16_5_cmpa_trampoline	jumps through RAM vector ir_ram_routines	high	vector 51
+25051AE	tmr_t5_tick_handler	isr_t16_5_cmpa_default	tmr_t5_ticks++	high	code
+252D2D6	nfc_uart_err_isr	isr_sio1_err	NFC UART error flags -> nfc_rx_fifo.x009	high	vector 60
+252D2A2	nfc_uart_rx_isr	isr_sio1_rx	NFC UART rx ring	high	vector 61
+252D204	nfc_uart_tx_isr	isr_sio1_tx	NFC UART tx queue	high	vector 62
+252C5A6	nfc_irq_isr	isr_nfc_irq	PN512 IRQ (P94): nfc_field_irq = 1	high	vector 88
+2500052	sys_isr_halt_a	isr_halt	unused vector stub	high
+250005E	sys_trap_wait	isr_undef_insn	exception: halt + debug counter	high	vector 3
+25000A4	sys_trap_record	isr_illegal_int	illegal interrupt exception	high	vector 11
+0000A54	func_0000A54	flash_erase_sectors	erase sectors a..b (AMD cmd set)	high	iram.s
+0000B52	func_0000B52	flash_program_word	program one halfword, poll DQ7/DQ5	high	iram.s
+0000C46	func_0000C46	flash_program_words	program n halfwords	high	iram.s
+00009A6	func_00009A6	lcd_present	flush dirty rects to the LCD	high	iram.s
+00006B8	func_00006B8	lcd_flush_rect	blit rect via 2A/2B/2C	high	iram.s
+000081A	func_000081A	lcd_flush_rect2	blit second rect	high	iram.s
+000014A	func_000014A	pixel_lookup	RGB565 -> panel colour with modes	med	iram.s
+0000312	func_0000312	render_sprite_row	render sprite into line buffer	med	iram.s
+00004C8	func_00004C8	compose_pixel	sprite list -> pixel at (x,y)	med	iram.s
+2409138	lcd_init_ili9163_old	lcd_init	ST7735 init sequence	high	bus writes
+240921A	lcd_init_st7735	lcd_init2	second panel init sequence	med	bus writes
+2401DD8	lcd_init	lcd_fill_window	2A/2B/2C + fill	high	bus writes
+2409068	sys_display_wake	display_on_off	wake / blank display	med	callers
+240C51C	sys_power_down	power_down_lcd	LCD sleep + timers off	med	code
+24021C2	gfx_object_create	sprite_create	add sprite (x,y,layer,flip,?,image), returns slot	high	usage everywhere
+2402188	gfx_object_move_dirty	sprite_move	move slot to x,y	high	usage
+24022C0	gfx_object_set_flags	sprite_set_flags	change slot flags	med	usage
+2402266	gfx_draw_text_line	draw_text	draw charset string at x,y	high	usage with _("...")
+2402296	gfx_draw_text_centered	draw_text2	draw string variant	high	usage
+2404068	txt_draw_centered	draw_label	draw string (menu label)	med	usage
+24032B0	gfx_set_background	set_background_colour	RGB565 bg	med	usage
+2401EEE	gfx_display_reset	screen_clear	clear sprite list	med	usage
+2408C36	ui_new_screen	screen_clear_menu	clear + menu frame	med	usage
+2402DFC	anim_draw_pic	anim_set_sprite	frame primitive (slot,image,flags,x,y)	high	generated zone
+2403024	anim_draw_text	anim_set_text	frame primitive text	med	generated zone
+2402C90	anim_draw_pet	anim_set_char	frame primitive character sprite	med	generated zone
+24031D6	anim_frame	anim_wait	present frame and wait ms	high	generated zone
+2403070	anim_queue_sound	anim_sound	play sound in animation	low	generated zone
+240912E	sys_idle_tick	idle_tick	wait one tick, service clock	high	every menu loop
+2528ACE	btn_mask	buttons_mask	disable button ints	high	regs
+2528AE0	btn_unmask	buttons_unmask	enable button ints	high	regs
+250DB8E	snd_play	sound_play	play sound/melody n	med	ISR usage
+250DC10	snd_wait_end	sound_stop	stop sound	med	usage
+253520C	snd_tick_start	seq_start_timer	timer 4 sequencer tick	high	regs
+2535270	snd_tick_timer_stop	seq_stop_timer	stop timer 4	high	regs
+25352AE	snd_ch0_on	tone0_start	TM0 PWM tone on P10	high	regs
+2535542	snd_set_pitch_0	tone0_set_period	update CR0A/CR0B	high	regs
+253545E	snd_ch0_off	tone0_stop	stop TM0	high	regs
+2535304	snd_ch1_on	tone1_start	TM1 on P11	high	regs
+253535A	snd_ch2_on	tone2_start	TM2 on P12	high	regs
+25353B2	snd_ch3_on	tone3_start	TM3 on P13	high	regs
+24F529C	func_24F529C	note_period_table	data: semitone period table + melodies	high	bytes
+2502298	sys_battery_low	battery_check	ADC ch0 read, returns 1 if low	med	regs + callers
+250B78E	flash_sector_addr	flash_sector_addr	address of sector k	high	code
+250B7B6	item_bank_slot	item_slot_addr	address of slot i of category	high	code
+250C000	flash_backup_sector	flash_sector_backup	copy sector k to 0x2040000	high	code
+250C06E	flash_restore_sector_except	flash_sector_restore_without	write back sector k minus item	high	code
+250C324	flash_program_record	flash_write_item	program item to bank slot	high	code
+250CF0C	item_add_to_inventory	item_store	store item into its category bank	high	code
+250CA22	item_store_in_bank	item_use	dispatch using an item	med	code
+250CD8E	item_receive	item_use_top	use item + animation	med	code
+250C4E0	item_bank_discard_browser	inventory_full_dialog	choose item to discard	high	strings
+250C1BC	item_find_in_bank	item_find_in_bank	find item by id	high	code
+250D304	item_record_by_index	item_addr_by_index	global index -> slot address	high	code
+250D24A	dl_install_program	install_program_item	write 0x94/2 item to flash 0x2000000	high	code
+250D5C8	spot_app_record	app_item_get_record	parse 0x81/8 item sub-lists	med	code
+250D79A	item_get_id	item_id	item id from header	high	code
+250B8F4	save_factory_reset	storage_format	erase item banks, write defaults	high	code
+250BF80	save_game	save_game	write state + friends to 0x200E000	high	code
+2500910	test_program_sample_tamago	write_default_record	test_sample_tamago -> 0x27D0000	high	code
+2504278	flash_write_sector_86	write_sector_86	buffer -> 0x27E0000	high	code
+2502AC4	comm_erase_session_buffers	check_save_banks	0x27C0000/0x27D0400 erased?	med	code
+2529144	comm_make_random_friend	new_character	create character record at 0x2050000	med	code
+2419436	diary_page_count	friend_count	count friend profiles	high	code
+241946C	diary_delete_page	friend_delete	remove profile n	high	code
+2417EA4	mail_store	mail_store	store 100-byte message record	high	code
+2418034	mail_renumber_friends	mail_renumber	after delete	med	code
+252D3F2	nfc_init	pn512_init	full bring-up, read NFCID	high	code
+252C5CE	nfc_link_open	pn512_wake_460800	wake, UART to 460800	high	asm
+252C8CA	nfc_link_open_921k	pn512_wake_921600	wake, UART to 921600	high	asm
+252CBEA	nfc_link_close	pn512_shutdown	power down, 9600	high	asm
+252CFD8	nfc_rearm_field_detect	pn512_arm_detect	configure RF detect + power down	high	asm
+252CE54	nfc_uart_send	nfc_uart_send	queue bytes to TX	high	asm
+252CF4C	nfc_uart_recv	nfc_uart_recv	read n bytes from RX ring	high	asm
+252D2FC	nfc_tick_start	nfc_tick_start	timer 3 10 ms tick	high	regs
+252D340	nfc_tick_stop	nfc_tick_stop	stop timer 3	high	regs
+252D3AC	nfc_hw_power_on	pn512_reset_power_on	P1 bits 3/4	high	code
+252D3CC	nfc_hw_power_off	pn512_power_off	P1 bits 3/4	high	code
+252D76A	nfc_sleep_until_field	pn512_arm	arm detection with RfOn/RfOff	high	code
+252D79E	nfc_request_abort	nfc_abort	nfc_abort = 1	high	code
+252D7AC	card_set_params	nfc_set_apdu_select	ISO-DEP select params	med	code
+252DB8A	card_last_result	nfc_get_apdu_status	SW + 4 bytes	med	code
+252D7E0	nfc_poll_tag	nfc_poll_tag	detect Type A tag	high	code
+252D882	nfc_tag_read	nfc_tag_read	read from tag by type	high	code
+252D9C0	nfc_tag_write	nfc_tag_write	write to tag by type	high	code
+252DAE4	card_apdu_f5_session	nfc_typ4_op	ISO-DEP op (2533426)	med	code
+252DBB6	card_apdu_c4_session	nfc_typ4_op2	ISO-DEP op with key (25336EE)	med	code
+252DC6E	nfc_detect_initiator	nfcdep_target_wait_atr	target: wait ATR_REQ, answer ATR_RES	high	code
+252E5D0	nfc_dep_receive	nfcdep_target_receive	receive DEP frames into flash/RAM	high	asm
+252ECE0	nfc_dep_send	nfcdep_initiator_send	send DEP frames	high	code
+252F292	nfc_snep_server	llcp_snep_receive	LLCP server, SNEP PUT -> flash	high	code
+252FE2C	nfc_snep_client	llcp_snep_send	LLCP client, SNEP PUT to phone	high	code
+25305F6	nfc_activate_type_a	typea_select	REQA/anticoll/select, ATQA/SAK	high	code
+25349B2	nfc_poll_type_a	typea_select_phone	same, phone mode	high	code
+2533B90	nfc_send_atr_req	send_atr_req	ATR_REQ with LLCP magic	high	bytes 46 66 6D
+2533DBE	nfc_send_atr_res	send_atr_res	ATR_RES with LLCP magic	high	bytes
+2533A5E	nfc_send_sensf_res	send_sensf_res	Type F polling response	high	bytes 01 FE
+25340DE	nfc_llcp_send_symm_res	send_dep_res_symm	DEP_RES + SYMM	high	bytes
+2534066	nfc_llcp_send_symm_req	send_dep_req_symm	DEP_REQ + SYMM	high	bytes
+25341D4	nfc_llcp_send_cc	send_llcp_cc	CC from SAP 4	high	bytes
+253459A	nfc_llcp_send_rr	send_llcp_rr	RR with N(R)	high	bytes
+25344EC	nfc_snep_send_response	send_snep_response	I PDU with 0x80/0x81	high	callers
+2534300	nfc_snep_send_put	send_snep_data	I PDU with PUT data	high	callers
+25346CC	nfc_llcp_send_disc_server	send_llcp_dm	DM	med	callers
+2534650	nfc_llcp_send_disc	send_llcp_disc	DISC	med	callers
+253474C	nfc_llcp_send_dm	send_llcp_dm2	DM	med	callers
+25347D6	nfc_snep_store_fragment	snep_store_fragment	NDEF payload -> flash	high	asm
+2534FBE	nfc_setup_passive_initiator	pn512_cfg_typea_initiator	106k Type A RF config	high	bytes
+25350DE	nfc_setup_active_initiator	pn512_cfg_typef_212k	212k FeliCa RF config	high	bytes
+2532BF8	card_activate	iso_dep_rats_select	RATS, ATS "TNPS064", SELECT AID	med	bytes
+25332B6	card_deselect	iso_dep_deselect	deselect	med	callers
+2533976	nfc_error_code	nfc_err_to_code	map PN512 error bits	high	code
+25298CE	nfc_show_session_screen	nfc_status_screen	NFC INITIALIZE OK/NG screens	high	strings
+2529B78	test_nfc_loopback	nfc_factory_loopback	test loop	high	code
+2529C48	nfc_session_clear	nfc_session_clear	clear nfc_session	high	code
+2529CA4	nfc_user_abort	nfc_user_abort	from button C long press	high	code
+2529D0A	nfc_find_peer_target	nfc_wait_peer	target mode wait	high	code
+2529DE0	nfc_power_up	nfc_init_chip	retry pn512_init twice	high	code
+2529E42	nfc_send	nfc_send	send to Tama or phone	high	code
+2529F0C	nfc_receive	nfc_receive	receive from Tama or phone	high	code
+252A496	nfc_session_target	nfc_comm_menu_target	communication menu, target side	med	code
+252A690	nfc_menu_session	nfc_comm_start	communication entry (mode 0..7)	med	code
+2514854	spot_reader	tag_touch_session	touch-spot tag read/write	high	strings
+2514274	test_spot_screen	tag_test_screen	TAG R/C/W engineering screen	high	strings
+251674A	spot_check_sum	checksum16_verify	additive checksum	high	code
+2516780	spot_sum	checksum16	additive checksum	high	code
+2516CF2	spot_bingo_card_kind	is_bingo_card_item	0x81/8 id ranges	med	code
+2516E3A	spot_is_gashapon_ticket	is_gashapon_item	0x81/8 id ranges	med	code
+2510B0A	spot_bingo_gashapon_menu	bingo_gashapon_menu	ビンゴ / たまガシャポン menu	high	strings
+251D67E	spot_bingo_mark	bingo_play	bingo board	high	code
+0004018	nfc_ticks	nfc_tick_10ms	timer 3 tick counter	high
+0004868	nfc_abort	nfc_abort_flag	1 = abort	high
+0004064	nfc_field_irq	nfc_irq_seen	set by P94 ISR	high
+0004050	nfc_id3	own_nfcid3	10 bytes, F0 40 prefix	high
+00045E8	nfc_cmd_buf	pn512_cmd_buf	register/value pairs	high
+0004374	nfc_session	nfc_session	x001 chip state, x002 role, x003 mode, x004 peer type, x006 last peer	high
+0004394	nfc_result	nfc_last_result	last s8 result	high
+0004395	nfc_cancel_request	nfc_abort_request	from button C	high
+0001420	btn_a_presses	btn_a_pressed	cleared by consumer	high
+0001421	btn_b_presses	btn_b_pressed		high
+0001422	btn_c_presses	btn_c_pressed		high
+000142C	ui_timeout	menu_timeout_s	seconds until menu times out	high
+0001423	tmr_flags	timer_flags	bit2 t3 cmpB, bit5 t5 cmpB	high
+0001428	sys_battery_level	adc_battery	last A/D reading	high
+000142F	btn_events	btn_held_bits	bits 0..2	med
+0001432	btn_a_debounce	btn_a_hold_count		high
+0001434	btn_b_debounce	btn_b_hold_count		high
+0001436	btn_c_debounce	btn_c_hold_count		high
+0000D94	ir_ram_routines	isr_t16_5_vector	RAM pointer	high
+0001444	gfx_objects	sprite_list	20 x 0x14	high
+0001804	gfx_object_count	sprite_count		high
+0001805	gfx_dirty_main_y0	dirty_rect	x0,x1,y0,y1 (+ second rect 1809..180C)	high
+0003C10	gfx_pal_blue	palette_r	256 (+256)	high
+0003D50	gfx_pal_green	palette_g		high
+0003E90	gfx_pal_red	palette_b		high
+0001810	gfx_frame_buffer	line_buffer	8-bit line/tile buffer	high
+2538F24	flash_sector_offsets	flash_sector_table	sector start offsets	high
+255C338	item_bank_tbl	item_bank_table	size, sector, count, idlist	high
+000119C	pet	char_state	character state record (0x248 bytes)	med
+0000E9C	friend_list	friend_records	30 x 0x16	med
+00011E2	pet_life_stage	life_stage	0..5	med
+24F8832	comm_main_menu	comm_main_menu	NFC communication main menu (tables comm_main_menu_items/D_2538190)	high	game text labels
+24F84F8	comm_menu_tama4u	tama4u_menu	Tama-to-Tama sub-menu comm_tama4u_menu_items	high	labels
+24F80CA	comm_give_shop_item	give_item_menu	"あげる" item picker (banks)	high	labels
+24F81DC	comm_give_inventory_item	give_inventory_menu	"もちもの" item picker	high	labels
+24F76EE	comm_menu_photo	photo_confirm	"さつえいする?" -> mode 4	med	labels
+24F77F2	comm_menu_proposal	propose_menu	proposal, needs stage >= 3	med	labels
+24F789C	comm_ask_marry	marry_confirm	"けっこん" yes/no	med	labels
+24F913A	ir_session	tama_session	run Tama-to-Tama exchange in game mode a	med	code
+24F94A0	ir_session_run	tama_exchange_drv	asm exchange driver	med	asm
+24F9704	ir_exchange	tama_exchange_app	interpret exchange result, message types	med	code
+24F91D6	visit_tick	visitor_tick	270 s visitor timer	med	code
+24F8BA0	visit_partner_add_traits	partner_affection	add 5 stats, pick favourite	med	code
+24F8E2E	comm_apply_partner_record	apply_partner_record	unlocks and stats from 0x27D5400	med	code
+24F8AAE	visit_load_partner_pics	load_partner_images	15 image slots anim_pic_slots	med	code
+24F90FE	flash_program_raw	flash_program_bytes	program len bytes at addr	high	code
+24F89BE	tmr_t5_wait_100ms	wait_100ms_n	busy wait n x 100 ms on timer 5	high	code
+24F8A16	util_bswap32	bswap32	byte swap u32	high	code
+24F8A32	util_read_be16	bswap16	byte swap u16	high	code
+24FA2AE	ir_record_sum	checksum16	additive 16-bit checksum	high	code
+24FA2D2	ir_validate_record	tamago_record_check	size at 0x48 (BE) + checksum	high	code
+24F7A12	comm_find_portrait	profile_second_list	find 2nd sub-list first entry	med	code
+24F7B3A	item_capsule_prize_class	gashapon_draw_class	prize class from percentages	med	code
+24F7C18	item_use_capsule	use_capsule_item	lottery item use	med	code
+24F7D56	item_can_give	item_giveable	can the item be given	med	code
+24F7E1A	item_receive_presentation	gift_presentation	pick gift box / effect images	med	code
+24F7FB8	comm_item_exchange_result	exchange_result_items	store received items	med	code
+24F7492	comm_menu_app	comm_receive_handler	mode 6 session	med	code
+24F7202	comm_result_wait	after_comm_mail_flush	queue comm_mail_queue -> mail records	med	code
+24F71DA	comm_prepare	menu_enter	reset RAM routines, split owner_id	med	code
+24FF958	sys_idle_housekeeping	tick_service	after-halt service	high	code
+24FF928	sys_sample_debug_strap	p06_hold_count	P06 low counter sys_debug_strap_count	high	code
+24FF904	btn_rearm	buttons_rearm	clear flags, enable P0-2 ints	high	code
+2502298	sys_battery_low	battery_check	10 ADC reads, 1 = low	high	code
+2502A3E	comm_exclusive_timing_on	nfc_timing_enter	timers 3/5 reset, RTC int off	high	code
+2502A56	comm_exclusive_timing_off	nfc_timing_leave	RTC on, timer 5 periodic, buttons	high	code
+25048D0	tmr_t5_start_tick	timer5_sample_start	periodic compare A sampling	high	code
+2505112	tmr_t5_start_raw	timer5_sample_start2	same without clock-on bit	high	code
+2505164	tmr_t5_standard_tick	timer5_periodic	menu coarse tick 0x989	high	code
+25051CE	ir_stop	serial_abort	stop timer 5, RTC mode 7	med	code
+2504984	sys_clock_osc3	serial_port_setup	CMU OSC3, ir_port_ptr = P0 data	med	code
+2504C44	ir_recv_packet	serial_receive20	bit-banged 20-byte receive (dead)	med	code
+2504F16	sys_copy_ram_routines	ram_routines_init	copy 2504F68->0xD58, 25051AE->0xD94	high	code
+2504F68	ir_carrier_burst	serial_tx_loop_ram	toggle P0 per timer tick (RAM copy)	med	code
+25051AE	tmr_t5_tick_handler	timer5_isr_default	count tmr_t5_ticks (RAM copy)	high	code
+25051A2	tmr_t5_cmpa_vector	timer5_cmpA_vector	jump through ir_ram_routines	high	vectors
+250489C	ir_edge_isr	serial_edge_isr_unused	port-4 edge ISR not in vector table	med	callers
+2504A14	ir_rx_start	serial_listen	arm receive	med	code
+25049DE	ir_power_down	serial_idle	line idle, ints off	med	code
+25049B2	ir_power_up	serial_ports_gpio	P04-P07 to GPIO	med	code
+2504A48	ir_detect_start	serial_wait_start	start pulse	med	code
+2504B64	ir_decode_bytes	serial_decode_bits	pulse width -> bytes	med	code
+2504FF6	ir_checksum	checksum8	additive 8-bit checksum	high	code
+2505034	btn_history_init	button_hist_init	sample history btn_samples	high	code
+2505070	btn_history_sample	button_hist_sample	shift in button samples	high	code
+25050AC	btn_disable	buttons_disable_after_sound	wait sound, mask P0-2 ints	high	code
+2505012	sys_irq_save_disable	cli_save	PSR -> sys_saved_psr, ints off	high	code
+2505026	sys_irq_restore	sti_restore	restore PSR | IE	high	code
+2504924	tmr_t5_wait_period	timer5_wait_period	one period	high	code
+250DB42	snd_init	sound_init	tempo/table per clock, callback	high	code
+250DB16	snd_end_callback_fn	sound_melody_end	callback via 0x84440	high	code
+250DB8E	snd_play	play_sound	melody k	high	code
+250DC10	snd_wait_end	wait_sound_end	poll snd_finished	high	code
+251A5B4	tmr_t5_start_timeout	delay_ms_t5	one-shot ms delay timer 5	high	code
+251A566	tmr_t3_start_timeout	delay_ms_t3	one-shot ms delay timer 3	high	code
+251A650	sys_apply_backlight	backlight_apply	timer 2 PWM level	high	code
+251A648	sys_set_backlight	backlight_set	request level	high	code
+2535656	snd_preset_timers	tone_timers_reset	PRESET mask	high	code
+2535270	snd_tick_timer_stop	sequencer_stop	timer 4 off	high	code
+253558A	snd_set_pitch	tone_set_pitch	channel sel period/duty	high	code
+25356C6	snd_irq_save_disable	psr_save_clear	critical enter	high	code
+25356D6	snd_irq_restore	psr_restore	critical leave	high	code
+000405C	sys_backlight_request	backlight_req	requested level 0..8	high	code
+000405D	sys_backlight_applied	backlight_cur	current level	high	code
+00013F3	sys_backlight_level	brightness_setting	user setting	med	code
+000142D	sys_debug_strap_count	p06_hold	P06 low tick count	high	code
+0000DBC	ir_rx_packet	peer_header	20-byte received header	med	code
+0000DD0	ir_tx_packet	our_header	20-byte sent header	med	code
+0000E24	visit_partner	partner_state	visitor/partner record	med	code
+0084254	snd_finished	sound_done	1 when melody finished	high	code
+0084440	RAM_84440	melody_end_cb	callback pointer	high	code
+0000D30	ir_port_ptr	serial_port_reg	P0 data register address	med	code
+0000D94	ir_ram_routines	timer5_isr_ram	RAM copy of ISR	high	code
+0000D58	ir_carrier_ram	serial_tx_ram	RAM copy of tx loop	med	code
+2538130	comm_main_menu_items	comm_menu_tbl	normal main menu	high	code
+2538190	comm_main_menu_debug_items	comm_menu_tbl_debug	P06-low variant	high	code
+253802C	comm_tama4u_menu_items	tama4u_menu_tbl	sub-menu	high	code
+25294F4	comm_validate_record	tamago_verify	TAMAGO prefix, length, checksum, 0x52 signature, 0xFF bit0, version	high	asm + sigcheck.py
+2562458	D_2562458	sig_perm_table	16 x 8 permutations keyed by low nibble of byte 0x55	high	asm
+25623D8	D_25623D8	sig_value_table	16 x 8 expected bytes keyed by high nibble of byte 0x55	high	asm
+2562564	D_2562564	sig_const_mode8	sender signature for mode 8 records	high	data
+2562570	D_2562570	sig_const_tama	sender signature for Tama records	high	data
+252AAC2	comm_record_sum	record_checksum16	additive sum of n-2 bytes	high	code
+252ABB6	comm_build_header	xchg_build_header	fill our 0x100 header	high	code
+252B9A8	comm_build_phase1	xchg_build_phase1	phase-1 record	high	code
+252BC96	comm_build_phase2	xchg_build_phase2	phase-2 record	high	code
+252BDAE	comm_build_phase3	xchg_build_phase3	phase-3 record	high	code
+252BBF2	comm_phase2_code	xchg_phase2_code	message code by mode/role	high	code
+252B8FC	comm_build_payload	xchg_payload_dispatch	per-mode section builder	high	code
+252B084	comm_build_section_images	xchg_sect0_images	portrait + profile blob	med	code
+252B0F4	comm_build_section_poses	xchg_sect1_poses	rendered wished poses	med	code
+252AF64	comm_build_section_profile	xchg_sect2_profile	profile section	high	code
+252B20E	comm_build_section_item	xchg_sect3_item	whole TAMAGO file	high	code
+252AEB4	comm_build_section_mail	xchg_sect4_mail	100-byte mail record	med	code
+252B194	comm_build_section_proposal	xchg_sect5_text	proposal text	med	code
+252B2C6	comm_describe_given_item	xchg_gift_descriptor	item given at 0xC8	med	code
+252BE66	comm_exchange_initiator	xchg_initiator	initiator session	high	code
+252C1B6	comm_exchange_target	xchg_target	target session	high	code
+252C57C	comm_exchange	xchg_run	role dispatch	high	code
+252AB30	comm_check_codes_paired	xchg_check_codes	codes differ by 1	high	code
+252AB76	comm_check_same_type	xchg_check_mode	same mode byte	high	code
+2528D18	comm_same_peer	peer_is_same	id+name vs comm_phase1_peer	high	asm
+2528D70	comm_remember_peer	peer_remember	store id+name	high	code
+2528DA2	friend_lookup_or_add	friend_find_or_add	friend list lookup/insert	high	asm
+250333C	friend_find_or_add	friend_find_or_add2	same, F16 variant	high	asm
+250392C	visit_record_clear	visitor_clear	clear friend slot 30	high	asm
+2528F18	friend_portrait	friend_portrait	portrait record pointer	high	code
+2528F92	friend_book_update	friend_book_update	add partner + portrait	high	code
+2528456	comm_can_marry	marriage_allowed	refusal checks	med	asm
+2562340	comm_forbidden_pairs	marriage_forbidden_pairs	species group pairs	med	data
+25283B8	evo_after_marriage	new_generation_reset	after marriage	med	code
+25283FA	comm_proposal_refused_msg	proposal_refusal_msg	3 messages	high	text
+2528176	comm_outcome_greeting	outcome_greeting	profile card + fortune	high	code
+252827A	comm_outcome_gift	outcome_gift	mode 5	high	code
+2528578	comm_outcome_marriage	outcome_marriage	mode 6	med	code
+2528628	comm_outcome_app	outcome_item_send	mode 8 target	high	code
+25286BE	comm_outcome_game1	outcome_game_round1	mode 3	med	code
+2528736	comm_outcome_game2	outcome_game_round2	mode 4	med	code
+25287F2	comm_outcome_photo	outcome_photo	mode 7	med	code
+252888C	comm_run_outcome	xchg_apply_result	outcome dispatch	high	code
+2527FC2	comm_fortune_number	fortune_digit	numerology digit	high	code
+25280A8	comm_show_fortune	fortune_show	result text	high	code
+2527D04	comm_draw_profile_card	partner_card_draw	profile card	high	code
+2527B60	comm_get_profile	partner_profile_get	name + 4 profile bytes	med	code
+2527AA0	comm_take_gift_item	xchg_take_item	store received item	high	code
+2528228	comm_load_section_pics	image_list_collect	pointers into section	high	asm
+2500EC8	comm_render_picture_records	render_poses_to_flash	render character poses	med	code
+2500B3A	comm_render_pose_list	render_portrait_list	section 0 images	med	asm
+2500BD2	comm_render_poses_or_room	render_pose_list	section 1 images	med	asm
+0004368	comm_tx_record	xchg_our_record	pointer to our header	high	code
+000436C	comm_rx_record	xchg_peer_record	pointer to received header	high	code
+00043C4	comm_phase1_peer	xchg_peer_identity	id + name of current peer	high	code
+0000E9C	friend_list	friend_list	31 x 0x16	high	asm
+00011DE	owner_id	owner_id	random u16 at creation	high	test/test_debug_chara
+000120C	owner_name	owner_name	16 bytes	high	code
+00012F4	owner_profile_bytes	profile_bytes	gender, mood, ?, ?	med	code
+00012F8	owner_profile_texts	profile_strings	5 x 16 bytes	med	F47
+2502DCE	ir_rx_find_marker	serial_find_marker	TAMAGO resync	high	code
+250300A	ir_rx_feed	serial_rx_feed	buffer + flush	high	code
+2503C82	item_kind_whitelist	item_kind_whitelist	kind ranges per class	high	code
+2503D16	ir_item_validate	serial_item_validate	version + whitelist	med	code
+2503E7A	ir_msg_pair_check	serial_msg_pair_check	request/answer pairs	high	code
+25036B6	friend_event_minute_check	daily_event_tick	time-of-day events	med	code
+24077C8	pet_minute_tick	life_tick_1s	one-second character life tick	med	code
+24074D2	pet_clock_events	clock_minute_events	7:00 reset, midnight, birthdays	med	code
+24073D4	pet_care_mistake	care_miss_roll	sickness / poop roll	med	code
+2406E9C	pet_sleep_state	sleep_state	0 awake 1 falling 2 waking 3 asleep	med	code
+2406D34	pet_get_sick	poop_event	poop, 5th -> sick	med	code
+2406E0C	pet_make_poop	growth_step	care grade per step	med	code
+2406AE8	pet_feed	feed	hunger hearts	high	code
+240624A	pet_add_happiness	add_happiness	hearts, cap 30/100	high	code
+24062FC	pet_sub_happiness	sub_happiness	hearts	high	code
+2406C3C	pet_add_points	money_add	Gotchi points	high	code
+2406C5E	pet_spend_points	money_spend	1 = not enough	high	code
+2406C8C	pet_add_weight	mood_add	pet_weight	high	code
+2406CAE	pet_sub_weight	mood_sub	with floor	high	code
+2406068	item_get_count	item_count_get	2-bit per slot	high	code
+24060FC	item_set_count	item_count_set		high	code
+2406134	item_acquire	item_acquire		high	code
+2406158	item_consume	item_consume		high	code
+24061C0	pet_get_unlock_flag	flag_get	achievement bit	high	code
+24061E6	pet_set_unlock_flag	flag_set		high	asm
+2405CF8	pet_raise_call	call_raise	attention call k	med	code
+2405F4A	pet_clear_call	call_clear		med	code
+240640E	pet_fill_clover_leaf	comm_game_unlock	by received item	med	code
+24067CE	album_register	raised_book_register	sector 0x37 snapshot	med	code
+2406A92	album_count	raised_count		high	code
+24084F8	chara_index_by_id	char_table_index		high	code
+2408180	chara_text	char_text	text group of a character	med	code
+2407FC6	dl_chara_text	dl_char_text	downloaded character text	med	code
+2407F42	util_rand_except	rand_excluding		high	code
+2407F6C	util_rand_shuffle	shuffle_bytes		high	code
+000119C	pet	char_record	see NOTES 17	med	code
+255B4DC	chara_table	char_table	built-in characters	high	code
+00011CC	pet_weight	mood		high	code
+00011E0	owner_bday_day	item_counts	+3: 2-bit counts; [0]/D_00011E1 = owner birthday day/month	med	code
+00011C2	pet_neglect_minutes	secs_since_care		med	code
+0001258	room_living_dirt	consecutive_days		low	code
+251FF4E	game_cake	reaction_game	button sequence mini game	med	code
+251FFC0	game_cake_loop	reaction_game_loop		med	asm
+2527516	game_quiz	quiz_game	100-question quiz	high	code
+255FB80	D_255FB80	reaction_patterns	count + button bits per game	high	data
+255FB94	game_cake_order_masks	reaction_level_masks		high	data
+255FBA8	D_255FBA8	reaction_scenes	10 animation functions	high	data
+2417924	mail_find	mail_find	lookup / allocate	high	code
+2417EA4	mail_store	mail_store_delete		high	code
+2418034	mail_renumber_friends	mail_renumber_after_delete		high	code
+2418CB2	mail_mark_all_read	mail_mark_read		high	code
+2418D84	mail_read_unread	mail_read_unread		high	code
+24180D4	friend_page	friend_page		high	code
+2418514	friend_book	friend_book_browser		high	code
+24172F8	friend_delete	friend_delete		high	code
+24172C6	friend_count	friend_count		high	code
+24188AE	album_photo_browser	photo_album_browser		high	code
+2418ADC	album_special_charas	decorations_viewer		med	code
+2419B8C	diary_compose_page	diary_compose		high	code
+241A510	diary_rasterize_page	diary_page_write	rasterised page	high	code
+241A6E6	gfx_raster_pixel	raster_pixel	sprite-list software raster	high	code
+241A7E0	gfx_image_pixel	image_pixel	4/8-bit decode with flips	high	code
+241A454	diary_store_page	diary_page_store		high	code
+241951E	diary_viewer	diary_browser		high	code
+2419436	diary_page_count	diary_page_count		high	code
+241946C	diary_delete_page	diary_page_delete		high	code
+241A92E	album_sort_records	raised_book_sort		high	code
+241AA40	album_draw_overview	raised_book_draw		high	code
+22D0000	mail_records	mail_area	100 x 100 bytes	high	code
+2570000	D_2570000	diary_pages	23 x 0x2000	high	code
+2770000	-	photo_album	6 x 0x2800	high	code
+22F0000	-	raised_book	80 x 0x1000	high	code
+24140BE	town_menu	town_menu	おでかけ menu incl. APP LAUNCH (native code from bank 8 item)	high	code
+2541D84	town_places	town_menu_table	16 x {name, avail, pre, handler, post}	high	data
+2413D4E	town_place_state	town_entry_avail		high	code
+2413D6C	town_entry_app_slot	town_entry_app_slot	entry 8/9/12/13 -> slot 0..3	high	code
+2413CF2	town_app_slot_state	app_slot_present	bank 8 slot k	high	code
+250D24A	dl_install_program	app_install_boot	copy 0x94/2 item to 0x2000000	high	code
+250596C	dl_chara_store	dl_character_store	8 x 0x8000 at 0x2780000	high	code
+2780000	-	dl_character_slots	downloadable characters	high	code
+2720000	-	app_slots	bank 8: 4 x 0x8000 executable apps	high	data
+2414638	ui_place_menu_run	menu4_driver	generic 4-per-page table menu	high	code
+24144CE	ui_place_draw_page	menu4_draw_page		high	code
+2411EA6	shop_tama_depa	tamadepa_shop	buy / sell	high	code
+2411D48	shop_sell	sell_item		high	code
+2412366	town_park_menu	park_menu	square / sports ground	high	code
+2412080	town_park_square_event	park_event_pick		med	code
+24121C8	town_sports_ground	sports_ground		med	code
+24139FC	town_school	school		high	code
+24137F6	town_club_visit	club_visit		med	code
+2412A32	town_matchmaking	matchmaking_entry		high	code
+2412528	town_match_candidates	matchmaking_candidates		med	code
+2412782	town_match_choose	matchmaking_choose		med	code
+2412498	pet_life_story	wedding_scene		med	code
+2412ABA	chara_transform_target	transform_available		med	code
+2412C18	chara_transform	transform		med	code
+24111E2	job_minute_tick	job_minute_tick		med	code
+24113DA	job_end	job_end		med	code
+2411FAA	town_lottery	lottery		high	code
+2411756	town_street_encounter	street_encounter	pets	med	code
+2411900	town_park_greeting	park_greeting		med	code
+0000E58	job	job_record		med	code
+0000E54	outing	outing_record		med	code
+000120A	pet_companion	pet_id		med	code
+24F7492	comm_menu_app	app_download_session	4Uアプリ: mode 8 target over SNEP	high	table comm_main_menu_items
+24F74C8	comm_menu_item_send	app_send_session	アイテムSEND: mode 8 initiator	high	table comm_main_menu_debug_items
+24F8774	comm_menu_greeting	greeting_entry	あいさツーしん -> mode 2	high	table
+2409BD6	nfc_idle_touch	idle_touch_session	any NFC initiator touching the idle toy	high	main + nfc/nfc_session.s
+252A752	nfc_idle_target_session	idle_touch_run	asm: adopt peer mode / phone present	high	asm
+252893A	comm_idle_touch_event	touch_present_event	random event by day of month	med	code
+2538130	comm_main_menu_items	comm_menu_tbl	{count, init, {label, handler}...}	high	data
+251A9BA	game_menu	game_corner_menu	built-in + downloaded games; 2nd native launch site	high	code
+255FA2C	game_menu_tbl	game_corner_table	built-in game functions	high	data
+2710000	-	game_slots	bank 7: 2 x 0x8000 downloadable games	high	data
+250629E	dl_chara_list	dl_character_list		high	code
+25015BA	chara_render_poses_flash	render_character_records	snapshot images to flash	high	code
+2501B1C	chara_render_poses_flash_flip	render_character_records2	exchange images	high	code
+250048A	flash_write_text_record	serial_profile_block	old protocol 0x6C bytes	med	code
+251C5DC	game_training	training_game		med	code
+2518958	mail_edit_message	message_edit		high	code
+2513B02	item_coupon_viewer	bingo_card_view		high	code
+25133C4	ui_settings_menu	settings_menu		high	code
+2510EDE	pet_status_pages	status_pages		high	code
+251149E	owner_editor	profile_edit		high	code
+2512B1A	friend_profile_view	friend_profile_view		high	code
+250913A	town_street_visit	street_encounter_visit	friendship -> marriage	med	code
+250944E	town_farm_visit	farm_visit		med	code
+2509EA0	town_fountain_visit	fountain		med	code
+25085DE	visit_garden_visitor	garden_visitor		med	code
+2508B14	visit_scheduled_visitor	scheduled_visitor		med	code
+250F616	pet_care_menu	care_menu		high	code
+250FCDA	pet_sitter_call	tama_sitter		med	code
+241B4AC	mail_letter_box	happy_mail_browser		high	code
+2414638	ui_place_menu_run	menu4_driver		high	code
+240FA1C	room_window_draw	room_window_draw	weather + passers-by	med	code
+240F840	room_weather_draw_daily	daily_weather		med	code
+2410C44	shop_reform	gotchi_reform		med	code
+24046A2	item_use	item_use		med	code
+2404984	item_draw_card	item_card		high	code
+2405652	item_inv_picker	inventory_picker		high	code
+24FC538	ui_show_message	speech_bubble_anim		high	code
+240E438	food_eat_meal	eat_meal		med	code
+240E4EC	food_eat_snack	eat_snack		med	code
+240EE3E	food_menu	food_menu		high	code
+240CD6C	chara_draw_pet	draw_character_dressed		high	code
+240C744	chara_draw_accessory	draw_accessory		med	code
+240D28C	ui_wardrobe_accessories	wardrobe_accessory		med	code
+24F6C06	evo_choose_next	special_form_triggers		med	code
+2506D82	ui_menu_run	menu_driver		high	code
+25072E8	ui_yes_no	yesno_box		high	code
+2415F28	shop_browser	shop_browser		high	code
+250596C	dl_chara_store	dl_character_store		high	code
+2505E8E	dl_chara_profile_card	dl_character_card		high	code

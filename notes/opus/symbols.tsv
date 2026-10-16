@@ -1,0 +1,208 @@
+address	current name	proposed name	meaning	confidence	evidence
+24F6256	sys_reset	reset_handler	reset vector: clocks, RAM clear, SP, init chain, main	high	vector 0, asm/sys/sys_boot.s
+24F6316	sys_init	hw_init	boot init chain (ITC, timers, IRAM copy, .data/.bss, A/D)	high	called from reset
+24F6390	sys_bus_setup	sramc_init	external bus chip-select setup	high	writes 0x301500..0x30150C
+24F63B6	sys_itc_init	itc_init	interrupt priorities/enables/flags	high	writes 0x300260..0x3002AA
+24F644A	sys_gpio_init	gpio_init	port directions, pull-ups, function select, port interrupt routing	high	writes 0x300380..0x300393, 0x300C42..
+24F64F4	tmr_init	t16_init	T16 advanced mode, stop timers	high	writes 0x3007DE, CTL regs
+24F6514	sys_copy_iram_code	copy_iram_code	copy 0xD08 bytes of code flash 0x2562840 -> RAM 0	high	loop
+24F6536	sys_copy_data	copy_data	copy .data init values	high	loop to 0x84474
+24F655E	sys_clear_bss_ram	clear_bss_ext	clear 0x84000..0x84474	high	loop
+24F657E	sys_clear_bss_iram	clear_bss_iram	clear 0xD08..0x4AE4	high	loop
+24F659A	sys_irq_enable	irq_enable	psrset IE	high	2 insns
+24F659E	sys_irq_disable	irq_disable	psrclr IE	high	2 insns
+24F714C	sys_sleep_osc1	clock_low_speed	switch to OSC1 32 kHz, stop OSC3	high	CLKCNTL 0x771007/0x771005 + slp
+24F717E	sys_sleep_osc3	clock_high_speed	back to OSC3 30 MHz	high	CLKCNTL 0x770003
+24F71B0	sys_leave_low_power	clock_high_speed_after_sound	wait sound, OSC3, reload click tables	high	calls 250DC10, 250DB42
+24F61BC	sys_adc_setup	adc_config	A/D channels/clock/trigger	high	0x30055E/0x300520/0x300542
+24F621C	sys_adc_irq_setup	adc_int_config	A/D interrupt mask	high	0x30055C
+2502298	sys_battery_low	battery_is_low	10 A/D samples, low if 5 <= 0x2E3	high	A/D + threshold
+251A062	test_battery_check	battery_check_screen	battery gauge / dead-battery halt	medium	A/D, draws, halts
+25003FA	sys_adc_isr	isr_adc	A/D end of conversion -> sys_battery_level	high	vector 64
+24FF966	rtc_isr	isr_rtc_tick	1 Hz game tick (clock, needs, timeouts)	high	vector 65
+25000F4	btn_a_isr	isr_button_a	button A (P00) press	high	vector 16
+25001E4	btn_b_isr	isr_button_b	button B (P01) press	high	vector 17
+25002D6	btn_c_isr	isr_button_c	button C (P02) press	high	vector 18
+25000C4	tmr_t16_23_isr	isr_t16_3b	ms timeout elapsed (tmr_flags bit 2)	high	vector 42
+25000DC	tmr_t16_45_isr	isr_t16_5b	delay elapsed (tmr_flags bit 5)	high	vector 50
+25051A2	tmr_t5_cmpa_vector	isr_t16_5a	jump to IRAM handler 0xD94 (IR tick)	high	vector 51
+253569E	snd_tick_isr	isr_sound_tick	sound sequencer tick	high	vector 46
+252D366	nfc_tick_isr	isr_nfc_tick	NFC 100 ms tick nfc_ticks	high	vector 43
+252C5A6	nfc_irq_isr	isr_nfc_irq	PN512 IRQ pin (P94) -> nfc_field_irq	high	vector 88
+252D204	nfc_uart_tx_isr	isr_uart1_tx	UART Ch.1 tx empty	high	vector 62
+252D2A2	nfc_uart_rx_isr	isr_uart1_rx	UART Ch.1 rx full	high	vector 61
+252D2D6	nfc_uart_err_isr	isr_uart1_err	UART Ch.1 rx error	high	vector 60
+2500052	sys_isr_halt_a	isr_default	halt + hang	high	unused vectors
+240912E	sys_idle_tick	idle	halt then housekeeping	high	halt + sys_idle_housekeeping
+24FF958	sys_idle_housekeeping	idle_housekeeping	P06 sampling, backlight, 240897C	high	calls
+24FF928	sys_sample_debug_strap	sample_p06	count P06 low samples (sys_debug_strap_count, max 8)	high	reads P0 bit 6
+251A566	tmr_t3_start_timeout	timeout3_start_ms	one-shot ms timeout on T16 ch.3	high	t*30000>>12
+251A5B4	tmr_t5_start_timeout	timeout5_start_ms	one-shot ms timeout on T16 ch.5	high	t*30000>>12
+251A602	tmr_delay_ms	delay_ms	halt until T16 ch.3 timeout	high	asm
+2409030	sys_display_off	display_sleep	LCD sleep in, backlight off, low-speed clock	high	LCD cmd 0x10
+2409068	sys_display_wake	display_wake	LCD sleep out, backlight PWM, OSC3	high	LCD cmd 0x11, T16 ch.2
+251A650	sys_apply_backlight	backlight_update	apply backlight level to T16 ch.2 PWM	high	CRA = k*(9-level)/10
+251A648	sys_set_backlight	backlight_set_level	sys_backlight_request = level	high
+2401DD8	lcd_init	lcd_init	LCD controller init, variant by P07 strap	high	LCD commands
+240921A	lcd_init_st7735	lcd_init_st7735	ST7735(S) init sequence	high	B1..B4, C0..C5 commands
+2409138	lcd_init_ili9163_old	lcd_init_old	unused older LCD init	high	no caller
+2409C76	sys_main	main	main loop	high	called by reset, never returns
+253520C	snd_tick_start	sound_tick_start	T16 ch.4 sequencer tick	high
+2535270	snd_tick_timer_stop	sound_tick_stop	stop T16 ch.4	high
+25352AE	snd_ch0_on	sound_ch0_on	TM0 tone output on	high	P10 CFP, T16 ch.0
+2535542	snd_set_pitch_0	sound_ch0_set	TM0 period/duty	high
+25356FA	snd_sequencer_tick	sound_engine	music/sfx sequencer (asm)	medium	called from T16 ch.4 isr
+250DB8E	snd_play	play_sfx	play short sound k on channels 0/1	high	key clicks from button isrs
+250DC10	snd_wait_end	wait_sfx_done	wait until the short sound finished	high	snd_finished
+250DB42	snd_init	sfx_init	pick sound tables for the clock	high
+2504D6E	ir_send_packet	ir_send_packet	IR transmit 20-byte packet	high	carrier bursts via RAM routine
+2504E44	ir_send_ping	ir_send_ping	IR short burst	medium
+2504C44	ir_recv_packet	ir_recv_packet	IR receive 20-byte packet, errors 0x10/0x11/0x12	high
+2504F68	ir_carrier_burst	ir_carrier_burst	toggle P05 for r6 timer ticks (copied to RAM 0xD58)	high	writes 0x20/0 to P0
+2504F16	sys_copy_ram_routines	ir_copy_ram_routines	copy IR routines to IRAM 0xD58/0xD94	high
+25048D0	tmr_t5_start_tick	t16_5_tick_start	periodic tick on T16 ch.5 with interrupt	high
+250B46A	rtc_reset	rtc_reset	RTC = 01/01 00:00:00	high	RTC regs
+250B5A6	rtc_set_time	rtc_set_time	set month/day/hour/minute	high	BCD
+250B6DC	rtc_read_clock	rtc_read	read RTC, advance day/month	high
+250B574	rtc_day_period	time_of_day_period	hour -> morning/.../night 0..4	high
+252D3F2	nfc_init	nfc_frontend_probe	PN512 power-up, NFCID, field-detect sleep	high	UART register script
+252C5CE	nfc_link_open	nfc_open	open session, 460.8 kbaud	high	SerialSpeedReg 0x3A
+252C8CA	nfc_link_open_921k	nfc_open_921k	unused 921.6 kbaud variant	high	SerialSpeedReg 0x1C
+252CBEA	nfc_link_close	nfc_close	soft-reset front-end, 9600 bd, stop tick	high	CommandReg 0x2F
+252CE54	nfc_uart_send	nfc_uart_write	queue bytes, interrupt-driven tx	high
+252CF4C	nfc_uart_recv	nfc_uart_read	read bytes from rx ring with timeout	high
+252CFD8	nfc_rearm_field_detect	nfc_sleep_field_detect	front-end soft power-down with RfOn/RfOff irq	high	CommandReg 0x37
+252D2FC	nfc_tick_start	nfc_tick_start	100 ms tick on T16 ch.3	high	0xB71B @ MCLK/64
+252D340	nfc_tick_stop	nfc_tick_stop	stop T16 ch.3	high
+252D79E	nfc_request_abort	nfc_abort	nfc_abort = 1	high
+25349B2	nfc_poll_type_a	nfca_poll	REQA + anticollision/select	high	0x26, 0x93/0x95
+2534FBE	nfc_setup_passive_initiator	pn512_cfg_initiator_106	passive NFC-A initiator setup	high
+25350DE	nfc_setup_active_initiator	pn512_cfg_active_424	active-mode 424k setup	medium	TxMode 0xA1
+2533B90	nfc_send_atr_req	dep_send_atr_req	ATR_REQ with LLCP general bytes	high	D4 00 + 46 66 6D
+2533DBE	nfc_send_atr_res	dep_send_atr_res	ATR_RES with LLCP general bytes	high	D5 01
+2533A5E	nfc_send_sensf_res	nfcf_send_sensf_res	SENSF_RES 01 FE..., PMm C0..C7	high
+2534066	nfc_llcp_send_symm_req	llcp_send_symm_i	SYMM as initiator	high	D4 06 k 00 00
+25340DE	nfc_llcp_send_symm_res	llcp_send_symm_t	SYMM as target	high	D5 07 k 00 00
+2534158	nfc_llcp_send_connect	llcp_send_connect_snep	CONNECT 0x20 -> 4	high	11 20
+25341D4	nfc_llcp_send_cc	llcp_send_cc	CC 4 -> 0x20 + MIUX	high	81 84 02 02 00 00
+2534276	nfc_llcp_send_dm_sdp	llcp_send_dm_noservice	DM reason 2 to SDP connect	high	81 C1 02
+253459A	nfc_llcp_send_rr	llcp_send_rr	RR with N(R)	high	13 60 / 83 44
+2534650	nfc_llcp_send_disc	llcp_send_disc	DISC 0x20 -> 4	high	11 60
+253474C	nfc_llcp_send_dm	llcp_send_dm	DM reason 0 (answer to DISC)	high	81 C4 00
+25344EC	nfc_snep_send_response	snep_send_response	I-PDU with SNEP response 0x80/0x81	high	asm
+2534300	nfc_snep_send_put	snep_send_fragment	I-PDU with next PUT fragment	high	asm
+25347D6	nfc_snep_store_fragment	snep_put_sink	NDEF record parsing, data to RAM or flash	high	asm, func_0000B52
+252F292	nfc_snep_server	snep_server_receive	LLCP/SNEP server, receives a PUT	high	state machine
+252FE2C	nfc_snep_client	snep_client_send	LLCP/SNEP client, sends a PUT	high	state machine
+252DC6E	nfc_detect_initiator	tama_link_wait_initiator	active-mode target, accepts NFCID3 F0 40	high
+252E1B6	nfc_detect_target	tama_link_find_target	active-mode initiator ATR_REQ	high
+252ECE0	nfc_dep_send	tama_link_send	chunked DEP_REQ transfer	high
+252E5D0	nfc_dep_receive	tama_link_receive	chunked receive (asm)	medium	mirror of 252ECE0
+252D7E0	nfc_poll_tag	card_poll	reader mode NFC-A/NFC-F poll	high
+252D882	nfc_tag_read	card_write	reader mode write by card type	medium
+252D9C0	nfc_tag_write	card_read	reader mode read by card type	medium
+2530E9A	nfc_identify_type2_tag	t2t_identify	Type 2 tag capability container	high	BuiltinItemKeyEntry 10
+2532BF8	card_activate	iso14443_4_rats	RATS E0 50	high
+25332B6	card_deselect	iso14443_4_deselect	S(DESELECT) C2	high
+25339E8	nfc_send_sensf_req	felica_poll	FeliCa polling command	high	06 00 FF FF 00 01
+2514854	spot_reader	card_touch_screen	reader-mode UI (cards/accessories)	medium	uses 252D7E0.. and flash 0x2050000
+2529D0A	nfc_find_peer_target	nfc_detect_peer_wait	peer detection, waiting side	high
+2529D8C	nfc_find_peer_initiator	nfc_detect_peer_init	peer detection, initiator side	high
+2529E42	nfc_send	nfc_send_packet	send via tama link or SNEP client	high
+2529F0C	nfc_receive	nfc_receive_packet	receive via tama link or SNEP server	high
+252A690	nfc_menu_session	nfc_communicate	communication entry (menu choice -> type/role)	high
+252A496	nfc_session_target	nfc_communicate_wait	waiting-side session UI	medium
+252C57C	comm_exchange	tamago_exchange	run the packet exchange for the role	high
+252BE66	comm_exchange_initiator	tamago_exchange_initiator	3-round exchange, initiator	high
+252C1B6	comm_exchange_target	tamago_exchange_receiver	3-round exchange, receiver	high
+25294F4	comm_validate_record	tamago_validate	TAMAGO header/sum/signature check	high	"TAMAGO", 0x4D
+252AAC2	comm_record_sum	tamago_sum16	16-bit byte sum	high
+252ABB6	comm_build_header	tamago_fill_header	fill own TAMAGO header	high
+252B9A8	comm_build_phase1	tamago_build_round1	round-1 packet	high
+252BC96	comm_build_phase2	tamago_build_round2	round-2 packet	high
+252BDAE	comm_build_phase3	tamago_build_round3	round-3 ack packet	high
+2528B52	comm_erase_banks	nfc_erase_buffers	erase flash 0x27C0000..0x27DFFFF	high	sectors 0x84..0x85
+2528BEC	flash_program_bytes	flash_write	program bytes to flash	high	func_0000B52 loop
+2528C4A	flash_program_halfwords	flash_write16	program halfwords to flash	high
+2528B7C	flash_fill	flash_fill	program a halfword value n times	high
+250C000	flash_backup_sector	flash_sector_backup	copy sector k to scratch 0x2040000	high
+250C06E	flash_restore_sector_except	flash_sector_restore_except	rewrite sector k from scratch except a range	high
+250B78E	flash_sector_addr	flash_sector_addr	1-based sector index -> address	high	flash_sector_offsets
+250B7B6	item_bank_slot	dl_slot_addr	download category/slot -> flash address	high	item_bank_tbl
+250D24A	dl_install_program	dl_game_install	program a downloaded game to flash 0x2000000	high	erase sectors 1.., func_0000B52
+251A9BA	game_menu	game_menu	game menu; calls built-in or downloaded game entry	high	(int(*)(void))(0x2000000 + be32(p+0xAE))
+24140BE	town_menu	app_menu	category-8 menu with downloaded programs	high	same launch code
+0000A54	func_0000A54	flash_erase_sectors	IRAM: erase sectors first..last (1-based)	high	AA 55 80 AA 55 30
+0000B52	func_0000B52	flash_program_halfword	IRAM: program one halfword	high	AA 55 A0
+0000C46	func_0000C46	flash_program_block	IRAM: program n halfwords	high
+0000000	func_0000000	dirty_add_object	IRAM: add object bounds to dirty rect	high	0x1805..0x180C
+00009A6	func_00009A6	lcd_flush	IRAM: send dirty rects to LCD	high
+000014A	func_000014A	palette_color_effect	IRAM: palette entry with colour effect	medium
+0000312	func_0000312	palette_load_object	IRAM: load object palette into the RGB tables	medium	0x3C10/0x3D50/0x3E90
+24021C2	gfx_object_create	obj_create	append display object	high	gfx_objects, gfx_object_count
+2401EEE	gfx_display_reset	screen_new	clear display list + dirty rects	high
+2402156	gfx_object_move	obj_set_pos	move object	high
+2402014	gfx_object_set_image	obj_set_image	set image of object	high
+24022C0	gfx_object_set_flags	obj_set_flags	set attribute/flags	high
+2402C90	anim_draw_pet	anim_show_pet	show the pet pose in a sprite slot	high	gen zone API
+2402DFC	anim_draw_pic	anim_show_image	show an image in a sprite slot	high	gen zone API
+2403070	anim_queue_sound	anim_queue_sound	queue sound for next frame	high	anim_queued_sound
+24031D6	anim_frame	anim_frame	flush + sound + wait ms, button skip mask	high	most called function
+240308C	anim_frame_wait	frame_wait	flush, sound, wait, buttons	high
+2403F98	anim_draw_text_line	text_show	text line object	high
+2403EA8	txt_render_line	text_render	render glyphs	high
+2404068	txt_draw_centered	text_draw_centered	centred text line	high
+24022F2	anim_scene_room	anim_scene_room	scene set-up in the room	high
+240CD6C	chara_draw_pet	pet_draw	draw pet + worn accessories	high
+2400E4A	api_picture_address	api_picture_addr	game API resource table	high
+2405CF8	pet_raise_call	call_raise	raise attention call kind k	high	x00A bits
+2405F4A	pet_clear_call	call_clear	clear call kind k	high
+2406AE8	pet_feed	pet_feed	add hunger hearts	high	x005
+240624A	pet_add_happiness	pet_add_happy	add happiness	high	x00C
+24062FC	pet_sub_happiness	pet_sub_happy	subtract happiness	high
+2406C3C	pet_add_points	points_add	gotchi points + n (max 99999)	high	x018
+2406C5E	pet_spend_points	points_spend	spend gotchi points	high
+2406C8C	pet_add_weight	weight_add	weight + n	high	pet_weight
+2406CAE	pet_sub_weight	weight_sub	weight - n	high
+2406D34	pet_get_sick	pet_get_sick	sickness, 5th -> departure	high	x010/x011
+2406E0C	pet_make_poop	pet_poop	add a poop	high	x01C, x037[]
+2406E9C	pet_sleep_state	pet_sleep_state	awake/sleepy/asleep from hour	high	table x015/x016
+24073D4	pet_care_mistake	care_mistake	care mistake, random sickness	high	x00F
+24074D2	pet_clock_events	clock_minute_events	daily events by time	high
+24077C8	pet_minute_tick	life_tick_minute	per-minute simulation	high
+2406068	item_get_count	item_count	2-bit item count	high	owner_bday_day[3..]
+24060FC	item_set_count	item_set_count	set item count	high
+2406134	item_acquire	item_add	add item	high
+2406158	item_consume	item_use	remove item	high
+24061C0	pet_get_unlock_flag	flag_get	flag bitmap x0AC	high
+24061E6	pet_set_unlock_flag	flag_set	flag bitmap x0AC	high
+24067CE	album_register	album_save_pet	save pet to album sector 0x37	medium
+2408180	chara_text	char_text	character text by id/kind	high
+2407F42	util_rand_except	rand_except	random in [0,a) != b	high
+pet	pet	g_pet	current pet state (see F30 header)	high	usage
+gfx_objects	gfx_objects	g_objects	display list (48 x 20 bytes)	high
+gfx_object_count	gfx_object_count	g_object_count	number of display objects	high
+gfx_dirty_main_y0	gfx_dirty_main_y0	g_dirty_main	main-area dirty rect (4 bytes)	high	IRAM code
+gfx_dirty_bar_y0	gfx_dirty_bar_y0	g_dirty_bars	icon-bar dirty rect (4 bytes)	high
+btn_a_presses	btn_a_presses	g_btn_a	button A press count	high	isr
+btn_b_presses	btn_b_presses	g_btn_b	button B press count	high	isr
+btn_c_presses	btn_c_presses	g_btn_c	button C press count	high	isr
+tmr_flags	tmr_flags	g_timer_flags	bit2 T16 ch.3 timeout, bit5 T16 ch.5	high	isrs
+ui_timeout	ui_timeout	g_ui_timeout	UI inactivity countdown (s)	medium	menus set 10/30
+sys_battery_level	sys_battery_level	g_adc_result	last battery A/D value	high
+nfc_session	nfc_session	g_nfc_session	NFC/communication session state (0x24 bytes)	high
+comm_tx_record	comm_tx_record	g_tamago_tx_hdr	own TAMAGO header pointer	high
+comm_rx_record	comm_rx_record	g_tamago_rx_hdr	peer TAMAGO header copy	high
+nfc_id3	nfc_id3	g_nfcid	10-byte NFCID3 (F0 40 ...)	high
+nfc_ticks	nfc_ticks	g_nfc_ticks	100 ms tick counter	high
+nfc_field_irq	nfc_field_irq	g_nfc_irq	NFC IRQ flag	high
+nfc_abort	nfc_abort	g_nfc_abort	abort request	high
+nfc_result	nfc_result	g_nfc_result	last NFC result	high
+nfc_cmd_buf	nfc_cmd_buf	g_pn512_script	PN512 register/FIFO command buffer	high
+pet_life_stage	pet_life_stage	g_life_stage	0 egg .. 4 adult	medium
+pet_weight	pet_weight	g_weight	weight	high
+chara_table	chara_table	g_char_table	character table, 46-byte rows	high
+item_bank_tbl	item_bank_tbl	g_dl_categories	download categories {slot size, first sector, count, ...}	high
+flash_sector_offsets	flash_sector_offsets	g_flash_sectors	NOR sector offsets (136 entries)	high
+anim_first_slot_idx	anim_first_slot_idx	g_anim_slot_base	first sprite slot of the scene	high
+anim_queued_sound	anim_queued_sound	g_anim_pending_sfx	sound to start at next frame	high

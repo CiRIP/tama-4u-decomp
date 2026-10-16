@@ -1,0 +1,96 @@
+/* Functions defined in src/api/api_entries.c. */
+#ifndef PROTO_API_API_ENTRIES_H
+#define PROTO_API_API_ENTRIES_H
+
+#include "structs.h"
+
+u8 api_get_btn_a(void);
+u8 api_get_btn_b(void);
+u8 api_get_btn_c(void);
+void api_set_btn_a(u8);
+void api_set_btn_b(u8);
+void api_set_btn_c(u8);
+void api_idle_tick(void);
+u8 api_get_btn_events(void);
+void api_set_btn_events(u8);
+int api_rand_except(int, int);
+void api_shuffle(u8 *, int);
+int api_get_happiness(void);
+int api_get_hunger(void);
+int api_get_weight(void);
+int api_get_points(void);
+void api_add_happiness(u8);
+void api_add_hunger(u8);
+void api_add_weight(u8);
+void api_add_points(int);
+u8 api_get_month(void);
+u8 api_get_day(void);
+u8 api_get_hour(void);
+u8 api_get_minute(void);
+void api_delay_ms(u16);
+void api_delay_ms_ch5(u16);
+void api_timeout_start(u16);
+void api_timeout_start_ch5(u16);
+u8 api_timeout_elapsed(void);
+u8 api_timeout_elapsed_ch5(void);
+void api_timeout_clear(void);
+void api_timeout_clear_ch5(void);
+void api_play_sound(u8);
+void api_wait_sound(void);
+void api_new_screen(void);
+void api_present(void);
+void api_draw_pet(u8, u8, u8, u16, s16, s16);
+void api_set_scene_busy(u8);
+void api_display_reset(void);
+void api_object_set_image_sized(u8, u16, u8, const u8 *, u8, u8);
+void api_object_set_image(u8, u16, u8, const u8 *);
+void api_object_set_image_clipped(u8, u16, u8, const u8 *, u8, u8);
+void api_object_move(u8 p0, s16 p1, s16 p2);
+void api_object_move_dirty(u8 p0, s16 p1, s16 p2);
+void api_object_set_image_attr(u8 p0, u8 p1);
+u8 api_object_create(s16, s16, u16, u8, u16, const u8 *);
+u8 api_object_create_plain(s16, s16, u16, u8, const u8 *);
+void api_object_draw_glyph(u8, u16, int, u8);
+void api_object_set_flags(u8, u16);
+void api_scene_game_corner(u8);
+void api_anim_draw_image(u8, const u8 *, u16, s16, s16);
+void api_anim_queue_sound(u8);
+u8 api_anim_frame(int, int);
+void api_draw_other_chara(u8, u8, u8, u16, s16, s16);
+void api_draw_chara_by_id(u8, u8, u8, u16, s16, s16, int);
+void api_draw_text(u8 a, s16 b, s16 c, u16 d, int e, u8 f, u8 g);
+u8 api_select_other_chara(u16);
+void api_anim_draw_companion(u8, u8, u16, s16, s16);
+const u8 *api_picture_address(int);
+void api_scene_room(u8);
+void api_scene_window(u8);
+void api_scene_window_mode(u8, u8);
+void api_scene_window2(u8);
+void api_scene_living(u8);
+void api_scene_living_poops(u8);
+void api_scene_kitchen(u8);
+void api_scene_tama_depa(u8);
+void api_scene_park(u8);
+void api_scene_blank(u8);
+void api_scene_bath(u8);
+void api_scene_toilet(u8);
+void api_scene_bedroom(u8);
+void api_anim_draw_pet(u8, u8, u16, s16, s16);
+void api_anim_draw_other_chara(u8, u8, u16, s16, s16);
+void api_anim_draw_fifth_chara(u8, u8, u16, s16, s16);
+void api_anim_draw_digit(u8, u8, u16, s16, s16);
+void api_anim_text_line(u8, const u8 *, u8, s16, s16);
+void api_anim_glyph_text(u8, int, u16, s16, s16);
+u8 api_anim_frame_wait(int, int);
+void api_select_fifth_chara(u16);
+struct SpriteSet *api_pet_sprite_set(void);
+struct SpriteSet *api_chara_sprite_set(int);
+int api_digit_font(void);
+void api_reaction_anim(u8, const u8 *, int);
+void api_show_message(int, const u8 *, const u8 *);
+void api_set_pic_slot(u8, int);
+u32 api_get_pic_slot(u8);
+int api_store_item(struct TamagoFile *);
+u32 api_chara_pose_image(int, int);
+
+#endif
