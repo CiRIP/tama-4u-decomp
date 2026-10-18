@@ -1,6 +1,6 @@
 /*
  * Low-power mode: sleep on OSC1, resume on OSC3, leaving low power (sound off, clock back to 30
- * MHz) and a small helper.
+ * MHz).
  *
  * Code 24F714C..24F71D8, no .rodata. No .rodata or call evidence ties its functions to a
  * neighbour: its boundaries are a guess.
@@ -43,8 +43,4 @@ void sys_leave_low_power(void)
     CMU_CLKCNTL = 0x770003;
     CMU_PROTECT = 0;
     snd_init();
-}
-
-void func_24F71D8(void)
-{
 }

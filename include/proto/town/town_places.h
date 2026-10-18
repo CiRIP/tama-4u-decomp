@@ -201,6 +201,5 @@ int town_reform_shop(void);
 int town_item_shop(void);
 int town_fashion_shop(void);
 void town_place_leave(void);
-void town_hook_stub_b(void);
 
 #endif

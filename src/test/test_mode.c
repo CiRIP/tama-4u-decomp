@@ -417,7 +417,7 @@ int test_flash_erase_all(void)
         if (test_flash_areas[i].flags == 0xffff)
             break;
         if (test_flash_areas[i].flags & 1) {
-            if (func_0000A54(0x2000000, test_flash_areas[i].first_sector, test_flash_areas[i].last_sector) != 0)
+            if (func_0000A54(FLASH_BASE, test_flash_areas[i].first_sector, test_flash_areas[i].last_sector) != 0)
                 goto fail;
         }
         if (test_flash_areas[i].flags & 2) {
@@ -436,7 +436,7 @@ int test_flash_erase_all(void)
             }
         }
         if ((test_flash_areas[i].flags & 8)
-            && func_0000A54(0x2000000, test_flash_areas[i].first_sector, test_flash_areas[i].last_sector) != 0) {
+            && func_0000A54(FLASH_BASE, test_flash_areas[i].first_sector, test_flash_areas[i].last_sector) != 0) {
 fail:
             sys_irq_enable();
             return 1;
@@ -530,13 +530,6 @@ void btn_wait_release(void)
         asm volatile("halt");
         sys_idle_housekeeping();
     }
-}
-
-/*
- * Empty function (stub, `ret` only).
- */
-void func_251A28A(void)
-{
 }
 
 /*
@@ -665,12 +658,12 @@ void test_rtc_count(void)
 /* The flash areas of the test-mode flash test test_flash_erase_all: {flags (1 erase, 2 fill,
  * 4 verify, 8 erase again), first sector, last sector, address, fill value, halfwords}. */
 const struct FlashTestArea test_flash_areas[7] = {
-    { 0xf, 0x01, 0x04, 0x2000000, 0, 0x4000 },
-    { 0xf, 0x08, 0x08, 0x200e000, 0, 0x1000 },
-    { 0xf, 0x09, 0x0b, 0x2010000, 0, 0x18000 },
-    { 0xf, 0x0c, 0x0f, 0x2040000, 0, 0x20000 },
-    { 0xf, 0x34, 0x3b, 0x22c0000, 0, 0x40000 },
-    { 0xf, 0x62, 0x87, 0x25a0000, 0, 0x130000 },
+    { 0xf, FLASH_SEC_DL_PROGRAM, FLASH_SEC_DL_PROGRAM_LAST, FLASH_DL_PROGRAM, 0, 0x4000 },
+    { 0xf, FLASH_SEC_SAVE, FLASH_SEC_SAVE, FLASH_SAVE, 0, 0x1000 },
+    { 0xf, FLASH_SEC_PORTRAITS, FLASH_SEC_PORTRAITS_LAST, FLASH_PORTRAITS, 0, 0x18000 },
+    { 0xf, FLASH_SEC_SECTOR_COPY, FLASH_SEC_DIARY_COPY, FLASH_SECTOR_COPY, 0, 0x20000 },
+    { 0xf, FLASH_SEC_RECORDS, FLASH_SEC_RECORDS_LAST, FLASH_RECORDS, 0, 0x40000 },
+    { 0xf, FLASH_SEC_USER, FLASH_SEC_USER_LAST, FLASH_USER, 0, 0x130000 },
     { 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff },
 };
 const u8 D_255F6F8[] = _("SOUND");

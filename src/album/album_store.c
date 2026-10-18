@@ -41,12 +41,12 @@ int item_pick_slot_to_overwrite(void)
     t = gfx_object_create(8, 0x4d, 0x10, 0, 0, 0);
     gfx_draw_text_centered(t, 0x4d, 0x10, D_255C290, 0, 9);
     func_00009A6();
-    flash_backup_sector(0x7f);
+    flash_backup_sector(FLASH_SEC_PHOTOS);
     tmr_delay_ms_t5(2000);
     cur = album_prev_photo(0);
 redraw:
     k = save.pet.photo_slots[cur] - 1;
-    img = (u8 *)(k * 0x2800 + 0x2770000);
+    img = (u8 *)(k * 0x2800 + FLASH_PHOTOS);
     ui_new_screen();
     c = gfx_object_create(0, 0x1c, 0, 0, 0, (const u8 *)img);
     c2 = gfx_object_create(0x72, 0x58, 0xb0, 0, 0, D_21059A4);
@@ -66,7 +66,7 @@ redraw:
             else
                 cur = 5;
             k = save.pet.photo_slots[cur] - 1;
-            img = (u8 *)(k * 0x2800 + 0x2770000);
+            img = (u8 *)(k * 0x2800 + FLASH_PHOTOS);
             gfx_object_set_image(c, 0, 0, img);
             if (cur > album_prev_photo(cur))
                 gfx_object_set_image(c2, 0xb0, 0, D_21059A4);
@@ -84,7 +84,7 @@ redraw:
                     goto redraw;
                 if (ui_confirm_really() != 0) {
                     snd_wait_end();
-                    flash_restore_sector_except(0x7f, img, 0x2800);
+                    flash_restore_sector_except(FLASH_SEC_PHOTOS, img, 0x2800);
                     for (i = cur; i <= 4; i++) {
                         p = (int)&save.pet;
                         o = 0xb4;
@@ -140,7 +140,7 @@ int album_free_photo_entry(void)
  */
 int album_store_record(struct TamagoFile *p)
 {
-    int r = flash_first_erased_record(D_2770000, 0x2800, 6);
+    int r = flash_first_erased_record((u8 *)FLASH_PHOTOS, 0x2800, 6);
 
     if (r < 0) {
         r = item_pick_slot_to_overwrite();
@@ -149,6 +149,6 @@ int album_store_record(struct TamagoFile *p)
     }
     save.pet.photo_slots[album_free_photo_entry()] = r + 1;
     save_game();
-    flash_program_record(p, D_2770000, 0x2800, r);
+    flash_program_record(p, (u8 *)FLASH_PHOTOS, 0x2800, r);
     return 0;
 }

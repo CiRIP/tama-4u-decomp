@@ -27,7 +27,6 @@
 #include "proto/sys/sys_low_power.h"
 #include "proto/comm/comm_menu.h"
 #include "proto/ir/ir_session.h"
-#include "proto/util/util_empty.h"
 #include "proto/ui/ui_message.h"
 #include "proto/pet/pet_gone.h"
 #include "proto/sys/sys_interrupts.h"
@@ -1532,8 +1531,8 @@ u8 ui_run_away_screen(void)
 
 /*
  * Main-loop hook when returning to the main screen (sub-screen level 0..2): handle a
- * pending request flagged by the sub-systems: friend_event.kind1_bit / x002 (NFC results ->
- * func_24FC4F2(1 / 0)), the end of the visit_partner.mode mode (x015 == 1: the menu
+ * pending request flagged by the sub-systems: friend_event.kind1_bit / x002 (NFC results:
+ * back to the room view), the end of the visit_partner.mode mode (x015 == 1: the menu
  * comm_main_menu with the RTC interrupt temporarily reconfigured, 0x300277 = 4 then 6),
  * the outing return (outing.come_home == 1 -> outing_screen) and the job end
  * (job.finished == 1 -> job_end). Returns 1 when something ran.
@@ -1544,14 +1543,8 @@ u8 ui_main_pending_hook(void)
 
     if (k != 0 && k != 2 && k != 1)
         return 0;
-    if (friend_event.kind1_bit != 0) {
+    if (friend_event.kind1_bit != 0 || friend_event.kind2_bit != 0) {
         room_view = 0;
-        func_24FC4F2(1);
-        return 1;
-    }
-    if (friend_event.kind2_bit != 0) {
-        room_view = 0;
-        func_24FC4F2(0);
         return 1;
     }
     if (visit_partner.mode != 0 && visit_partner.over == 1) {
@@ -1969,7 +1962,6 @@ void sys_main(void)
         room_mood_question_due = 1;
     else
         room_mood_question_due = 0;
-    func_2408726();
     room_period_drawn = rtc_day_period();
     room_calls_drawn = 0;
     room_status_drawn = 0;
@@ -2515,7 +2507,6 @@ no_icon:
                     if (sys_battery_level <= 0x2e3)
                         break;
                     comm_menu_active = 0;
-                    func_24F71D8();
                     INT_EP47_ERTC_EAD = 6;
                     goto menu_done;
                 case 7:

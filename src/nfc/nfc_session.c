@@ -160,7 +160,7 @@ void test_nfc_loopback(void)
     nfc_show_session_screen(3);
     comm_stop_ms_timers();
     do {
-    } while (nfc_init((struct FlashBase *)0x2000000) != 0);
+    } while (nfc_init((struct FlashBase *)FLASH_BASE) != 0);
     z = 0;
     for (;;) {
         switch (state) {
@@ -357,7 +357,7 @@ s8 nfc_power_up(void)
 
     if (nfc_session.x001 != 1) {
         for (i = 0; i <= 1; i++) {
-            r = nfc_init((struct FlashBase *)0x2000000);
+            r = nfc_init((struct FlashBase *)FLASH_BASE);
             if (r == 0)
                 goto ok;
             nfc_session.x001 = 2;
@@ -389,8 +389,7 @@ int nfc_init_if_enabled(void)
  * busy waits (nfc_short_delay) then up to 3 LLCP/SNEP PUT attempts as a SNEP client
  * (nfc_snep_client, c seconds each) with 0x14 busy waits between them, stopping on 0 ok /
  * 4 abort / -6 / -7 (peer
- * released). comm_trace() calls are empty debug/progress trace hooks, comm_user_cancelled() =
- * session cancelled. Result also in nfc_result.
+ * released). comm_user_cancelled() = session cancelled. Result also in nfc_result.
  */
 int nfc_send(void *a, int b, int c)
 {
@@ -398,7 +397,6 @@ int nfc_send(void *a, int b, int c)
     int n = 3;
     int r;
 
-    comm_trace();
     if (comm_user_cancelled() == 0) {
         if (nfc_session.peer_kind == 0xf040) {
             nfc_result = nfc_dep_send(a, b, c);
@@ -410,26 +408,21 @@ int nfc_send(void *a, int b, int c)
             }
             i = 0;
             do {
-                comm_trace();
                 r = comm_user_cancelled();
                 if (r)
                     goto out;
                 r = nfc_snep_client(a, b, c);
                 nfc_result = r;
-                comm_trace();
                 if (nfc_result == 4 || nfc_result == 0 || nfc_result == -6 || nfc_result == -7)
                     break;
-                comm_trace();
                 for (j = 0; j < 0x14; j++) {
                     nfc_short_delay();
                     if (comm_user_cancelled())
                         goto out;
                 }
-                comm_trace();
                 i++;
             } while (i < n);
         }
-        comm_trace();
     }
 out:
     return nfc_result;
@@ -449,7 +442,6 @@ int nfc_receive(int a, int *b, int c, s8 d, int e)
     int i, j;
     int n = 6;
 
-    comm_trace();
     if (comm_user_cancelled() == 0) {
         if (nfc_session.peer_kind == 0xf040) {
             nfc_result = nfc_dep_receive(a, (u32 *)b, e, c, d);
@@ -466,21 +458,16 @@ int nfc_receive(int a, int *b, int c, s8 d, int e)
             }
             for (i = 0; i < n; i++) {
                 *b = 0;
-                comm_trace();
                 nfc_result = nfc_snep_server(a, b, e, 10, d);
-                comm_trace();
                 if (nfc_result == 4 || nfc_result == 0 || nfc_result == -6 || nfc_result == -7)
                     break;
-                comm_trace();
                 for (j = 0; j < 0x14; j++) {
                     nfc_short_delay();
                     if (comm_user_cancelled())
                         goto out;
                 }
-                comm_trace();
             }
         }
-        comm_trace();
     }
 out:
     return nfc_result;
@@ -521,11 +508,8 @@ u8 test_nfc_link(void)
     u16 id;
     u8 v;
     int k;
-    int a;
 
-    a = 0;
 again:
-    comm_trace2(a);
     nfc_show_session_screen(0);
     nfc_cancel_request = 0;
     btn_a_presses = 0;
@@ -583,7 +567,6 @@ run:
         if (btn_a_presses != 0 && (P0_P0D & 7) == 6) {
             nfc_wait_field_on();
             nfc_wait_field_on();
-            a = 0;
             goto again;
         }
         if (btn_b_presses != 0) {
@@ -607,7 +590,6 @@ fail:
     }
     btn_history_init();
     btn_history_sample();
-    a = 0;
     goto again;
 quit:
     comm_exclusive_timing_off();
@@ -642,7 +624,6 @@ int nfc_session_initiator(u8 a)
     if (r == 1)
         return 0;
 again:
-    comm_trace2(0);
     if (nfc_session.x003 == 4) {
         btn_mask(7);
         btn_a_presses = 0;
@@ -779,13 +760,11 @@ again:
         if (r != 0)
             break;
         nfc_wait_field_on();
-        comm_trace();
         btn_mask(3);
         nfc_field_irq = 2;
         nfc_session.x000_b = 1;
         r = nfc_find_peer_target(&id);
         if (r == 0) {
-            comm_trace2(r);
             nfc_session.peer_kind = nfc_session.detected_peer;
             if (id == 0xf0ef) {
                 room_view = 0;
@@ -816,10 +795,8 @@ again:
         }
         if (nfc_result != 4)
             goto L10;
-        if (nfc_cancel_request == 0 && btn_c_presses == 0) {
-            comm_trace();
+        if (nfc_cancel_request == 0 && btn_c_presses == 0)
             break;
-        }
         nfc_cancel_request = 0;
         nfc_wait_field_on();
         comm_exclusive_timing_off();
@@ -1001,7 +978,6 @@ again:
         return r;
     }
     room_idle = 0;
-    comm_trace2(0);
     btn_a_presses = 0;
     btn_b_presses = 0;
     btn_c_presses = 0;
@@ -1021,7 +997,6 @@ again:
     comm_reset_records_wrapper();
     if (nfc_find_peer_target(&id) != 0)
         goto nod0a;
-    comm_trace2(1);
     nfc_session.x002 = 2;
     nfc_session.peer_kind = nfc_session.detected_peer;
     if (id == 0xf0ef && nfc_session.x003 == 0) {

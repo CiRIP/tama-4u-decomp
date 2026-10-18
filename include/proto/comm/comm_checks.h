@@ -15,7 +15,5 @@ int comm_check_peer_phase(struct ExchangeRecord *, u8);
 void comm_count_and_save(void);
 void comm_count_add(void);
 int comm_store_peer_mail(void);
-void ir_transfer_abort(void);
-void ir_transfer(void);
 
 #endif

@@ -394,11 +394,6 @@ void sys_copy_ram_routines(void)
  */
 asm(".include \"asm/func/func_2504F68.s\"");
 
-/* Empty (`ret`). */
-void func_2504F9E(void)
-{
-}
-
 /*
  * Wait until a button is pressed (btn_a_presses..22) or a seconds pass (ui_timeout), idling
  * (halt + sys_idle_housekeeping) on the standard 3 Hz tick. Live: used by the NFC code too.
@@ -580,11 +575,6 @@ void __attribute__((interrupt_handler)) tmr_t5_cmpa_vector(void)
  * (every communication menu entry), 0xD94 holds zeros.
  */
 asm(".include \"asm/func/func_25051AE.s\"");
-
-/* Empty (`ret`). */
-void func_25051CC(void)
-{
-}
 
 /* Stop timer 5 and set the RTC interrupt mode to 7 (1-second, level sensed, enabled);
  * ir_last_error = v (status of the aborted serial transfer). Returns v. */

@@ -167,11 +167,11 @@ void ir_rx_feed(u8 *a, u16 b, u8 c)
         case 5:
             break;
         case 3:
-            comm_flash_write_ptr = (u32)(comm_exchange_kind == 0 ? D_27C8000 : (ir_session_flags & 3) ? D_27A0400 : D_27D0400);
+            comm_flash_write_ptr = (u32)(comm_exchange_kind == 0 ? ((u8 *)(FLASH_COMM_TX + 0x8000)) : (ir_session_flags & 3) ? ((u8 *)(FLASH_COMM_RX2 + 0x400)) : ((u8 *)(FLASH_COMM_RX + 0x400)));
             break;
         case 6:
         case 7:
-            comm_flash_write_ptr = (u32)(comm_exchange_kind == 0 ? D_27CB800 : (ir_session_flags & 3) ? D_27A5400 : D_27D5400);
+            comm_flash_write_ptr = (u32)(comm_exchange_kind == 0 ? ((u8 *)(FLASH_COMM_TX + 0xB800)) : (ir_session_flags & 3) ? ((u8 *)(FLASH_COMM_RX2 + 0x5400)) : ((u8 *)(FLASH_COMM_RX + 0x5400)));
             break;
         }
     }
@@ -216,10 +216,10 @@ void ir_dir_entry_write(int idx, int unused, u32 val, u8 b)
     u16 *p;
 
     sys_irq_disable();
-    p = (u16 *)(0x27c0000 + idx * 16);
+    p = (u16 *)(FLASH_COMM_TX + idx * 16);
     buf[0] = b;
     buf[1] = 0;
-    r = func_0000B52(p, *(u16 *)buf, 0x2000000);
+    r = func_0000B52(p, *(u16 *)buf, FLASH_BASE);
     if (r != 0)
         return;
     p++;
@@ -228,7 +228,7 @@ void ir_dir_entry_write(int idx, int unused, u32 val, u8 b)
     buf[2] = val >> 8;
     buf[3] = val;
     for (i = 0; i <= 1; i++, p++)
-        if (func_0000B52(p, ((u16 *)buf)[i], 0x2000000) != 0)
+        if (func_0000B52(p, ((u16 *)buf)[i], FLASH_BASE) != 0)
             break;
     sys_irq_enable();
 }
@@ -242,7 +242,7 @@ void ir_status_word_write(u16 v)
 
     buf[0] = v;
     sys_irq_disable();
-    func_0000B52((u16 *)D_27C0000, buf[0], 0x2000000);
+    func_0000B52((u16 *)FLASH_COMM_TX, buf[0], FLASH_BASE);
     sys_irq_enable();
 }
 
@@ -259,11 +259,6 @@ void ir_xfer_enter(void)
     INT_E16T45 = 0;
     btn_disable();
     btn_history_init();
-}
-
-/* comm_redraw_hook = empty (ret): the "redraw after a session" hook is a no-op here. */
-void comm_redraw_hook(void)
-{
 }
 
 /*
@@ -316,14 +311,12 @@ u8 ir_apply_points(void)
 }
 
 /*
- * Leave a session: timer 5 periodic again (tmr_t5_standard_tick), 10 s menu timeout, then the
- * empty hook comm_redraw_hook.
+ * Leave a session: timer 5 periodic again (tmr_t5_standard_tick), 10 s menu timeout.
  */
 void ir_session_leave(void)
 {
     tmr_t5_standard_tick();
     ui_timeout = 10;
-    comm_redraw_hook();
 }
 
 
@@ -404,16 +397,16 @@ int ir_locate_partner_pics(void)
     int i;
     int n;
 
-    q0 = D_27D0516;
+    q0 = (u8 *)(FLASH_COMM_RX + 0x516);
     b[1] = *q0++;
     b[0] = *q0;
-    n = 0x27d0402 + *(u16 *)b;
+    n = (FLASH_COMM_RX + 0x402) + *(u16 *)b;
     if (comm_menu_choice == 2)
         return n;
-    dst = D_27D3C00;
+    dst = (u8 *)(FLASH_COMM_RX + 0x3C00);
     sz = 0xe00;
     flash_program(dst, (u8 *)n + 0x118, sz);
-    q = D_27D0516;
+    q = (u8 *)(FLASH_COMM_RX + 0x516);
     for (i = 0; i <= 2; i++) {
         b[1] = *q++;
         b[0] = *q++;
@@ -422,13 +415,6 @@ int ir_locate_partner_pics(void)
     }
     flash_program(dst + sz, q + 0xe, 0x80);
     return (int)dst - 0x118;
-}
-
-/*
- * Empty function (stub, `ret` only).
- */
-void friend_new_hook(int a)
-{
 }
 
 /*
@@ -449,42 +435,28 @@ void comm_write_default_partner_image(void)
 
     off = 0;
     flash_begin();
-    func_0000A54(0x2000000, 0x84, 0x84);
-    dst = (u8 *)0x27C8114;
+    func_0000A54(FLASH_BASE, FLASH_SEC_COMM_TX, FLASH_SEC_COMM_TX);
+    dst = (u8 *)(FLASH_COMM_TX + 0x8114);
     hdr[0] = 0;
     hdr[1] = 1;
     src = hdr;
     for (i = off; i < 1; i++, off += 2)
-        func_0000B52((u16 *)(dst + off), *(u16 *)(src + off), 0x2000000);
+        func_0000B52((u16 *)(dst + off), *(u16 *)(src + off), FLASH_BASE);
     dst += off;
     len = 0xe70;
     crc = util_read_be16((int)&len);
     src = (u8 *)&crc;
     for (i = 0, off = 0; i < sizeof(crc) / 2; i++, off += 2)
-        func_0000B52((u16 *)(dst + off), *(u16 *)(src + off), 0x2000000);
+        func_0000B52((u16 *)(dst + off), *(u16 *)(src + off), FLASH_BASE);
     dst += off;
     src = D_215C920;
     for (i = 0, off = 0; i < len >> 1; i++, off += 2)
-        func_0000B52((u16 *)(dst + off), *(u16 *)(src + off), 0x2000000);
+        func_0000B52((u16 *)(dst + off), *(u16 *)(src + off), FLASH_BASE);
     dst += off;
     flash_end();
 }
 
-/*
- * Empty function (stub, `ret` only).
- */
-void friend_portrait_hook(int a)
-{
-}
-
 u8 friend_event_hook_a(u8 a, u8 b)
-{
-}
-
-/*
- * Empty function (stub, `ret` only).
- */
-void friend_event_hook_b(u8 a, u8 b, u8 c)
 {
 }
 
@@ -493,7 +465,7 @@ void friend_event_hook_b(u8 a, u8 b, u8 c)
  * times whether the corresponding bit of the event masks pet.friend_event_mask1 (kind 1) /
  * pet.friend_event_mask2 (kind 2), filtered by pet.friend_event_pending (still pending today), is set;
  * friend_event_pick picks the kind, friend_event_run_pending fires it and friend_event_fire
- * only calls the empty hooks friend_event_hook_a / _b and clears the bit. Nothing in this
+ * only calls the empty hook friend_event_hook_a and clears the bit. Nothing in this
  * firmware sets the masks (they are only tested and cleared here), so no event ever fires;
  * nothing ties them to visits.
  *
@@ -516,8 +488,8 @@ u8 friend_event_pick(u8 a, u8 m)
 }
 
 /*
- * Fire the scheduled friend event of kind a (1 / 0), bit b, through the hooks
- * friend_event_hook_a / friend_event_hook_b (both empty `ret` stubs here), then clear the bit in
+ * Fire the scheduled friend event of kind a (1 / 0), bit b, through the hook
+ * friend_event_hook_a (an empty `ret` stub here), then clear the bit in
  * pet.friend_event_mask1 or pet.friend_event_mask2, in pet.friend_event_pending and in friend_event.
  */
 int friend_event_fire(u8 a, u8 b)
@@ -527,7 +499,6 @@ int friend_event_fire(u8 a, u8 b)
     r = friend_event_hook_a(a, b);
     if (r == 0xff)
         return;
-    friend_event_hook_b(r, a, b);
     if (a == 1) {
         save.pet.friend_event_mask1 &= ~friend_event.kind1_bit;
         save.pet.friend_event_pending &= ~friend_event.kind1_bit;
@@ -638,24 +609,6 @@ int friend_event_minute_check(void)
 }
 
 /*
- * Empty function (stub, `ret` only).
- */
-void friend_add_hook(void)
-{
-}
-
-void func_25037BE(void)
-{
-}
-
-/*
- * Empty function (stub, `ret` only).
- */
-void friend_clear_hook(void)
-{
-}
-
-/*
  * File the portrait of the partner comm_partner_slot: for a real friend slot (< 30) back up its
  * portrait sector (friend_portrait_backup) and store the image record p (friend_portrait_store, p - 0x118);
  * a new friend (comm_friend_is_new) gets its record flag x000 set to 0xFF.
@@ -682,31 +635,19 @@ void friend_portrait_file_received(void)
 {
     u8 k = comm_partner_slot;
 
-    friend_new_hook(k);
-    friend_portrait_hook(k);
     friend_portrait_backup(k);
     if (comm_exchange_kind > 2)
         friend_portrait_store(comm_partner_slot, (u8 *)ir_locate_partner_pics());
     else
-        friend_portrait_store(comm_partner_slot, D_27C8000);
+        friend_portrait_store(comm_partner_slot, (u8 *)(FLASH_COMM_TX + 0x8000));
 }
 
-
-
-
-
-extern void friend_add_hook(void) ;
-
-
-
 /*
- * The full "add friend after an exchange": friend_add_hook (empty hook) first, then for a
- * real slot (< 30) mark a new friend 0xFF and file its portrait (friend_portrait_file_received); slot 30
- * (visitor) is only marked.
+ * The full "add friend after an exchange": for a real slot (< 30) mark a new friend 0xFF and
+ * file its portrait (friend_portrait_file_received); slot 30 (visitor) is only marked.
  */
 void friend_add_after_exchange(void)
 {
-    friend_add_hook();
     if (comm_partner_slot < 30) {
         if (comm_friend_is_new != 0)
             save.friend_list[comm_partner_slot].x000_b = 0xFF;
@@ -723,14 +664,8 @@ void friend_add_after_exchange(void)
  */
 void friend_mark_new(void)
 {
-    if (comm_partner_slot <= 29) {
-        if (comm_friend_is_new)
-            save.friend_list[comm_partner_slot].x000_b = 0xff;
-        friend_new_hook(comm_partner_slot);
-    } else if (comm_partner_slot == 30) {
-        if (comm_friend_is_new)
-            save.friend_list[comm_partner_slot].x000_b = 0xff;
-    }
+    if (comm_partner_slot <= 30 && comm_friend_is_new)
+        save.friend_list[comm_partner_slot].x000_b = 0xff;
 }
 
 /*

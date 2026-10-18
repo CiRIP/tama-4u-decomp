@@ -50,7 +50,7 @@ u8 *flash_sector_addr(int k)
     u8 *p = 0;
 
     if (k >= 1 && k <= 0x87)
-        p = (u8 *)(flash_sector_offsets[k - 1] + 0x2000000);
+        p = (u8 *)(flash_sector_offsets[k - 1] + FLASH_BASE);
     return p;
 }
 
@@ -139,17 +139,17 @@ void save_factory_reset(void)
     u32 i;
 
     sys_irq_disable();
-    func_0000A54(0x2000000, 1, 4);
-    func_0000A54(0x2000000, 9, 11);
-    func_0000A54(0x2000000, 0x34, 0x3b);
-    func_0000A54(0x2000000, 0x62, 0x87);
+    func_0000A54(FLASH_BASE, FLASH_SEC_DL_PROGRAM, FLASH_SEC_DL_PROGRAM_LAST);
+    func_0000A54(FLASH_BASE, FLASH_SEC_PORTRAITS, FLASH_SEC_PORTRAITS_LAST);
+    func_0000A54(FLASH_BASE, FLASH_SEC_RECORDS, FLASH_SEC_RECORDS_LAST);
+    func_0000A54(FLASH_BASE, FLASH_SEC_USER, FLASH_SEC_USER_LAST);
     i = 0;
     sys_irq_enable();
     for (; i <= 1; i++) {
-        flash_program_record((u16 *)item_builtin_records[D_255BF88[i]], (u32)flash_sector_addr(0x65), 0x800, i);
+        flash_program_record((u16 *)item_builtin_records[D_255BF88[i]], (u32)flash_sector_addr(FLASH_SEC_INV_FOOD), 0x800, i);
         item_set_count(i, 1);
     }
-    flash_program_record((u16 *)item_builtin_records[47], (u32)flash_sector_addr(0x76), 0x2000, 0);
+    flash_program_record((u16 *)item_builtin_records[47], (u32)flash_sector_addr(FLASH_SEC_DEFAULT_BG), 0x2000, 0);
     comm_menu_choice = 0;
     comm_submenu_choice = 0;
 }
@@ -201,7 +201,7 @@ u8 save_confirm_erase(void)
             btn_c_presses = 1;
             snd_wait_end();
             sys_irq_disable();
-            func_0000A54(0x2000000, 8, 8);
+            func_0000A54(FLASH_BASE, FLASH_SEC_SAVE, FLASH_SEC_SAVE);
             sys_irq_enable();
             r = 1;
             goto out;
@@ -332,7 +332,7 @@ u8 sys_power_on(void)
         lcd_palette_set = 0;
         ui_new_screen();
     }
-    if (*(int *)0x200e000 == -1)
+    if (*(int *)FLASH_SAVE == -1)
         return 0;
     anim_busy = 0;
     rtc_reset();
@@ -365,7 +365,7 @@ again:
         if (btn_b_presses) {
             if (sel != 0)
                 goto other;
-            q = (u16 *)0x200e000;
+            q = (u16 *)FLASH_SAVE;
             for (i = 0; i <= 0x123; i++)
                 ((u16 *)&save.pet)[i] = *q++;
             chara_select_pet_sprites_by_id(save.pet.x000);
@@ -423,12 +423,12 @@ void save_game(void)
     snd_wait_end();
     save.pet.saved_poop_display = pet_poops_drawn;
     sys_irq_disable();
-    q = (u16 *)0x200e000;
-    func_0000A54(0x2000000, 8, 8);
+    q = (u16 *)FLASH_SAVE;
+    func_0000A54(FLASH_BASE, FLASH_SEC_SAVE, FLASH_SEC_SAVE);
     for (i = 0; i <= 0x123; i++, q++)
-        func_0000B52(q, ((u16 *)&save.pet)[i], 0x2000000);
+        func_0000B52(q, ((u16 *)&save.pet)[i], FLASH_BASE);
     for (i = 0; i <= 0x293; i++, q++)
-        func_0000B52(q, ((u16 *)save.friend_list)[i], 0x2000000);
+        func_0000B52(q, ((u16 *)save.friend_list)[i], FLASH_BASE);
     sys_irq_enable();
 }
 
@@ -443,10 +443,10 @@ void flash_backup_sector(int k)
     u16 *q;
 
     sys_irq_disable();
-    func_0000A54(0x2000000, 12, 12);
-    q = (u16 *)0x2040000;
+    func_0000A54(FLASH_BASE, FLASH_SEC_SECTOR_COPY, FLASH_SEC_SECTOR_COPY);
+    q = (u16 *)FLASH_SECTOR_COPY;
     for (off = flash_sector_offsets[k - 1]; off < flash_sector_offsets[k]; off += 2, q++) {
-        if (func_0000B52(q, *(u16 *)(off + 0x2000000), 0x2000000) != 0)
+        if (func_0000B52(q, *(u16 *)(off + FLASH_BASE), FLASH_BASE) != 0)
             break;
     }
     sys_irq_enable();
@@ -463,12 +463,12 @@ void flash_restore_sector_except(int k, void *p, int n)
     u16 *src;
 
     sys_irq_disable();
-    func_0000A54(0x2000000, k, k);
-    src = (u16 *)0x2040000;
+    func_0000A54(FLASH_BASE, k, k);
+    src = (u16 *)FLASH_SECTOR_COPY;
     for (off = flash_sector_offsets[k - 1]; off < flash_sector_offsets[k]; off += 2, src++) {
-        u32 a = off + 0x2000000;
+        u32 a = off + FLASH_BASE;
         if (a < (u32)p || a >= (u32)p + n) {
-            if (func_0000B52((u16 *)(off + 0x2000000), *src, 0x2000000) != 0)
+            if (func_0000B52((u16 *)(off + FLASH_BASE), *src, FLASH_BASE) != 0)
                 break;
         }
     }
@@ -631,7 +631,7 @@ void flash_program_record(u16 *src, u32 base, int size, int idx)
     base += size * idx;
     sys_irq_disable();
     for (a = base; a < base + size; a += 2, src++) {
-        if (func_0000B52((u16 *)a, *src, 0x2000000) != 0)
+        if (func_0000B52((u16 *)a, *src, FLASH_BASE) != 0)
             break;
     }
     sys_irq_enable();
@@ -656,7 +656,6 @@ void ui_show_items_full(void)
     a = gfx_object_create(0x1c, 0x50, 0x10, 0, 0, 0);
     gfx_draw_text_line(a, 0x1c, 0x50, 0x10, (int)D_255BFF4, 0, 9);
     func_00009A6();
-    comm_redraw_hook();
     tmr_delay_ms_t5(2000);
 }
 
@@ -932,7 +931,7 @@ void dl_erase_program_area(int k)
 {
     if (k >= 7 && k <= 8) {
         sys_irq_disable();
-        func_0000A54(0x2000000, 1, 4);
+        func_0000A54(FLASH_BASE, FLASH_SEC_DL_PROGRAM, FLASH_SEC_DL_PROGRAM_LAST);
         sys_irq_enable();
     }
 }
@@ -1434,13 +1433,6 @@ u8 item_add_to_inventory(struct TamagoFile *p)
 }
 
 /*
- * Empty function (stub, `ret` only).
- */
-void func_250D248(void)
-{
-}
-
-/*
  * Install a downloaded PROGRAM p (type 0x94 / category 2: the downloadable games and
  * outings) from its download slot into the execution area at the very start of the
  * flash, 0x2000000: returns 0 for any other type; skipped (returns 1) if the file
@@ -1477,7 +1469,7 @@ int dl_install_program(struct TamagoFile *p)
     u16 k;
     u16 *src;
 
-    q = (struct TamagoFile *)0x2000000;
+    q = (struct TamagoFile *)FLASH_DL_PROGRAM;
     if (p->x04e != 0x94 || p->x04f != 2)
         return 0;
     if (q->sub_kind == p->sub_kind && q->x05a == p->x05a && q->x05b == p->x05b)
@@ -1488,10 +1480,10 @@ int dl_install_program(struct TamagoFile *p)
     if (n != 0)
         k = ((n + 0x1fff) >> 13) - 1;
     sys_irq_disable();
-    func_0000A54(0x2000000, 1, k + 1);
-    h = (u8 *)0x2000000;
+    func_0000A54(FLASH_BASE, FLASH_SEC_DL_PROGRAM, FLASH_SEC_DL_PROGRAM + k);
+    h = (u8 *)FLASH_DL_PROGRAM;
     for (src = (u16 *)base; (u8 *)src < base + n; src++, h += 2)
-        if (func_0000B52((u16 *)h, *src, 0x2000000))
+        if (func_0000B52((u16 *)h, *src, FLASH_BASE))
             break;
     sys_irq_enable();
     return 1;
@@ -1513,22 +1505,22 @@ struct TamagoFile *item_record_by_index(int a)
 
     switch (a) {
     case 0 ... 21:
-        r = (u8 *)(a * 0x800) + (int)flash_sector_addr(0x65);
+        r = (u8 *)(a * 0x800) + (int)flash_sector_addr(FLASH_SEC_INV_FOOD);
         break;
     case 22 ... 36:
-        r = (u8 *)((a - 22) * 0x4000) + (int)flash_sector_addr(0x66);
+        r = (u8 *)((a - 22) * 0x4000) + (int)flash_sector_addr(FLASH_SEC_INV_CLOTHES);
         break;
     case 37 ... 56:
-        r = (u8 *)((a - 37) * 0x2000) + (int)flash_sector_addr(0x6b);
+        r = (u8 *)((a - 37) * 0x2000) + (int)flash_sector_addr(FLASH_SEC_INV_ACCESSORIES);
         break;
     case 57 ... 81:
-        r = (u8 *)((a - 57) * 0x2000) + (int)flash_sector_addr(0x70);
+        r = (u8 *)((a - 57) * 0x2000) + (int)flash_sector_addr(FLASH_SEC_INV_GOODS);
         break;
     case 82:
-        r = flash_sector_addr(0x7c);
+        r = flash_sector_addr(FLASH_SEC_LETTERS);
         break;
     case 93 ... 96:
-        r = (u8 *)((a - 93) * 0x8000) + (int)flash_sector_addr(0x7d);
+        r = (u8 *)((a - 93) * 0x8000) + (int)flash_sector_addr(FLASH_SEC_BINGO);
         break;
     default:
         r = 0;
@@ -1838,7 +1830,7 @@ int item_get_id(struct TamagoFile *p)
  */
 void friend_portrait_backup(int k)
 {
-    flash_backup_sector(friend_portrait_slot(k) / 0x11 + 9);
+    flash_backup_sector(friend_portrait_slot(k) / 0x11 + FLASH_SEC_PORTRAITS);
 }
 
 /*
@@ -1854,7 +1846,7 @@ void friend_portrait_store(int k, u8 *p)
 
     a = friend_portrait_slot(k);
     save.friend_list[k].met_flags[1] = a + 1;
-    b = a / 0x11 + 9;
+    b = a / 0x11 + FLASH_SEC_PORTRAITS;
     a = a % 0x11;
     flash_restore_sector_except(b, (flash_sector_addr(b) + a * 0xe80), 0xe80);
     flash_program_record((u16 *)(p + 0x118), (u32)flash_sector_addr(b), 0xe80, a);
@@ -1866,7 +1858,7 @@ void friend_portrait_store(int k, u8 *p)
 void flash_erase_sector(int p0)
 {
     sys_irq_disable();
-    func_0000A54((int)((const u8 *)&flash_base), p0, p0);
+    func_0000A54(FLASH_BASE, p0, p0);
     sys_irq_enable();
 }
 
@@ -1882,11 +1874,11 @@ int flash_sector_to_scratch(int a, int b)
     u16 *dst;
 
     sys_irq_disable();
-    func_0000A54(0x2000000, 12, 12);
-    dst = (u16 *)0x2040000;
+    func_0000A54(FLASH_BASE, FLASH_SEC_SECTOR_COPY, FLASH_SEC_SECTOR_COPY);
+    dst = (u16 *)FLASH_SECTOR_COPY;
     n = 0;
     for (i = flash_sector_offsets[a - 1]; i < flash_sector_offsets[a]; i += 2) {
-        if (func_0000B52(dst, *(u16 *)(i + 0x2000000), 0x2000000) != 0) {
+        if (func_0000B52(dst, *(u16 *)(i + FLASH_BASE), FLASH_BASE) != 0) {
             ok = 0;
             break;
         }
@@ -1911,12 +1903,12 @@ int flash_sector_from_scratch(int a, int b)
     u8 *src;
 
     sys_irq_disable();
-    func_0000A54(0x2000000, a, a);
-    src = (u8 *)0x2040000;
+    func_0000A54(FLASH_BASE, a, a);
+    src = (u8 *)FLASH_SECTOR_COPY;
     j = 0;
     n = 0;
     for (i = flash_sector_offsets[a - 1]; i < flash_sector_offsets[a]; i += 2) {
-        if (func_0000B52((u16 *)(i + 0x2000000), *(u16 *)(src + j), 0x2000000) != 0) {
+        if (func_0000B52((u16 *)(i + FLASH_BASE), *(u16 *)(src + j), FLASH_BASE) != 0) {
             ok = 0;
             break;
         }
@@ -1940,7 +1932,7 @@ int flash_program(u8 *dst, const u8 *src, int n)
 
     sys_irq_disable();
     for (i = 0, off = 0; i < n / 2; i++, off += 2) {
-        if (func_0000B52((u16 *)(dst + off), *(u16 *)(src + off), 0x2000000) != 0) {
+        if (func_0000B52((u16 *)(dst + off), *(u16 *)(src + off), FLASH_BASE) != 0) {
             ok = 0;
             break;
         }
@@ -1958,7 +1950,7 @@ void item_load_stamp_pictures(void)
     int i;
     u8 *p;
 
-    p = flash_sector_addr(0x7c) + 0x8000;
+    p = flash_sector_addr(FLASH_SEC_LETTERS) + 0x8000;
     for (i = 0; i <= 2; i++) {
         if (i < save.pet.stamp_count)
             anim_pic_slots[2][i + 1] = p;
@@ -1983,13 +1975,13 @@ u8 item_store_received_stamp(void)
 
     if (save.pet.stamp_count > 3)
         return save.pet.stamp_count;
-    s = D_27D0400;
+    s = (u8 *)(FLASH_COMM_RX + 0x400);
     flash_begin();
     n = save.pet.stamp_count;
     off = n * 0x1000 + 0x8000;
     flash_sector_to_scratch(0x7c, off);
     flash_sector_from_scratch(0x7c, off);
-    p = flash_sector_addr(0x7c) + off;
+    p = flash_sector_addr(FLASH_SEC_LETTERS) + off;
     for (i = 0; i <= 2; i++)
         kept[i] = anim_pic_slots[0][i];
     item_load_pictures(anim_pic_slots[0], (struct TamagoFile *)(s + 0x14), 3);

@@ -34,10 +34,10 @@ void test_program_sample_tamago(void)
     u16 *q;
 
     sys_irq_disable();
-    func_0000A54(0x2000000, 0x85, 0x85);
+    func_0000A54(FLASH_BASE, FLASH_SEC_COMM_RX, FLASH_SEC_COMM_RX);
     q = comm_rx_phase1;
     for (i = 0; i <= 0x257; i++, q++)
-        func_0000B52(q, test_sample_tamago[i], 0x2000000);
+        func_0000B52(q, test_sample_tamago[i], FLASH_BASE);
     comm_gift_item = (u32)comm_rx_phase1;
     sys_irq_enable();
 }
@@ -74,17 +74,17 @@ void comm_fill_record(int a, int b, struct PictureSetHdr *c)
         break;
     case 11:
         if ((ir_rx_packet.owner_id_hi & 0xc0) == 0xc0) {
-            comm_render_record_poses(a, (int)D_27D5400, (int)c);
+            comm_render_record_poses(a, (int)(FLASH_COMM_RX + 0x5400), (int)c);
             break;
         }
-        comm_render_record_poses(a, (int)D_27D0400, (int)c);
+        comm_render_record_poses(a, (int)(FLASH_COMM_RX + 0x400), (int)c);
         break;
     case 12:
     case 13:
-        comm_render_record_poses(a, (int)D_27A0400, (int)c);
+        comm_render_record_poses(a, (int)(FLASH_COMM_RX2 + 0x400), (int)c);
         break;
     default:
-        comm_render_record_poses(a, (int)D_27D0400, (int)c);
+        comm_render_record_poses(a, (int)(FLASH_COMM_RX + 0x400), (int)c);
         break;
     }
 }
@@ -338,7 +338,7 @@ int comm_render_record_poses(int k, int rec, int c)
             len += 2;
             sys_irq_disable();
             for (i = off; i < len; i += 2, off += 2) {
-                if (func_0000B52((u16 *)(dest + off), *src, 0x2000000) != 0) {
+                if (func_0000B52((u16 *)(dest + off), *src, FLASH_BASE) != 0) {
                     sys_irq_enable();
                     return 0;
                 }

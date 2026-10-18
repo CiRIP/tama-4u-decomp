@@ -1,5 +1,5 @@
 /*
- * A visitor who brings a gift (and an empty hook).
+ * A visitor who brings a gift.
  *
  * Code 2508D66..2508D68, .rodata from 254182C. No .rodata or call evidence ties its functions
  * to a neighbour: its boundaries are a guess.
@@ -12,10 +12,6 @@
 #include "proto/ui/ui_message.h"
 #include "proto/chara/chara_select.h"
 #include "proto/save/save_flash.h"
-
-void func_2508D66(void)
-{
-}
 
 /*
  * Visitor a gives a gift: message text b with animation, +1 happiness, save.

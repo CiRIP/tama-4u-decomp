@@ -649,7 +649,7 @@ int spot_reader(u8 a)
                 goto fail;
             }
             sys_irq_disable();
-            func_0000A54(0x2000000, 0xd, 0xd);
+            func_0000A54(FLASH_BASE, FLASH_SEC_TEMP_RECORD, FLASH_SEC_TEMP_RECORD);
             sys_irq_enable();
             tmr_delay_ms(0x32);
             memset(buf38, 0xff, 0x30);
@@ -852,7 +852,7 @@ int spot_reader(u8 a)
                                             nfc_restore_game_timing();
                                             tmr_delay_ms(0x32);
                                             comm_exclusive_timing_on();
-                                            x30 = 0x2050000;
+                                            x30 = FLASH_TEMP_RECORD;
                                             x34 = 0;
                                             len = v;
                                             r0 = nfc_tag_read(x30, x34, len, HDR, (int)&x28, x2c, 1);
@@ -1847,13 +1847,13 @@ int spot_bingo_card_kind(struct TamagoFile *p)
 
 /*
  * Bingo spot check: is k (byte 6 of the spot record, the spot's bingo id) the id stored in
- * byte 0xEE of the installed bingo card (D_27500EE: which spots belong to this card, not
+ * byte 0xEE of the installed bingo card (FLASH_BINGO + 0xEE: which spots belong to this card, not
  * the last spot touched)? 0 yes, -1 no (spot_reader then shows "このビンゴせんよう
  * スポットに タッチしてね").
  */
 int spot_bingo_id_matches(u8 k)
 {
-    if (D_27500EE == k)
+    if (*(u8 *)(FLASH_BINGO + 0xEE) == k)
         return 0;
     return -1;
 }
@@ -1927,22 +1927,22 @@ u32 spot_content_entry_count(s8 a)
     sum = 0;
     if (a >= 0) {
         switch (a) {
-        case 0: p = (volatile u8 *)0x2050028; break;
-        case 1: p = (volatile u8 *)0x205002e; break;
-        case 2: p = (volatile u8 *)0x2050030; break;
-        case 3: p = (volatile u8 *)0x2050032; break;
-        case 4: p = (volatile u8 *)0x2050034; break;
-        case 5: p = (volatile u8 *)0x2050036; break;
-        case 6: p = (volatile u8 *)0x2050038; break;
-        case 7: p = (volatile u8 *)0x205003a; break;
-        case 8: p = (volatile u8 *)0x205003c; break;
-        case 9: p = (volatile u8 *)0x205003e; break;
-        case 10: p = (volatile u8 *)0x2050040; break;
+        case 0: p = (volatile u8 *)(FLASH_TEMP_RECORD + 0x28); break;
+        case 1: p = (volatile u8 *)(FLASH_TEMP_RECORD + 0x2E); break;
+        case 2: p = (volatile u8 *)(FLASH_TEMP_RECORD + 0x30); break;
+        case 3: p = (volatile u8 *)(FLASH_TEMP_RECORD + 0x32); break;
+        case 4: p = (volatile u8 *)(FLASH_TEMP_RECORD + 0x34); break;
+        case 5: p = (volatile u8 *)(FLASH_TEMP_RECORD + 0x36); break;
+        case 6: p = (volatile u8 *)(FLASH_TEMP_RECORD + 0x38); break;
+        case 7: p = (volatile u8 *)(FLASH_TEMP_RECORD + 0x3A); break;
+        case 8: p = (volatile u8 *)(FLASH_TEMP_RECORD + 0x3C); break;
+        case 9: p = (volatile u8 *)(FLASH_TEMP_RECORD + 0x3E); break;
+        case 10: p = (volatile u8 *)(FLASH_TEMP_RECORD + 0x40); break;
         }
         sum = p[0] << 8;
         sum += p[1];
     } else {
-        p = (volatile u8 *)0x2050000;
+        p = (volatile u8 *)FLASH_TEMP_RECORD;
         sum = 0;
         if (p[0x28] != 0xff || p[0x29] != 0xff) { sum += p[0x28] << 8; sum += p[0x29]; }
         if (p[0x2e] != 0xff || p[0x2f] != 0xff) { sum += p[0x2e] << 8; sum += p[0x2f]; }
@@ -1969,7 +1969,7 @@ u32 spot_content_entry_count(s8 a)
  */
 int spot_content_header_field(u8 k)
 {
-    u8 *p = (u8 *)0x2050000;
+    u8 *p = (u8 *)FLASH_TEMP_RECORD;
     int r = 0;
 
     switch (k) {
@@ -2013,7 +2013,7 @@ int spot_content_header_field(u8 k)
  */
 int spot_content_character(u8 k)
 {
-    int a = spot_content_header_field(1) + 0x2050082;
+    int a = spot_content_header_field(1) + (FLASH_TEMP_RECORD + 0x82);
 
     if (k)
         a += 0x4800;
@@ -2047,7 +2047,7 @@ int spot_content_file(u8 n)
     int i;
     int len;
 
-    p = (u8 *)(spot_content_header_field(1) + 0x2050080);
+    p = (u8 *)(spot_content_header_field(1) + (FLASH_TEMP_RECORD + 0x80));
     p += spot_content_header_field(2);
     for (i = 0; i < n; i++) {
         len = ((p[0] << 8) & 0xff00) + p[1];
@@ -2067,7 +2067,7 @@ int spot_content_file_length(u8 n)
     int i;
     int len;
 
-    p = (u8 *)(spot_content_header_field(1) + 0x2050080);
+    p = (u8 *)(spot_content_header_field(1) + (FLASH_TEMP_RECORD + 0x80));
     p += spot_content_header_field(2);
     for (i = 0; i < n; i++) {
         len = ((p[0] << 8) & 0xff00) + p[1];
@@ -2755,9 +2755,9 @@ int spot_replace_card_dialog(u8 a)
     img = a == 0 ? (struct PictureSize *)&spot_bingo_card_pic : (struct PictureSize *)D_2199EB0;
     gfx_object_create(0x40 - (img->width >> 1), 0x30 - (img->height >> 1), 0x30, 0, 0, (const u8 *)img);
     if (a == 0)
-        s = D_275005E;
+        s = (u8 *)(FLASH_BINGO + 0x5E);
     else
-        s = D_276005E;
+        s = (u8 *)(FLASH_GASHAPON + 0x5E);
     c = gfx_object_create(0, 0x38, 0x90, 0, 0, 0);
     gfx_draw_text_centered(c, 0x41, 0x90, s, 0, 9);
     func_00009A6();
@@ -2824,7 +2824,7 @@ skip:
         snd_wait_end();
     }
     sys_irq_disable();
-    func_0000A54(0x2000000, 0x7e, 0x7e);
+    func_0000A54(FLASH_BASE, FLASH_SEC_GASHAPON, FLASH_SEC_GASHAPON);
     dst = spot_gashapon_ticket_slot;
     s = (u8 *)p - 2;
     n = *s++ << 8;
@@ -2834,7 +2834,7 @@ skip:
     if (i >= (int)(n / 2))
         goto done;
 again:
-    if (func_0000B52(dst, *src, 0x2000000) != 0)
+    if (func_0000B52(dst, *src, FLASH_BASE) != 0)
         return -1;
     i++;
     dst++;
@@ -2871,7 +2871,7 @@ skip:
         snd_wait_end();
     }
     sys_irq_disable();
-    func_0000A54(0x2000000, 0x7d, 0x7d);
+    func_0000A54(FLASH_BASE, FLASH_SEC_BINGO, FLASH_SEC_BINGO);
     dst = spot_bingo_card_slot;
     s = (u8 *)p - 2;
     n = *s++ << 8;
@@ -2880,7 +2880,7 @@ skip:
     if (i >= (int)(n >> 1))
         goto done;
 again:
-    if (func_0000B52(dst, *(u16 *)src, 0x2000000) != 0)
+    if (func_0000B52(dst, *(u16 *)src, FLASH_BASE) != 0)
         return -1;
     i++;
     dst++;

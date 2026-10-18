@@ -101,6 +101,5 @@ int flash_sector_from_scratch(int, int);
 int flash_program(u8 *, const u8 *, int);
 void item_load_stamp_pictures(void);
 u8 item_store_received_stamp(void);
-void func_250D248(void);
 
 #endif

@@ -39,7 +39,7 @@ int visit_friend(void)
     room_idle = 0;
     strncpy((char *)buf, (char *)save.friend_list[r].name, 0x10);
     k = save.friend_list[r].met_flags[1] - 1;
-    bank = k / 17 + 9;
+    bank = k / 17 + FLASH_SEC_PORTRAITS;
     k = k % 17;
     e = flash_sector_addr(bank) + k * FRIEND_PORTRAIT_SIZE;
     room_visitor_scene = 1;

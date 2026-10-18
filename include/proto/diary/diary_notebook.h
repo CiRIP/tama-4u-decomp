@@ -41,7 +41,6 @@ extern const u8 D_255EFCC[];
 extern const u8 D_255EFE0[];
 extern const u8 D_255EFEC[];
 
-void diary_hook_layout_done(int);
 u8 gfx_count_used_objects(u8);
 int diary_copy_template(char *, int);
 u8 diary_page_meal_a(const u8 *);
@@ -132,7 +131,5 @@ u8 album_sort_records(void);
 void gfx_object_create_centered(s16, s16, u16, u8, const u8 *);
 void album_draw_overview(u8, void *);
 int album_browser(void);
-void func_2418032(void);
-void func_241AA10(void);
 
 #endif

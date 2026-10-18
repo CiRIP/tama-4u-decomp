@@ -90,9 +90,5 @@ void shop_tamamori_pick(void);
 int shop_reform(void);
 u8 shop_reform_card(void);
 void shop_reform_pick(void);
-void func_24101C8(void);
-void func_24101CA(void);
-void func_24101CC(void);
-void func_24101CE(void);
 
 #endif

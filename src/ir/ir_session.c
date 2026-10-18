@@ -309,12 +309,10 @@ w0:
 }
 
 /*
- * Session clean-up: the empty hook comm_redraw_hook, restore the standard T16 ch.5 tick,
- * 10 s menu timeout.
+ * Session clean-up: restore the standard T16 ch.5 tick, 10 s menu timeout.
  */
 void ir_session_cleanup(void)
 {
-    comm_redraw_hook();
     tmr_t5_standard_tick();
     ui_timeout = 10;
 }
@@ -329,21 +327,19 @@ void ir_session_cleanup(void)
  * point gift: a peer 0x70 grants 1000 points here, as in ir_point_gift_packets; not a refusal) and
  * then the payload records that land in the save banks 0x27D5400 /
  * 0x27A5400 (profile + images at +0x14) and 0x27C5428 / 0x27CB814 (received items /
- * portrait). The transfer is ir_transfer (status 0x20 = ok, 0xAA = aborted by the user,
- * 0x10 = retry), with ir_transfer_abort (abort) and ir_send_data_stub (data to send): in this
- * firmware all three are stubs (`ret`, `ret`, `return 0`), so st/sub stay uninitialised
- * and the session fails, aborts or loops on "0x10" forever. comm_is_initiator == 0: the peer
+ * portrait). The transfer routine (status st 0x20 = ok, 0xAA = aborted by the user, 0x10 =
+ * retry) and its abort routine are empty in this firmware (`ret`, so they are left out
+ * here), and ir_send_data_stub (data to send) returns 0: st/sub stay uninitialised and the
+ * session fails, aborts or loops on "0x10" forever. comm_is_initiator == 0: the peer
  * pinged first and we answer (first branch); 1: we pressed B and initiated (second branch,
  * header loaded from the bank + 0x200). Outcomes: store received items
  * (item_add_to_inventory / comm_item_exchange_result / ir_store_received_message), record the friend (friend_add_after_exchange +
  * comm_load_visitor_pictures(1) = add to the たまとも list), unlock mini games (pet_add_happiness), apply the
  * partner record (comm_apply_partner_record...), save (save_game). Return 0 = failed, 1 = ok, 2 =
  * cancelled, 3 = partner left. ir_block_kind/D14/D28/D4C are the transfer-state bytes shared
- * with ir_transfer. (Confidence medium on the message-type names.)
+ * with the (empty) transfer routine. (Confidence medium on the message-type names.)
  */
 u8 f_25029DA(u8 **, u32 *, u8 *) __asm__("ir_send_data_stub");
-void ir_partner_hook_b(int);
-void ir_partner_hook_a(int);
 void f_2500A9C(int) __asm__("ir_pause_short");
 u8 ir_exchange(void)
 {
@@ -374,7 +370,6 @@ u8 ir_exchange(void)
         ir_block_kind = 2;
         ir_xfer_started = 0;
 again1:
-        ir_transfer();
         if (st == 0x20 && sub == 0)
             ir_xfer_failed = 0;
         else if (st == 0xaa)
@@ -398,7 +393,6 @@ again1:
         if (ir_check_kinds_pair() == 7) {
             tmr_t5_standard_tick();
             ui_timeout = 10;
-            comm_redraw_hook();
             return 0;
         }
         if (visit_start(4) != 0) {
@@ -432,12 +426,12 @@ again1:
                 comm_gift_bonus();
                 ir_stamp_peers_confirm();
                 if (ir_apply_points() == 0) {
-                    item_load_pictures((void *)anim_pic_slots, (void *)0x27D5414, 3);
-                    comm_item_exchange_result(comm_exchange_kind, (void *)0x27C5428, (void *)0x27D5400);
+                    item_load_pictures((void *)anim_pic_slots, (void *)(FLASH_COMM_RX + 0x5414), 3);
+                    comm_item_exchange_result(comm_exchange_kind, (void *)(FLASH_COMM_TX + 0x5428), (void *)(FLASH_COMM_RX + 0x5400));
                 } else {
                     anim_good_result();
                 }
-                ir_xfer_failed = ir_store_received_message(1, 0x27D5400);
+                ir_xfer_failed = ir_store_received_message(1, (FLASH_COMM_RX + 0x5400));
                 pet_add_happiness(1);
                 friend_add_after_exchange();
                 comm_load_visitor_pictures(1);
@@ -445,9 +439,9 @@ again1:
             if (ir_rx_packet.kind == 9) {
                 comm_gift_bonus();
                 ir_stamp_peers_confirm();
-                item_load_pictures((void *)anim_pic_slots, (void *)0x27D5414, 3);
-                comm_item_exchange_result(comm_exchange_kind, (void *)0x27C5428, (void *)0x27D5400);
-                ir_xfer_failed = ir_store_received_message(1, 0x27D5400);
+                item_load_pictures((void *)anim_pic_slots, (void *)(FLASH_COMM_RX + 0x5414), 3);
+                comm_item_exchange_result(comm_exchange_kind, (void *)(FLASH_COMM_TX + 0x5428), (void *)(FLASH_COMM_RX + 0x5400));
+                ir_xfer_failed = ir_store_received_message(1, (FLASH_COMM_RX + 0x5400));
                 pet_add_happiness(1);
                 friend_add_after_exchange();
                 comm_load_visitor_pictures(1);
@@ -459,16 +453,14 @@ again1:
             }
             if (ir_rx_packet.arg_lo == 1) {
                 ir_anim_pause_b(ir_rx_packet.result & 0x7f);
-                item_load_pictures((void *)anim_pic_slots, (void *)0x27A5414, 3);
+                item_load_pictures((void *)anim_pic_slots, (void *)(FLASH_COMM_RX2 + 0x5414), 3);
                 comm_result_show_record();
             } else {
                 ir_anim_pause_b(ir_rx_packet.result & 0x7f);
-                item_load_pictures((void *)anim_pic_slots, (void *)0x27A5414, 3);
-                ir_partner_hook_b(ir_rx_packet.char_byte & 0x3f);
+                item_load_pictures((void *)anim_pic_slots, (void *)(FLASH_COMM_RX2 + 0x5414), 3);
             }
             tmr_t5_standard_tick();
             ui_timeout = 0;
-            comm_redraw_hook();
             return 1;
         } else if (ir_rx_packet.kind == 2) {
             if (ir_tx_packet.kind != 3) {
@@ -498,7 +490,7 @@ again1:
             if ((ir_rx_packet.owner_id_hi & 0xc0) == 0xc0 && comm_exchange_kind != 7) {
                 ir_session_flags |= 1;
                 tmr_t5_pause_restore(30);
-                item_load_pictures((void *)anim_pic_slots, (void *)0x27D5414, 3);
+                item_load_pictures((void *)anim_pic_slots, (void *)(FLASH_COMM_RX + 0x5414), 3);
                 anim_proposal();
                 if (ir_rx_packet.flags & 0x1c)
                     comm_show_rx_message();
@@ -511,23 +503,19 @@ again1:
             tmr_t5_standard_tick();
             if ((s8)ir_rx_packet.result < 0) {
                 ir_anim_pause_a(ir_rx_packet.result & 0x7f);
-                comm_result_pre_hook();
             } else {
                 tmr_t5_pause_restore(30);
-                item_load_pictures((void *)anim_pic_slots, (void *)0x27D5414, 3);
+                item_load_pictures((void *)anim_pic_slots, (void *)(FLASH_COMM_RX + 0x5414), 3);
                 comm_result_anim();
             }
             pet_start_new_egg(comm_game_result);
             ui_timeout = 10;
-            comm_redraw_hook();
             return 1;
         } else {
-            comm_redraw_hook();
             return 0;
         }
         save_game();
         ui_timeout = 10;
-        comm_redraw_hook();
         return 1;
     } else {
         if (f_25029DA(&a, &b, &c) == 7)
@@ -542,7 +530,6 @@ again1:
         ir_tx_ptr = b;
         ir_send_data_ptr = (u32)a;
 again2:
-        ir_transfer();
         if (ir_rx_status == 0xfc && ir_block_kind == 0x85)
             goto r3;
         if (st == 0x20 && sub == 0)
@@ -565,7 +552,6 @@ again2:
             visit_load_partner_pics(1);
             anim_happy();
             save_game();
-            comm_redraw_hook();
             return 1;
         }
         if (ir_block_kind != 7) {
@@ -574,14 +560,13 @@ fail:
             return 0;
         }
         tmr_t5_standard_tick();
-        ir_rx_record = (struct TamagoFile *)((ir_session_flags & 3) ? D_27A5400 : D_27D5400);
+        ir_rx_record = (struct TamagoFile *)((ir_session_flags & 3) ? ((u8 *)(FLASH_COMM_RX2 + 0x5400)) : ((u8 *)(FLASH_COMM_RX + 0x5400)));
         a = (u8 *)*(u32 *)&ir_rx_record + 0x200;
         for (i = 0; i < 20; i++)
             ((u8 *)&ir_rx_packet)[i] = *a++;
         if (ir_check_kinds_pair() == 7) {
             tmr_t5_standard_tick();
             ui_timeout = 10;
-            comm_redraw_hook();
             return 0;
         }
         if (visit_start(3) != 0) {
@@ -593,7 +578,6 @@ fail:
             ir_anim_pause_a(ir_rx_packet.result2 & 0x7f);
             anim_good_result();
             ui_timeout = 10;
-            comm_redraw_hook();
             friend_add_after_exchange();
             comm_load_visitor_pictures(1);
             return 1;
@@ -601,7 +585,6 @@ fail:
             if (ir_rx_packet.kind != 15) {
                 tmr_t5_standard_tick();
                 ui_timeout = 10;
-                comm_redraw_hook();
                 return 0;
             }
             tmr_t5_standard_tick();
@@ -613,21 +596,20 @@ fail:
         } else if (ir_tx_packet.kind == 8) {
             if (ir_rx_packet.kind != 9) {
                 ui_timeout = 10;
-                comm_redraw_hook();
                 return 0;
             }
             tmr_t5_standard_tick();
             if (comm_exchange_kind == 4) {
                 comm_gift_received();
                 comm_gift_bonus();
-                item_load_pictures((void *)anim_pic_slots, (void *)0x27D5414, 3);
-                comm_item_exchange_result(comm_exchange_kind, (void *)0x27C5428, (void *)0x27D5400);
-                ir_xfer_failed = ir_store_received_message(1, 0x27D5400);
+                item_load_pictures((void *)anim_pic_slots, (void *)(FLASH_COMM_RX + 0x5414), 3);
+                comm_item_exchange_result(comm_exchange_kind, (void *)(FLASH_COMM_TX + 0x5428), (void *)(FLASH_COMM_RX + 0x5400));
+                ir_xfer_failed = ir_store_received_message(1, (FLASH_COMM_RX + 0x5400));
             } else if (comm_exchange_kind == 5) {
                 ir_stamp_peers_confirm();
-                item_load_pictures((void *)anim_pic_slots, (void *)0x27D5414, 3);
-                comm_item_exchange_result(comm_exchange_kind, (void *)0x27C5428, (void *)0x27D5400);
-                ir_xfer_failed = ir_store_received_message(1, 0x27D5400);
+                item_load_pictures((void *)anim_pic_slots, (void *)(FLASH_COMM_RX + 0x5414), 3);
+                comm_item_exchange_result(comm_exchange_kind, (void *)(FLASH_COMM_TX + 0x5428), (void *)(FLASH_COMM_RX + 0x5400));
+                ir_xfer_failed = ir_store_received_message(1, (FLASH_COMM_RX + 0x5400));
             }
             snd_wait_end();
             pet_add_happiness(1);
@@ -636,7 +618,6 @@ fail:
             comm_load_visitor_pictures(1);
             save_with_short_sound();
             ui_timeout = 10;
-            comm_redraw_hook();
             return 1;
         } else if (ir_tx_packet.kind == 12) {
             if (ir_rx_packet.kind != 13) {
@@ -644,17 +625,14 @@ fail:
                 return 0;
             }
             if (ir_rx_packet.arg_lo == 1) {
-                item_load_pictures((void *)anim_pic_slots, (void *)0x27A5414, 3);
+                item_load_pictures((void *)anim_pic_slots, (void *)(FLASH_COMM_RX2 + 0x5414), 3);
                 comm_record_result();
             } else {
-                item_load_pictures((void *)anim_pic_slots, (void *)0x27A5414, 3);
-                ir_partner_hook_a(ir_rx_packet.char_byte & 0x3f);
+                item_load_pictures((void *)anim_pic_slots, (void *)(FLASH_COMM_RX2 + 0x5414), 3);
             }
             ui_timeout = 0;
-            comm_redraw_hook();
             return 1;
         } else if (ir_tx_packet.kind == 10 && ir_rx_packet.kind != 11) {
-            comm_redraw_hook();
             return 0;
         } else if (ir_tx_packet.kind == 10 && ir_rx_packet.kind == 11) {
             if (ir_rx_packet.arg_lo == 0) {
@@ -672,7 +650,7 @@ fail:
             if ((ir_rx_packet.owner_id_hi & 0xc0) == 0xc0 && comm_exchange_kind != 7) {
                 ir_session_flags |= 1;
                 tmr_t5_pause_restore(30);
-                item_load_pictures((void *)anim_pic_slots, (void *)0x27D5414, 3);
+                item_load_pictures((void *)anim_pic_slots, (void *)(FLASH_COMM_RX + 0x5414), 3);
                 anim_proposal();
                 if (ir_rx_packet.flags & 0x1c)
                     comm_show_rx_message();
@@ -684,16 +662,13 @@ fail:
             tmr_t5_standard_tick();
             if ((s8)ir_rx_packet.result < 0) {
                 ir_anim_pause_a(ir_rx_packet.result & 0x7f);
-                comm_result_pre_hook();
             } else {
                 tmr_t5_pause_restore(30);
-                item_load_pictures((void *)anim_pic_slots, (void *)0x27D5414, 3);
+                item_load_pictures((void *)anim_pic_slots, (void *)(FLASH_COMM_RX + 0x5414), 3);
                 comm_result_anim();
             }
-            comm_result_anim_hook(comm_game_result);
             pet_start_new_egg(comm_game_result);
             ui_timeout = 0;
-            comm_redraw_hook();
             return 1;
         } else if (ir_tx_packet.kind == 2) {
             if (ir_rx_packet.kind != 3) {
@@ -708,38 +683,38 @@ fail:
             return 0;
         } else {
             tmr_t5_pause_restore(5);
-            item_load_pictures((void *)anim_pic_slots, (void *)0x27D5414, 3);
+            item_load_pictures((void *)anim_pic_slots, (void *)(FLASH_COMM_RX + 0x5414), 3);
             if (ir_rx_packet.role != ir_tx_packet.role)
                 goto mm;
             switch (ir_rx_packet.role) {
             case 4:
                 visit_reward_pic_idx = 1;
                 pet_add_happiness(2);
-                item_load_pictures((void *)anim_pic_slots, (void *)0x27CB814, 3);
+                item_load_pictures((void *)anim_pic_slots, (void *)(FLASH_COMM_TX + 0xB814), 3);
                 anim_present_box(visit_reward_pics[visit_reward_pic_idx].pic_a);
                 break;
             case 3:
                 visit_reward_pic_idx = 0;
                 pet_add_happiness(2);
-                item_load_pictures((void *)anim_pic_slots, (void *)0x27CB814, 3);
+                item_load_pictures((void *)anim_pic_slots, (void *)(FLASH_COMM_TX + 0xB814), 3);
                 anim_present_box(visit_reward_pics[visit_reward_pic_idx].pic_a);
                 break;
             case 2:
                 visit_reward_pic_idx = 2;
                 pet_sub_happiness(1);
-                item_load_pictures((void *)anim_pic_slots, (void *)0x27CB814, 3);
+                item_load_pictures((void *)anim_pic_slots, (void *)(FLASH_COMM_TX + 0xB814), 3);
                 anim_present_box(visit_reward_pics[visit_reward_pic_idx].pic_a);
                 break;
             case 1:
                 visit_reward_pic_idx = 4;
                 pet_sub_happiness(1);
-                item_load_pictures((void *)anim_pic_slots, (void *)0x27CB814, 3);
+                item_load_pictures((void *)anim_pic_slots, (void *)(FLASH_COMM_TX + 0xB814), 3);
                 anim_present_box(visit_reward_pics[visit_reward_pic_idx].pic_a);
                 break;
             case 0:
                 visit_reward_pic_idx = 3;
                 pet_sub_happiness(1);
-                item_load_pictures((void *)anim_pic_slots, (void *)0x27CB814, 3);
+                item_load_pictures((void *)anim_pic_slots, (void *)(FLASH_COMM_TX + 0xB814), 3);
                 anim_present_box(visit_reward_pics[visit_reward_pic_idx].pic_a);
                 break;
             default:
@@ -755,16 +730,14 @@ fail:
                 if ((int)p == -1) {
                     visit_reward_pic_idx = 0;
                     pet_add_happiness(2);
-                    item_load_pictures((void *)anim_pic_slots, (void *)0x27CB814, 3);
+                    item_load_pictures((void *)anim_pic_slots, (void *)(FLASH_COMM_TX + 0xB814), 3);
                     anim_present_box(visit_reward_pics[visit_reward_pic_idx].pic_a);
-                    comm_redraw_hook();
                     item_add_to_inventory((struct TamagoFile *)item_builtin_records[visit_reward_pic_idx]);
                 } else {
                     pet_add_happiness(2);
-                    item_load_pictures((void *)anim_pic_slots, (void *)0x27CB814, 3);
+                    item_load_pictures((void *)anim_pic_slots, (void *)(FLASH_COMM_TX + 0xB814), 3);
                     item_load_pictures((void *)&anim_pic_slots[3][1], p, 1);
                     anim_present_box(anim_pic_slots[3][1]);
-                    comm_redraw_hook();
                     item_add_to_inventory(p);
                 }
                 break;
@@ -774,15 +747,12 @@ fail:
         }
         save_game();
         ui_timeout = 10;
-        comm_redraw_hook();
         return 1;
     }
 r3:
     ir_session_cleanup();
     return 3;
 aa:
-    ir_transfer_abort();
-    comm_redraw_hook();
     snd_play(3);
     snd_wait_end();
     visit_end();
@@ -790,7 +760,6 @@ aa:
     ui_timeout = 10;
     return 2;
 mm:
-    comm_redraw_hook();
     ui_timeout = 10;
     return 2;
 }
@@ -1025,19 +994,19 @@ int ir_render_section(int k, struct PictureSetHdr *p)
 }
 
 /*
- * ir_transfer_abort, then ir_status_word_write(ir_rx_status).
+ * Abort the transfer (an empty routine in this firmware, left out) and store the status:
+ * ir_status_word_write(ir_rx_status).
  */
 void ir_abort_and_store_status(void)
 {
-    ir_transfer_abort();
     ir_status_word_write(ir_rx_status);
 }
 
 
 /*
  * Unreferenced IR session entry (no call, no table, no word in the image): answer-only
- * receive of a record into 0x27C1000 (ir_receive_record_step, which uses the stub transfer
- * ir_transfer), filed by item_receive. Dead.
+ * receive of a record into 0x27C1000 (ir_receive_record_step, which uses the empty transfer
+ * routine), filed by item_receive. Dead.
  */
 int ir_session_receive_only(void)
 {
@@ -1045,7 +1014,7 @@ int ir_session_receive_only(void)
     u8 c;
 
     comm_exchange_kind = 0;
-    ir_rx_record = (struct TamagoFile *)D_27C1000;
+    ir_rx_record = (struct TamagoFile *)(FLASH_COMM_TX + 0x1000);
     ir_edge_count = 0;
     ir_edge_count2 = 0;
     sys_clock_osc3();
@@ -1127,7 +1096,8 @@ c5:
 
 /*
  * IR exchange step with retries for ir_session_receive_only (legacy, dead): receive a record through
- * the stub transfer ir_transfer into gfx_frame_buffer, check it (ir_rx_store_block, ir_check_rx_record).
+ * the empty transfer routine (st/sub stay uninitialised) into gfx_frame_buffer, check it
+ * (ir_rx_store_block, ir_check_rx_record).
  */
 u8 ir_receive_record_step(void)
 {
@@ -1151,7 +1121,6 @@ again:
     ir_session_busy = 1;
     ir_rx_buf_ptr = (u32)&gfx_frame_buffer;
     for (;;) {
-        ir_transfer();
         if (st == 0x20 && sub == 0) {
             if (ir_rx_buf_count != 0) {
                 ir_xfer_failed = ir_rx_store_block((u16 *)&gfx_frame_buffer, ir_rx_buf_count + 1);
@@ -1183,24 +1152,21 @@ set:
     }
     if (ir_rx_hunting != 0)
         goto fail;
-    ir_rx_record = (struct TamagoFile *)0x27C1000;
+    ir_rx_record = (struct TamagoFile *)(FLASH_COMM_TX + 0x1000);
     if (ir_check_rx_record() == 0)
         goto ok;
 fail:
     ir_session_cleanup();
     return 0;
 aa:
-    ir_transfer_abort();
-    comm_redraw_hook();
     snd_play(3);
     snd_wait_end();
     tmr_t5_standard_tick();
     ui_timeout = 10;
     return 2;
 ok:
-    comm_redraw_hook();
     tmr_t5_standard_tick();
-    item_receive((struct TamagoFile *)0x27C1000);
+    item_receive((struct TamagoFile *)(FLASH_COMM_TX + 0x1000));
     ui_timeout = 10;
     return 1;
 }
@@ -1628,8 +1594,9 @@ w0:
 
 u8 f_25029FA(u8 **, u32 *, u8 *) __asm__("ir_send_data_stub_b");
 /*
- * IR exchange for ir_test_session (legacy, dead): kinds 0xB2/0xB3 through the stub transfer
- * ir_transfer (the data to send comes from the stub ir_send_data_stub_b). 1 = ok.
+ * IR exchange for ir_test_session (legacy, dead): kinds 0xB2/0xB3 through the empty transfer
+ * routine (st/sub stay uninitialised; the data to send comes from the stub ir_send_data_stub_b).
+ * 1 = ok.
  */
 u8 ir_test_exchange(void)
 {
@@ -1656,11 +1623,10 @@ u8 ir_test_exchange(void)
         ir_block_kind = 2;
         ir_xfer_started = 0;
 again1:
-        ir_transfer();
         if (st == 0x20 && sub == 0)
             ir_xfer_failed = 0;
         else if (st == 0xaa)
-            goto aa;
+            goto fail;
         else if (st == 0x10)
             goto again1;
         else
@@ -1674,7 +1640,6 @@ again1:
         t = ir_block_kind;
         if (t != 0x88)
             goto fail;
-        comm_redraw_hook();
         tmr_t5_standard_tick();
         if (ir_rx_packet.kind == 0xb2)
             return 1;
@@ -1692,11 +1657,10 @@ again1:
         ir_tx_ptr = b;
         ir_send_data_ptr = (u32)a;
 again2:
-        ir_transfer();
         if (st == 0x20 && sub == 0)
             ir_xfer_failed = 0;
         else if (st == 0xaa)
-            goto aa;
+            goto fail;
         else if (st == 0x10)
             goto again2;
         else
@@ -1710,9 +1674,8 @@ again2:
         t = ir_block_kind;
         if (t != 7)
             goto fail;
-        comm_redraw_hook();
         tmr_t5_standard_tick();
-        a = D_27CB800;
+        a = (u8 *)(FLASH_COMM_TX + 0xB800);
         ir_rx_record = (struct TamagoFile *)a;
         a += 0x200;
         for (i = 0; i < 20; i++)
@@ -1721,37 +1684,11 @@ again2:
             return 0;
         return 1;
     }
-aa:
-    ir_transfer_abort();
 fail:
-    comm_redraw_hook();
     tmr_t5_standard_tick();
     ui_timeout = 10;
     return 0;
 }
-
-/*
- * The old Tamagotchi-to-Tamagotchi exchange over IR (legacy state machine, application
- * level; built from asm). Both sides swap a 20-byte header (ours in ir_tx_packet, theirs in
- * ir_rx_packet; x001 = message type, paired request/answer codes: 2/3 greeting, 8/9 gift
- * (item follows), 10/11 play-together with ir_rx_packet.owner_id_hi bits 6-7 = "has the stamp card"
- * and x00e/x00f = result/item index (bit 7 = reject), 12/13 photo (x003 & 0x3f = pose,
- * x00c = which side), 14/15 proposal, 5 = marriage with x00b = the agreed game, 0x70 =
- * point gift: a peer 0x70 grants 1000 points here, as in ir_point_gift_packets; not a refusal) and
- * then the payload records that land in the save banks 0x27D5400 /
- * 0x27A5400 (profile + images at +0x14) and 0x27C5428 / 0x27CB814 (received items /
- * portrait). The transfer is ir_transfer (status 0x20 = ok, 0xAA = aborted by the user,
- * 0x10 = retry), with ir_transfer_abort (abort) and ir_send_data_stub (data to send): in this
- * firmware all three are stubs (`ret`, `ret`, `return 0`), so st/sub stay uninitialised
- * and the session fails, aborts or loops on "0x10" forever. comm_is_initiator == 0: the peer
- * pinged first and we answer (first branch); 1: we pressed B and initiated (second branch,
- * header loaded from the bank + 0x200). Outcomes: store received items
- * (item_add_to_inventory / comm_item_exchange_result / ir_store_received_message), record the friend (friend_add_after_exchange +
- * comm_load_visitor_pictures(1) = add to the たまとも list), unlock mini games (pet_add_happiness), apply the
- * partner record (comm_apply_partner_record...), save (save_game). Return 0 = failed, 1 = ok, 2 =
- * cancelled, 3 = partner left. ir_block_kind/D14/D28/D4C are the transfer-state bytes shared
- * with ir_transfer. (Confidence medium on the message-type names.)
- */
 
 /*
  * Verify the checksum of the record at ir_rx_record.
@@ -1878,17 +1815,6 @@ wait0:
 fail:
     btn_enable();
     return 0;
-}
-
-/*
- * Empty function (stub, `ret` only).
- */
-void func_24FB610(void)
-{
-}
-
-void func_24FB612(void)
-{
 }
 
 /*
@@ -2275,7 +2201,7 @@ u8 visit_start(u8 a)
     case 3:
         if (ir_tx_packet.kind == 0x20 && ir_rx_packet.kind == 0x21) {
             visit_partner.mode = 2;
-            p = (int)D_27D5400;
+            p = (int)(FLASH_COMM_RX + 0x5400);
             visit_partner.chara_id = util_read_be16(p + 0x94);
             visit_partner.gender = *(u8 *)(p + 0x98);
             visit_partner.life_stage = *(u8 *)(p + 0x99);
@@ -2312,7 +2238,7 @@ u8 visit_start(u8 a)
                 visit_diary_full = 0;
             else
                 visit_diary_full = 1;
-            item_load_pictures((void *)anim_pic_slots, (void *)D_27D5414, 7);
+            item_load_pictures((void *)anim_pic_slots, (void *)(FLASH_COMM_RX + 0x5414), 7);
             q = &save.pet;
             save.pet.x062 = 0;
             save.pet.x0cc = 0;
@@ -2328,11 +2254,11 @@ u8 visit_start(u8 a)
             else
                 visit_reward_pic_idx = 0;
             pet_add_happiness(2);
-            flash_erase_sector(0x80);
-            flash_program(D_2780000, D_27D0400, 0x2800);
-            flash_program(D_2780000 + 0x2800, D_27D5400, 0x5000);
+            flash_erase_sector(FLASH_SEC_DL_CHARA);
+            flash_program((u8 *)FLASH_DL_CHARA, (u8 *)(FLASH_COMM_RX + 0x400), 0x2800);
+            flash_program((u8 *)FLASH_DL_CHARA + 0x2800, (u8 *)(FLASH_COMM_RX + 0x5400), 0x5000);
             friend_add_after_exchange();
-            ir_xfer_failed = ir_store_received_message(0, 0x27D5400);
+            ir_xfer_failed = ir_store_received_message(0, (FLASH_COMM_RX + 0x5400));
             visit_partner.seconds = 0;
             goto done;
         }
@@ -2346,13 +2272,13 @@ u8 visit_start(u8 a)
             save.pet.x062 = 0;
             save.pet.x0cc = 0;
             save.pet.x148 = 0;
-            item_load_pictures((void *)anim_pic_slots, (void *)D_27D5414, 7);
+            item_load_pictures((void *)anim_pic_slots, (void *)(FLASH_COMM_RX + 0x5414), 7);
             anim_comm_done();
             friend_add_after_exchange();
             ir_partner_id_lo = ir_rx_packet.owner_id_lo & 0x3f;
             ir_partner_id_hi = ir_rx_packet.owner_id_hi & 0x3f;
             memcpy(ir_partner_name, (u8 *)&ir_rx_packet + 5, 5);
-            ir_xfer_failed = ir_store_received_message(0, 0x27D5400);
+            ir_xfer_failed = ir_store_received_message(0, (FLASH_COMM_RX + 0x5400));
             visit_partner.seconds = -12;
         done:
             pet_clear_call(4);
@@ -2377,33 +2303,31 @@ u8 ir_visit_pair_check(void)
         switch (visit_partner.mode) {
         case 2:
             visit_partner.mode = 0;
-            item_load_pictures((void *)anim_pic_slots, (void *)D_27D5414, 7);
+            item_load_pictures((void *)anim_pic_slots, (void *)(FLASH_COMM_RX + 0x5414), 7);
             diary_write_comm_page();
             ui_timeout = 10;
-            comm_redraw_hook();
             friend_add_after_exchange();
             visit_load_partner_pics(1);
             visit_partner.over = 0;
             visit_partner.seconds = 0;
             comm_load_visitor_pictures(1);
-            ir_xfer_failed = ir_store_received_message(0, 0x27D5400);
+            ir_xfer_failed = ir_store_received_message(0, (FLASH_COMM_RX + 0x5400));
             r = 1;
             break;
         case 1:
-            item_load_pictures((void *)anim_pic_slots, (void *)D_27D5414, 7);
+            item_load_pictures((void *)anim_pic_slots, (void *)(FLASH_COMM_RX + 0x5414), 7);
             ir_anim_pause_b(ir_rx_packet.result2 & 0x7f);
             visit_partner.mode = 0;
             anim_good_result();
             ui_timeout = 10;
-            comm_redraw_hook();
             friend_add_after_exchange();
             visit_load_partner_pics(1);
             visit_partner.over = 0;
             visit_partner.seconds = 0;
             comm_load_visitor_pictures(1);
-            ir_xfer_failed = ir_store_received_message(0, 0x27D5400);
+            ir_xfer_failed = ir_store_received_message(0, (FLASH_COMM_RX + 0x5400));
             comm_apply_partner_record();
-            ir_store_received_diary(0, 0x27D5400);
+            ir_store_received_diary(0, (FLASH_COMM_RX + 0x5400));
             r = 1;
             break;
         }

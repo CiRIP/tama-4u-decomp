@@ -637,7 +637,6 @@ void pet_new_game_init(void)
     dl_chara_affection_update(0xff);
     pet_clear_traits(0);
     pet_clear_growth_items();
-    friend_clear_hook();
     memset(&save.pet.x13d, 0, 8);
     save.pet.profile_age = 100;
     save.pet.baby_id = 0;
@@ -663,7 +662,6 @@ void pet_new_egg_random(void)
     save.pet.life_stage = 0;
     dl_chara_affection_update(0xff);
     pet_clear_growth_items();
-    friend_clear_hook();
     memset(&save.pet.x13d, 0, 8);
     save_game();
     ui_main_icon = 0;
@@ -1107,7 +1105,6 @@ void pet_start_next_generation(void)
     job_clear_all();
     dl_chara_affection_update(0xff);
     pet_clear_growth_items();
-    friend_clear_hook();
     memset(&save.pet.x13d, 0, 8);
     rtc_seconds = 0;
     save.pet.life_stage = 0;
@@ -1136,7 +1133,6 @@ void pet_start_new_egg(int k)
     job_clear_all();
     dl_chara_affection_update(0xff);
     pet_clear_growth_items();
-    friend_clear_hook();
     memset(&save.pet.x13d, 0, 8);
     save_game();
     rtc_seconds = 60;

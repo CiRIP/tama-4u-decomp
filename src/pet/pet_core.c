@@ -334,13 +334,6 @@ void item_drop_event_items(void)
 }
 
 /*
- * Empty function (stub, `ret` only).
- */
-void func_2405CF6(void)
-{
-}
-
-/*
  * Raise a "call" (attention request, shown by the attention icon and a beep) of kind k in
  * the call flags pet.x00A:
  *   1 = hungry (x009 = 15 minutes to answer before it counts as a care mistake; for
@@ -976,7 +969,7 @@ u8 album_register(void)
 
     ret = 1;
     v = chara_canonical_id(pet_get_id());
-    if (v != 0) {    p = flash_sector_addr(0x37);
+    if (v != 0) {    p = flash_sector_addr(FLASH_SEC_ALBUM);
     max = 0;
     empty = 0xffff;
     found = 0xffff;
@@ -998,7 +991,7 @@ u8 album_register(void)
                 empty = (u16)i;
         }
     }
-    p = flash_sector_addr(0x37);
+    p = flash_sector_addr(FLASH_SEC_ALBUM);
     for (i = 0; i <= 0x4f; i++, p += 0x1000) {
         if (*(u32 *)(p + 8) != 0xffffffff) {
             if (max == 0xffffffff)
@@ -1024,10 +1017,10 @@ u8 album_register(void)
     save.pet.x0cc = 0;
     s3 = save.pet.x148;
     save.pet.x148 = 0;
-    p = flash_sector_addr(0x37);
+    p = flash_sector_addr(FLASH_SEC_ALBUM);
     p += empty << 12;
-    flash_backup_sector(empty / 16 + 0x37);
-    flash_restore_sector_except(empty / 16 + 0x37, p, 0x1000);
+    flash_backup_sector(empty / 16 + FLASH_SEC_ALBUM);
+    flash_restore_sector_except(empty / 16 + FLASH_SEC_ALBUM, p, 0x1000);
     st.a = k;
     st.b = save.pet.age_days;
     st.c = pet_get_gender();
@@ -1038,7 +1031,7 @@ u8 album_register(void)
     sys_irq_disable();
     d = (u16 *)p;
     for (j = 0; j <= 15; j++) {
-        func_0000B52(d, *s, 0x2000000);
+        func_0000B52(d, *s, FLASH_BASE);
         s++;
         d++;
     }
@@ -1073,10 +1066,10 @@ int album_update_snapshot(void)
     t = chara_canonical_id(pet_get_id());
     if (t != 0) {
         if (pet_get_unlock_flag(chara_family_index(t) + 0x1d) == 1) {
-            b = flash_sector_addr(0x37);
+            b = flash_sector_addr(FLASH_SEC_ALBUM);
             b += k << 12;
-            flash_backup_sector(k / 16 + 0x37);
-            flash_restore_sector_except(k / 16 + 0x37, b, 0x1000);
+            flash_backup_sector(k / 16 + FLASH_SEC_ALBUM);
+            flash_restore_sector_except(k / 16 + FLASH_SEC_ALBUM, b, 0x1000);
             chara_render_poses_flash((int)D_2542AFC, (struct PictureSetHdr *)b);
             q = (u8 *)&save.pet + k;
             q[0x8c] = save.pet.age_days;
@@ -4044,24 +4037,12 @@ void pet_clear_activities(void)
     save.pet.restaurant_count = 0;
 }
 
-void func_2408726(void)
-{
-}
-
 /*
  * Returns 0 (stub).
  */
 int func_2408728(void)
 {
     return 0;
-}
-
-void func_240872C(void)
-{
-}
-
-void func_240872E(void)
-{
 }
 
 /*
@@ -4146,7 +4127,7 @@ int chara_family_in_album(u16 id)
     } else {
         return 0;
     }
-    p = flash_sector_addr(0x37);
+    p = flash_sector_addr(FLASH_SEC_ALBUM);
     for (i = 0; i <= 0x4f; i++) {
         if (*(u16 *)p == k)
             return k;

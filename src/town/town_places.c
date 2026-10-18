@@ -2556,13 +2556,9 @@ int town_enter_nopic_b(void)
 }
 
 /*
- * Empty function (stub, `ret` only), like town_hook_stub_b.
+ * Empty function (stub, `ret` only; falls off the end without a result).
  */
 u8 town_hook_stub_a(int a)
-{
-}
-
-void town_hook_stub_b(void)
 {
 }
 
@@ -3065,10 +3061,10 @@ again:
             fn += s[0xb0] << 8;
             fn += s[0xaf] << 16;
             fn += s[0xae] << 24;
-            fn += 0x2000000;
+            fn += FLASH_DL_PROGRAM;
             if (((int (*)(void))fn)() != 0) {
                 anim_happy();
-                dl_chara_affection_update(0x2000000);
+                dl_chara_affection_update(FLASH_DL_PROGRAM);
                 snd_wait_end();
                 save_game();
                 ui_timeout = 10;

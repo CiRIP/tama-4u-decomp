@@ -291,7 +291,7 @@ int comm_build_section_mail(int base, int off)
     int n = 0;
     int k;
 
-    comm_partner_slot = f_2528DA2(comm_rx_peer_id, D_27D0060);
+    comm_partner_slot = f_2528DA2(comm_rx_peer_id, (u8 *)(FLASH_COMM_RX + 0x60));
     if (comm_friend_is_new == 1)
         return n;
     if (mail_find(comm_partner_slot, 1, buf, -1, 0) == -1)
@@ -677,7 +677,7 @@ int comm_payload_gift_target(int base, int off)
 
 /*
  * Type 8 initiator (debug "アイテムSEND", the toy in the app's role): the item at
- * 0x2070000 (or the default record of the background bank D_26E0000 when that slot is
+ * 0x2070000 (or the default record of the background bank FLASH_DEFAULT_BG when that slot is
  * erased) as section 3; 0x76 = 0, version 0x84 = 3 (the receiver shows "name registered"
  * for version 3, comm_outcome_app).
  */
@@ -689,9 +689,9 @@ int comm_payload_app_init(int a, int b)
 
     *(u16 *)((u8 *)comm_tx_record + 0x76) = n;
     *(u16 *)((u8 *)comm_tx_record + 0x84) = 3;
-    p = (u8 *)0x2070000;
+    p = (u8 *)FLASH_DIARY_COPY;
     if (*p == 0xff)
-        p = D_26E0000;
+        p = (u8 *)FLASH_DEFAULT_BG;
     comm_gift_item = (u32)p;
     n += comm_build_section_item(a, b);
     return n;
@@ -718,10 +718,10 @@ int comm_payload_proposal_init(int base, int off)
     u16 k;
     int t;
 
-    t = D_27D008C * 800 / 1000;
+    t = *(u8 *)(FLASH_COMM_RX + 0x8C) * 800 / 1000;
     *(u16 *)((u8 *)comm_tx_record + 0x76) = (u8)(t + 6);
     *(u16 *)((u8 *)comm_tx_record + 0x76) += 10;
-    if (D_27D00F8 & 1) {
+    if (*(u8 *)(FLASH_COMM_RX + 0xF8) & 1) {
         k = chara_family(save.pet.x000);
         if (k == 0x15) {
             *(u16 *)((u8 *)comm_tx_record + 0x74) = 0x138b;
@@ -760,7 +760,7 @@ int comm_payload_proposal_target(int base, int off)
     int p;
     int o;
 
-    if (D_27D00F8 & 1) {
+    if (*(u8 *)(FLASH_COMM_RX + 0xF8) & 1) {
         k = chara_family(save.pet.x000);
         if (k == 0x15) {
             *(u16 *)((u8 *)comm_tx_record + 0x74) = 0x138b;
@@ -1013,7 +1013,7 @@ void comm_build_phase1(void)
             *(u32 *)((u8 *)comm_tx_record + 0x48) = 0;
             n = 0x100;
             *(u32 *)((u8 *)comm_tx_record + 0x48) += n;
-            p = 0x27C0000;
+            p = FLASH_COMM_TX;
             p += n;
             n = 0x2000;
             flash_fill(n, p, 0x55aa);
@@ -1021,8 +1021,8 @@ void comm_build_phase1(void)
             *(u32 *)((u8 *)comm_tx_record + 0x48) += n;
             n = 2;
             *(u32 *)((u8 *)comm_tx_record + 0x48) += n;
-            flash_program_bytes(0x100, 0x27C0000, (u8 *)comm_tx_record);
-            comm_record_sum((u8 *)0x27C0000, *(u32 *)((u8 *)comm_tx_record + 0x48), &crc);
+            flash_program_bytes(0x100, FLASH_COMM_TX, (u8 *)comm_tx_record);
+            comm_record_sum((u8 *)FLASH_COMM_TX, *(u32 *)((u8 *)comm_tx_record + 0x48), &crc);
             flash_fill(n, p, crc);
         } else {
             *((u8 *)comm_tx_record + 0x5e) = 0xe1;
@@ -1030,7 +1030,7 @@ void comm_build_phase1(void)
             *(u32 *)((u8 *)comm_tx_record + 0x48) = 0;
             n = 0x100;
             *(u32 *)((u8 *)comm_tx_record + 0x48) += n;
-            p = 0x27C0000;
+            p = FLASH_COMM_TX;
             p += n;
             n = 0x2000;
             flash_fill(n, p, 0xaa55);
@@ -1038,8 +1038,8 @@ void comm_build_phase1(void)
             *(u32 *)((u8 *)comm_tx_record + 0x48) += n;
             n = 2;
             *(u32 *)((u8 *)comm_tx_record + 0x48) += n;
-            flash_program_bytes(0x100, 0x27C0000, (u8 *)comm_tx_record);
-            comm_record_sum((u8 *)0x27C0000, *(u32 *)((u8 *)comm_tx_record + 0x48), &crc);
+            flash_program_bytes(0x100, FLASH_COMM_TX, (u8 *)comm_tx_record);
+            comm_record_sum((u8 *)FLASH_COMM_TX, *(u32 *)((u8 *)comm_tx_record + 0x48), &crc);
             flash_fill(n, p, crc);
         }
         break;
@@ -1083,24 +1083,24 @@ void comm_build_phase1(void)
             *(u32 *)((u8 *)comm_tx_record + 0x48) = 0;
             n = 0x100;
             *(u32 *)((u8 *)comm_tx_record + 0x48) += n;
-            p = 0x27C0000;
+            p = FLASH_COMM_TX;
             p += n;
             n = 2;
             *(u32 *)((u8 *)comm_tx_record + 0x48) += n;
-            flash_program_bytes(0x100, 0x27C0000, (u8 *)comm_tx_record);
-            comm_record_sum((u8 *)0x27C0000, *(u32 *)((u8 *)comm_tx_record + 0x48), &crc);
+            flash_program_bytes(0x100, FLASH_COMM_TX, (u8 *)comm_tx_record);
+            comm_record_sum((u8 *)FLASH_COMM_TX, *(u32 *)((u8 *)comm_tx_record + 0x48), &crc);
             flash_fill(n, p, crc);
         } else {
             *((u8 *)comm_tx_record + 0x5e) = 1;
             *(u32 *)((u8 *)comm_tx_record + 0x48) = 0;
             n = 0x100;
             *(u32 *)((u8 *)comm_tx_record + 0x48) += n;
-            p = 0x27C0000;
+            p = FLASH_COMM_TX;
             p += n;
             n = 2;
             *(u32 *)((u8 *)comm_tx_record + 0x48) += n;
-            flash_program_bytes(0x100, 0x27C0000, (u8 *)comm_tx_record);
-            comm_record_sum((u8 *)0x27C0000, *(u32 *)((u8 *)comm_tx_record + 0x48), &crc);
+            flash_program_bytes(0x100, FLASH_COMM_TX, (u8 *)comm_tx_record);
+            comm_record_sum((u8 *)FLASH_COMM_TX, *(u32 *)((u8 *)comm_tx_record + 0x48), &crc);
             flash_fill(n, p, crc);
         }
         break;
@@ -1164,8 +1164,8 @@ void comm_build_phase2(void)
             *(u32 *)((u8 *)comm_tx_record + 0x48) = 0;
             n = 0x100;
             *(u32 *)((u8 *)comm_tx_record + 0x48) += n;
-            p = n + 0x27C0800;
-            n = comm_build_payload(0x27C0800, n);
+            p = n + (FLASH_COMM_TX + 0x800);
+            n = comm_build_payload((FLASH_COMM_TX + 0x800), n);
             *(u32 *)((u8 *)comm_tx_record + 0x48) += n;
             p += n;
             comm_describe_given_item((struct CommHeaderItem *)comm_tx_record);
@@ -1176,15 +1176,15 @@ void comm_build_phase2(void)
             *(u32 *)((u8 *)comm_tx_record + 0x48) = 0;
             n = 0x100;
             *(u32 *)((u8 *)comm_tx_record + 0x48) += n;
-            p = n + 0x27C0800;
-            n = comm_build_payload(0x27C0800, n);
+            p = n + (FLASH_COMM_TX + 0x800);
+            n = comm_build_payload((FLASH_COMM_TX + 0x800), n);
             *(u32 *)((u8 *)comm_tx_record + 0x48) += n;
             p += n;
         }
         n = 2;
         *(u32 *)((u8 *)comm_tx_record + 0x48) += n;
-        flash_program_bytes(0x100, 0x27C0800, (u8 *)comm_tx_record);
-        comm_record_sum((u8 *)0x27C0800, *(u32 *)((u8 *)comm_tx_record + 0x48), &crc);
+        flash_program_bytes(0x100, (FLASH_COMM_TX + 0x800), (u8 *)comm_tx_record);
+        comm_record_sum((u8 *)(FLASH_COMM_TX + 0x800), *(u32 *)((u8 *)comm_tx_record + 0x48), &crc);
         flash_fill(n, p, crc);
         break;
     }
@@ -1209,11 +1209,11 @@ void comm_build_phase3(void)
             *(u32 *)((u8 *)comm_tx_record + 0x48) = 0;
             n = 0x100;
             *(u32 *)((u8 *)comm_tx_record + 0x48) += n;
-            p = n + (u32)D_27C0400;
+            p = n + (u32)(FLASH_COMM_TX + 0x400);
             n = 2;
             *(u32 *)((u8 *)comm_tx_record + 0x48) += n;
-            flash_program_bytes(0x100, 0x27C0400, (u8 *)comm_tx_record);
-            comm_record_sum((u8 *)0x27C0400, *(u32 *)((u8 *)comm_tx_record + 0x48), &crc);
+            flash_program_bytes(0x100, (FLASH_COMM_TX + 0x400), (u8 *)comm_tx_record);
+            comm_record_sum((u8 *)(FLASH_COMM_TX + 0x400), *(u32 *)((u8 *)comm_tx_record + 0x48), &crc);
             flash_fill(n, p, crc);
         } else {
             *((u8 *)comm_tx_record + 0x5e) = 0x91;
@@ -1221,11 +1221,11 @@ void comm_build_phase3(void)
             *(u32 *)((u8 *)comm_tx_record + 0x48) = 0;
             n = 0x100;
             *(u32 *)((u8 *)comm_tx_record + 0x48) += n;
-            p = n + (u32)D_27C0400;
+            p = n + (u32)(FLASH_COMM_TX + 0x400);
             n = 2;
             *(u32 *)((u8 *)comm_tx_record + 0x48) += n;
-            flash_program_bytes(0x100, 0x27C0400, (u8 *)comm_tx_record);
-            comm_record_sum((u8 *)0x27C0400, *(u32 *)((u8 *)comm_tx_record + 0x48), &crc);
+            flash_program_bytes(0x100, (FLASH_COMM_TX + 0x400), (u8 *)comm_tx_record);
+            comm_record_sum((u8 *)(FLASH_COMM_TX + 0x400), *(u32 *)((u8 *)comm_tx_record + 0x48), &crc);
             flash_fill(n, p, crc);
         }
         break;
@@ -1269,15 +1269,15 @@ u8 comm_exchange_initiator(void)
     comm_build_phase1();
     switch (nfc_session.x003) {
     case 1:
-        nfc_result = nfc_send(D_27C0000, *(u32 *)((u8 *)comm_tx_record + 0x48), n);
+        nfc_result = nfc_send((u8 *)FLASH_COMM_TX, *(u32 *)((u8 *)comm_tx_record + 0x48), n);
         if (nfc_result != 0)
             return 1;
         x = 0;
         nfc_result = nfc_receive((int)comm_rx_phase1, &x, n, 1, 0);
         if (nfc_result != 0)
             return 1;
-        memcpy(comm_rx_record, (void *)0x27D0000, 0x104);
-        if (comm_validate_record((struct TamagoFile *)0x27D0000) != 0)
+        memcpy(comm_rx_record, (void *)comm_rx_phase1, 0x104);
+        if (comm_validate_record((struct TamagoFile *)comm_rx_phase1) != 0)
             return 1;
         break;
     case 2:
@@ -1295,14 +1295,14 @@ u8 comm_exchange_initiator(void)
         }
         break;
     default:
-        nfc_result = nfc_send(D_27C0000, *(u32 *)((u8 *)comm_tx_record + 0x48), n);
+        nfc_result = nfc_send((u8 *)FLASH_COMM_TX, *(u32 *)((u8 *)comm_tx_record + 0x48), n);
         if (nfc_result != 0)
             return 1;
         x = 0;
         nfc_result = nfc_receive((int)comm_rx_phase1, &x, n, 1, 0);
         if (nfc_result != 0)
             return 1;
-        memcpy(comm_rx_record, (void *)0x27D0000, 0x104);
+        memcpy(comm_rx_record, (void *)comm_rx_phase1, 0x104);
         if (comm_validate_record(comm_rx_record) != 0 || comm_check_pair_and_type() != 0) {
             nfc_session.x000_b = 0xf;
             nfc_result = nfc_request_abort();
@@ -1317,17 +1317,17 @@ u8 comm_exchange_initiator(void)
         break;
     case 3: case 4: case 5: case 6: case 7: case 8:
         comm_build_phase2();
-        nfc_result = nfc_send(D_27C0800, *(u32 *)((u8 *)comm_tx_record + 0x48), n);
+        nfc_result = nfc_send((u8 *)(FLASH_COMM_TX + 0x800), *(u32 *)((u8 *)comm_tx_record + 0x48), n);
         if (nfc_result != 0)
             return 1;
         x = 0;
         nfc_result = nfc_receive((int)&comm_rx_phase2, &x, n, 1, 0);
         if (nfc_result != 0)
             return 1;
-        memcpy(comm_rx_record, (void *)0x27D0800, 0x104);
-        if (comm_validate_record((struct TamagoFile *)0x27D0800) != 0)
+        memcpy(comm_rx_record, (void *)&comm_rx_phase2, 0x104);
+        if (comm_validate_record((struct TamagoFile *)&comm_rx_phase2) != 0)
             return 1;
-        if (comm_same_peer(*(u16 *)(comm_rx_record + 0x72), (int)(comm_rx_record + 0x60)) != 0)
+        if (comm_same_peer(*(u16 *)(comm_rx_record + 0x72), (u8 *)comm_rx_record + 0x60) != 0)
             return 1;
         break;
     }
@@ -1336,15 +1336,15 @@ u8 comm_exchange_initiator(void)
         break;
     case 3: case 4: case 5: case 6: case 7:
         comm_build_phase3();
-        nfc_result = nfc_send(D_27C0400, *(u32 *)((u8 *)comm_tx_record + 0x48), n);
+        nfc_result = nfc_send((u8 *)(FLASH_COMM_TX + 0x400), *(u32 *)((u8 *)comm_tx_record + 0x48), n);
         if (nfc_result != 0)
             return 1;
         x = 0;
-        nfc_result = nfc_receive((int)D_27D0400, &x, n, 1, 0);
+        nfc_result = nfc_receive((int)(FLASH_COMM_RX + 0x400), &x, n, 1, 0);
         if (nfc_result != 0)
             return 1;
-        memcpy(comm_rx_record, (void *)0x27D0400, 0x104);
-        if (comm_validate_record((struct TamagoFile *)0x27D0400) != 0)
+        memcpy(comm_rx_record, (void *)(FLASH_COMM_RX + 0x400), 0x104);
+        if (comm_validate_record((struct TamagoFile *)(FLASH_COMM_RX + 0x400)) != 0)
             return 1;
         comm_apply_points((struct GiftPoints *)comm_rx_record);
         break;
@@ -1367,8 +1367,7 @@ u8 comm_exchange_initiator(void)
  * received record is first copied to 0x27D0000). Types 3..8: phase 2 (receive 0x27D0800,
  * check with comm_check_peer_phase / comm_check_item_flag (the item section must carry a valid item) /
  * comm_check_app_food (type 8: no food items of kind 1), then send ours). Types 3..7: phase 3 +
- * money transfer. The comm_trace2(1) calls are progress trace points; comm_trace() the
- * trace reset.
+ * money transfer.
  */
 #define CHECK(e) for (;;) { int t = (e); r = 1; if (t != 0) goto end; break; }
 #define CHECKD(e) for (;;) { int t = (s8)(nfc_result = (e)); r = 1; if (t != 0) goto end; break; }
@@ -1381,23 +1380,21 @@ int comm_exchange_target(void)
     int s;
     int k;
 
-    comm_trace2(1);
-    comm_trace();
     if (nfc_session.x003 == 1) {
         CHECK(comm_erase_banks());
         x = 0;
         CHECKD(nfc_receive((int)comm_rx_phase1, (int *)&x, n, 1, 0));
-        memcpy(comm_rx_record, (void *)0x27D0000, 0x104);
-        CHECK(comm_validate_record((struct TamagoFile *)0x27D0000));
+        memcpy(comm_rx_record, (void *)comm_rx_phase1, 0x104);
+        CHECK(comm_validate_record((struct TamagoFile *)comm_rx_phase1));
         comm_build_phase1();
-        CHECKD(nfc_send(D_27C0000, *(u32 *)((u8 *)comm_tx_record + 0x48), n));
+        CHECKD(nfc_send((u8 *)FLASH_COMM_TX, *(u32 *)((u8 *)comm_tx_record + 0x48), n));
     } else {
         x = 0;
         if (nfc_session.detected_peer == 0xf0f0) {
             CHECK(comm_erase_banks());
             n = 30;
             CHECKD(nfc_receive((int)comm_rx_phase1, (int *)&x, n, 1, 0x180));
-            memcpy(comm_rx_record, (void *)0x27D0000, 0x180);
+            memcpy(comm_rx_record, (void *)comm_rx_phase1, 0x180);
         } else {
             n = nfc_session.x003 == 0 ? 8 : 10;
             nfc_result = nfc_receive((int)comm_rx_record, (int *)&x, n, 0, 0x180);
@@ -1431,40 +1428,37 @@ int comm_exchange_target(void)
             flash_program_bytes(*(u32 *)(comm_rx_record + 0x48), (u32)comm_rx_phase1, comm_rx_record);
             CHECK(comm_check_peer_phase((struct ExchangeRecord *)comm_rx_record, 1));
             comm_build_phase1();
-            CHECKD(nfc_send(D_27C0000, *(u32 *)((u8 *)comm_tx_record + 0x48), n));
+            CHECKD(nfc_send((u8 *)FLASH_COMM_TX, *(u32 *)((u8 *)comm_tx_record + 0x48), n));
         }
     }
-    comm_trace2(1);
     switch (nfc_session.x003) {
     case 1: case 2:
         break;
     case 3: case 4: case 5: case 6: case 7: case 8:
         x = 0;
         CHECKD(nfc_receive((int)&comm_rx_phase2, (int *)&x, n, 1, 0));
-        memcpy(comm_rx_record, (void *)0x27D0800, 0x104);
-        CHECK(comm_validate_record((struct TamagoFile *)0x27D0800));
-        CHECK(comm_check_peer_phase((struct ExchangeRecord *)0x27D0800, 2));
-        CHECK(comm_check_item_flag((struct ExchangeRecord *)0x27D0800));
-        CHECK(comm_check_app_food((struct ExchangeRecord *)0x27D0800));
+        memcpy(comm_rx_record, (void *)&comm_rx_phase2, 0x104);
+        CHECK(comm_validate_record((struct TamagoFile *)&comm_rx_phase2));
+        CHECK(comm_check_peer_phase(&comm_rx_phase2, 2));
+        CHECK(comm_check_item_flag(&comm_rx_phase2));
+        CHECK(comm_check_app_food(&comm_rx_phase2));
         comm_build_phase2();
-        CHECKD(nfc_send(D_27C0800, *(u32 *)((u8 *)comm_tx_record + 0x48), n));
+        CHECKD(nfc_send((u8 *)(FLASH_COMM_TX + 0x800), *(u32 *)((u8 *)comm_tx_record + 0x48), n));
         break;
     }
-    comm_trace2(1);
     switch (nfc_session.x003) {
     case 0: case 1: case 2: case 8:
         break;
     case 3: case 4: case 5: case 6: case 7:
         x = 0;
-        CHECKD(nfc_receive((int)D_27D0400, (int *)&x, n, 1, 0));
-        memcpy(comm_rx_record, (void *)0x27D0400, 0x104);
-        CHECK(comm_validate_record((struct TamagoFile *)0x27D0400));
+        CHECKD(nfc_receive((int)(FLASH_COMM_RX + 0x400), (int *)&x, n, 1, 0));
+        memcpy(comm_rx_record, (void *)(FLASH_COMM_RX + 0x400), 0x104);
+        CHECK(comm_validate_record((struct TamagoFile *)(FLASH_COMM_RX + 0x400)));
         comm_apply_points((struct GiftPoints *)comm_rx_record);
         comm_build_phase3();
-        CHECKD(nfc_send(D_27C0400, *(u32 *)((u8 *)comm_tx_record + 0x48), n));
+        CHECKD(nfc_send((u8 *)(FLASH_COMM_TX + 0x400), *(u32 *)((u8 *)comm_tx_record + 0x48), n));
         break;
     }
-    comm_trace2(1);
     k = 0;
 out:
     r = k;

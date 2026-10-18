@@ -171,23 +171,23 @@ int comm_store_peer_mail(void)
     comm_mail_queue.friend2 = 0xff;
     if (comm_tx_message_chunk == 0)
         goto skip;
-    comm_partner_slot = friend_lookup_or_add(*(u16 *)0x27D0872, 0x27D0860, *(u8 *)0x27D085F);
+    comm_partner_slot = friend_lookup_or_add(comm_rx_phase2.owner_id, comm_rx_phase2.name, comm_rx_phase2.gender);
     res = mail_find(comm_partner_slot, 1, (void *)&s, -1, 0);
     if (res == -1)
         goto skip;
     s.friend_idx = comm_partner_slot;
     s.direction = 0;
     mail_store(s.friend_idx, res, 0, (int)(&s), 0);
-    p = (struct ExchangeRecord *)0x27D0800;
+    p = &comm_rx_phase2;
     goto go;
 skip:
-    p = (struct ExchangeRecord *)0x27D0800;
+    p = &comm_rx_phase2;
 go:
     r = 2;
-    if (*(u16 *)0x27D08E8 != 0) {
-        comm_partner_slot = friend_lookup_or_add(p->owner_id, (int)p + 0x60, p->gender);
+    if (comm_rx_phase2.sect_mail != 0) {
+        comm_partner_slot = friend_lookup_or_add(p->owner_id, p->name, p->gender);
         if (comm_friend_is_new != 1) {
-            src = (u8 *)0x27D0808 + p->sect_mail;
+            src = (u8 *)&comm_rx_phase2 + 8 + p->sect_mail;
             bp = &s;
             memcpy(bp, src, 100);
             s.friend_idx = comm_mail_queue.friend0 = comm_partner_slot;
@@ -197,14 +197,6 @@ go:
         }
     }
     return r;
-}
-
-void ir_transfer_abort(void)
-{
-}
-
-void ir_transfer(void)
-{
 }
 
 /*

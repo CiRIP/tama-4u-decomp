@@ -35,13 +35,6 @@ extern void func_2402014_2400D12(int, int, int) __asm__("gfx_object_set_image") 
 extern void func_2402082_2400D4E(int, int) __asm__("gfx_object_set_image_attr") ;
 
 /*
- * An empty function (between the API functions in the original).
- */
-void func_2401DD6(void)
-{
-}
-
-/*
  * LCD controller init (called once by main sys_main, before anything is drawn). The
  * panel/controller variant comes from the P07 strap: P0 data register 0x300380 bit 7,
  * input with the internal pull-up on since sys_gpio_init (pMISC_PUP0 = 0xEF), so an open
@@ -127,13 +120,6 @@ void lcd_init(void)
 }
 
 /*
- * An empty function.
- */
-void func_2401EEC(void)
-{
-}
-
-/*
  * Reset the renderer / start a new screen: empty the display list (gfx_object_count = number of
  * objects in gfx_objects = 0) and set both dirty rectangles to empty (main area
  * gfx_dirty_main_y0..D_0001808 and top/bottom icon bars gfx_dirty_bar_y0..D_000180C, each y0, y1, x0, x1:
@@ -154,13 +140,6 @@ void gfx_display_reset(void)
     gfx_tint_first = 0;
     gfx_tint_end = 0;
     ui_attention_icon_state = 0;
-}
-
-/*
- * An empty function.
- */
-void func_2401F52(void)
-{
 }
 
 /*
@@ -191,13 +170,6 @@ void gfx_set_tint_range(u8 n)
 }
 
 /*
- * An empty function.
- */
-void func_2401FCE(void)
-{
-}
-
-/*
  * Set display object a: image d with size e x f, palette slot b, attribute c; loads the
  * image palette into the shared palette tables (IRAM func_0000312) (asm).
  */
@@ -210,13 +182,6 @@ void gfx_object_set(u8 a, u16 b, u8 c, const u8 *d, u8 e, u8 f)
     p->frame = c;
     p->image = d;
     func_0000312(p, d, b);
-}
-
-/*
- * An empty function.
- */
-void func_2402012(void)
-{
 }
 
 /*
@@ -235,13 +200,6 @@ void gfx_object_set_image(u8 a, u16 b, u8 c, const u8 *d)
     } else {
         gfx_object_set(a, b, c, d, 0, 0);
     }
-}
-
-/*
- * An empty function.
- */
-void func_2402080(void)
-{
 }
 
 /*
@@ -267,13 +225,6 @@ void gfx_object_set_image_attr(u8 a, u8 b, const u8 *d)
 }
 
 /*
- * An empty function.
- */
-void func_24020E2(void)
-{
-}
-
-/*
  * Display object a: set image d clipped to e x f pixels (partial image, e.g. gauges).
  */
 void gfx_object_set_image_clipped(u8 a, u16 b, u8 c, const u8 *d, u8 e, u8 f)
@@ -292,13 +243,6 @@ void gfx_object_set_image_clipped(u8 a, u16 b, u8 c, const u8 *d, u8 e, u8 f)
 }
 
 /*
- * An empty function.
- */
-void func_2402154(void)
-{
-}
-
-/*
  * Display object a: move to screen position (b, c) (top-left corner, screen pixels) and
  * mark its area dirty.
  */
@@ -312,26 +256,12 @@ void gfx_object_move(u8 a, s16 b, s16 c)
 }
 
 /*
- * An empty function.
- */
-void func_2402186(void)
-{
-}
-
-/*
  * Display object a: move to (b, c), marking both the old and the new area dirty.
  */
 void gfx_object_move_dirty(u8 a, s16 b, s16 c)
 {
     func_0000000(&gfx_objects[a]);
     gfx_object_move(a, b, c);
-}
-
-/*
- * An empty function.
- */
-void func_24021C0(void)
-{
 }
 
 
@@ -359,25 +289,11 @@ s8 gfx_object_create(s16 x, s16 y, u16 c, u8 d, u16 flags, const u8 *img)
 }
 
 /*
- * An empty function.
- */
-void func_2402246(void)
-{
-}
-
-/*
  * Display object a: render text/glyphs (txt_set_glyph).
  */
 void gfx_object_draw_glyph(u8 a, u16 b, int c, u8 d)
 {
     txt_set_glyph(a, b, c, d);
-}
-
-/*
- * An empty function.
- */
-void func_2402264(void)
-{
 }
 
 void f_2266(u8, s16, s16, u16, u8 *, u8, u8) __asm__("gfx_draw_text_line");
@@ -387,20 +303,12 @@ void f_2266(u8 a, s16 b, s16 c, u16 d, u8 *e, u8 f, u8 g)
     txt_render_line(a, b, c, d, e, f, g);
 }
 
-void func_2402294(void)
-{
-}
-
 /*
  * Draw a centred text line (txt_draw_centered).
  */
 void gfx_draw_text_centered(u8 a, s16 b, u8 c, const u8 *d, u8 e, u8 f)
 {
     txt_draw_centered(a, b, c, d, e, f);
-}
-
-void func_24022BE(void)
-{
 }
 
 /*
@@ -414,10 +322,6 @@ void gfx_object_set_flags(u8 a, u16 b)
     struct GfxObject *p = &gfx_objects[a];
 
     p->flags = (p->flags & 0xC000) | b;
-}
-
-void func_24022F0(void)
-{
 }
 
 /*
@@ -448,10 +352,6 @@ void anim_scene_room(u8 n)
     anim_queued_sound = 0;
 }
 
-void func_2402378(void)
-{
-}
-
 /*
  * Animation scene set-up with animated background kind 1 (room_window_draw(0)); skipped when
  * ui_message_shown is set. See anim_scene_room.
@@ -474,10 +374,6 @@ void anim_scene_window(u8 n)
     }
 }
 
-void func_24023FC(void)
-{
-}
-
 /*
  * Animation scene set-up, animated background kind 1, sub-mode m (anim_window_mode = m + 1).
  */
@@ -498,10 +394,6 @@ void anim_scene_window_mode(u8 n, u8 m)
     anim_queued_sound = 0;
 }
 
-void func_240247C(void)
-{
-}
-
 /*
  * Animation API: like anim_draw_pet for the character of the fifth slot (chara_fifth_row,
  * selected with chara_fifth_sprite_set by chara_select_fifth_by_id / chara_select_fifth_by_set).
@@ -514,18 +406,6 @@ void anim_draw_fifth_chara(u8 a, u8 b, u16 c, s16 d, s16 e)
     a += anim_first_slot_idx;
     t = gfx_palette_slot_for(a, 0, c);
     chara_draw_any(a, t, b, c, d, e, chara_fifth_row);
-}
-
-void func_24024E0(void)
-{
-}
-
-void func_24024F2(void)
-{
-}
-
-void func_2402504(void)
-{
 }
 
 /*
@@ -549,10 +429,6 @@ void anim_scene_window2(u8 n)
     }
 }
 
-void func_2402580(void)
-{
-}
-
 /*
  * Animation scene set-up with the background of room_draw_background. See anim_scene_room.
  */
@@ -572,10 +448,6 @@ void anim_scene_living(u8 n)
     anim_queued_sound = 0;
 }
 
-void func_24025F0(void)
-{
-}
-
 /*
  * Animation scene set-up with animated background kind 3 (room_draw_background, room_draw_poops(0)).
  */
@@ -593,10 +465,6 @@ void anim_scene_living_poops(u8 n)
         gfx_object_create(0, 0x1c, 0, 0, 0, 0);
     ui_draw_icon_bars();
     anim_queued_sound = 0;
-}
-
-void func_2402668(void)
-{
 }
 
 /*
@@ -636,10 +504,6 @@ void anim_scene_kitchen(u8 n)
     anim_queued_sound = 0;
 }
 
-void func_2402752(void)
-{
-}
-
 /*
  * Animation scene set-up with the fixed background picture gfx_bg_game_corner.
  */
@@ -657,10 +521,6 @@ void anim_scene_game_corner(u8 n)
         gfx_object_create(0, 0x1c, 0, 0, 0, 0);
     ui_draw_icon_bars();
     anim_queued_sound = 0;
-}
-
-void func_24027D4(void)
-{
 }
 
 /*
@@ -683,10 +543,6 @@ void anim_scene_tama_depa(u8 n)
     anim_queued_sound = 0;
 }
 
-void func_2402872(void)
-{
-}
-
 /*
  * Animation scene set-up with the fixed background gfx_bg_park.
  */
@@ -707,10 +563,6 @@ void anim_scene_park(u8 n)
     anim_queued_sound = 0;
 }
 
-void func_2402910(void)
-{
-}
-
 /*
  * Animation scene set-up without background picture.
  */
@@ -728,10 +580,6 @@ void anim_scene_blank(u8 n)
         gfx_object_create(0, 0x1c, 0, 0, 0, 0);
     ui_draw_icon_bars();
     anim_queued_sound = 0;
-}
-
-void func_2402998(void)
-{
 }
 
 /*
@@ -770,10 +618,6 @@ void anim_scene_bath(u8 n)
     anim_queued_sound = 0;
 }
 
-void func_2402A78(void)
-{
-}
-
 /*
  * Animation scene set-up in location room_toilet_designs[pet.room_designs[2]].
  */
@@ -810,10 +654,6 @@ void anim_scene_toilet(u8 n)
     anim_queued_sound = 0;
 }
 
-void func_2402B4A(void)
-{
-}
-
 /*
  * Animation scene set-up in location room_bedroom_designs[pet.x06A], animated background kind 2.
  */
@@ -846,10 +686,6 @@ void anim_scene_bedroom(u8 n)
         gfx_object_create(0, 0x1c, 0, 0, 0, 0);
     ui_draw_icon_bars();
     anim_queued_sound = 0;
-}
-
-void func_2402C2A(void)
-{
 }
 
 /*
@@ -890,10 +726,6 @@ void anim_draw_pet(u8 a, u8 b, u16 c, s16 d, s16 e)
     chara_draw_pet(a, t, b, c, d, e);
 }
 
-void func_2402CE8(void)
-{
-}
-
 /*
  * Animation API: like anim_draw_pet but for the "other" character selected by
  * chara_select_other_by_id (a visitor / friend / partner: chara_other_sprite_set).
@@ -906,10 +738,6 @@ void anim_draw_other_chara(u8 a, u8 b, u16 c, s16 d, s16 e)
     a += anim_first_slot_idx;
     t = gfx_palette_slot_for(a, 0, c);
     chara_draw_second(a, t, b, c, d, e);
-}
-
-void func_2402D42(void)
-{
 }
 
 /*
@@ -925,10 +753,6 @@ void anim_draw_third_chara(u8 a, u8 b, u16 c, s16 d, s16 e)
     chara_draw_third(a, t, b, c, d, e);
 }
 
-void func_2402D9E(void)
-{
-}
-
 /*
  * Animation API: show a character pose with chara_draw_fourth in sprite slot a.
  */
@@ -940,10 +764,6 @@ void anim_draw_fourth_chara(u8 a, u8 b, u16 c, s16 d, s16 e)
     a += anim_first_slot_idx;
     t = gfx_palette_slot_for(a, 0, c);
     chara_draw_fourth(a, t, b, c, d, e);
-}
-
-void func_2402DFA(void)
-{
 }
 
 /*
@@ -968,10 +788,6 @@ void anim_draw_pic(u8 id, const u8 *pos, u16 c, s16 x, s16 y)
     } else {
         gfx_object_set(id, t, 0, pos, 0, 0);
     }
-}
-
-void func_2402EA8(void)
-{
 }
 
 /*
@@ -1003,12 +819,7 @@ void anim_draw_companion(u8 id, u8 k, u16 c, s16 x, s16 y)
  * Frame sprites are addressed relative to anim_first_slot_idx (the sprite count when the animation
  * started, see anim_scene_room / anim_scene_living); coordinates are centre points, y + 0x1c for
  * the status bar. gfx_palette_slot_for(id, image, c) allocates/looks up the palette for a slot.
- *
- * func_2402F7C: an empty function.
  */
-void func_2402F7C(void)
-{
-}
 
 /*
  * Animation API: show digit m (0..9, frame m of the digit strip: palette image D_2143818,
@@ -1031,13 +842,6 @@ void anim_draw_digit(u8 id, u8 m, u16 c, s16 x, s16 y)
 }
 
 /*
- * An empty function.
- */
-void func_2403022(void)
-{
-}
-
-/*
  * Animation API / frame primitive: text line b (game charset, 2 bytes per glyph) in slot
  * a centred at (d, e) (anim_draw_text_line); c = 1 narrow font (9 px, up to 14 glyphs) / 0 normal
  * (12 px, 12 glyphs). Returns the pointer to the rest of the string (next line) or 0 at
@@ -1046,13 +850,6 @@ void func_2403022(void)
 int anim_draw_text(u8 a, const u8 *b, u8 c, s16 d, s16 e)
 {
     return (int)anim_draw_text_line(a, b, c, d, e);
-}
-
-/*
- * An empty function.
- */
-void func_2403048(void)
-{
 }
 
 /*
@@ -1065,26 +862,12 @@ void anim_draw_glyph(u8 a, int b, u16 c, s16 d, s16 e)
 }
 
 /*
- * An empty function.
- */
-void func_240306E(void)
-{
-}
-
-/*
  * Animation API: queue sound effect a; it is started (snd_play) at the next frame
  * shown by anim_frame / anim_frame_wait.
  */
 void anim_queue_sound(int a)
 {
     anim_queued_sound = a;
-}
-
-/*
- * An empty function.
- */
-void func_240308A(void)
-{
 }
 
 /*
@@ -1154,13 +937,6 @@ u8 anim_frame_wait(int a, int b)
 }
 
 /*
- * An empty function.
- */
-void func_24031D4(void)
-{
-}
-
-/*
  * Animation API "frame(a ms, skip mask b)": the call that ends every keyframe of the
  * generated animation scripts. a = milliseconds (values > 100 have 100 subtracted: a 500 ms
  * frame shows for 400 ms), b = button mask that may cut it short. In normal scenes it is
@@ -1192,13 +968,6 @@ u8 anim_frame(int a, int b)
 }
 
 /*
- * An empty function.
- */
-void func_2403254(void)
-{
-}
-
-/*
  * Set palette entry a of the shared palette from the RGB565 colour b: the renderer keeps
  * three 256-byte tables of 8-bit components, blue gfx_pal_blue (bits 0..4 of b), green
  * gfx_pal_green, red gfx_pal_red (bits 11..15), which the IRAM blitters send to the LCD (3 bytes
@@ -1210,13 +979,6 @@ void gfx_palette_set(u16 a, u16 b)
     gfx_pal_blue[a] = ((b & 0x1f) << 3) | ((b & 1) << 2);
     gfx_pal_green[a] = (b & 0x7e0) >> 3;
     gfx_pal_red[a] = ((b & 0xf800) >> 8) | ((b & 0x800) >> 9);
-}
-
-/*
- * An empty function.
- */
-void func_24032AE(void)
-{
 }
 
 /*
@@ -1236,13 +998,6 @@ void gfx_set_background(u16 a)
     gfx_dirty_bar_y1 = 0x7F;
     gfx_dirty_bar_x0 = 0;
     gfx_dirty_bar_x1 = 0x7F;
-}
-
-/*
- * An empty function.
- */
-void func_2403304(void)
-{
 }
 
 /*
@@ -1285,7 +1040,7 @@ int chara_render_poses_to_flash(const struct PoseSet *a, u8 *b)
 
     off = 0;
     sys_irq_disable();
-    if (func_0000B52((u16 *)(b + off), a->count << 8, 0x2000000) != 0) {
+    if (func_0000B52((u16 *)(b + off), a->count << 8, FLASH_BASE) != 0) {
         off = -1;
         goto out;
     }
@@ -1330,24 +1085,24 @@ int chara_render_poses_to_flash(const struct PoseSet *a, u8 *b)
             h[2] = 0x11;
         start = off;
         off += 2;
-        if (func_0000B52((u16 *)(b + off), h[1] << 8 | h[0], 0x2000000) != 0) {
+        if (func_0000B52((u16 *)(b + off), h[1] << 8 | h[0], FLASH_BASE) != 0) {
             off = -1;
             goto out;
         }
         off += 2;
-        if (func_0000B52((u16 *)(b + off), h[3] << 8 | h[2], 0x2000000) != 0) {
+        if (func_0000B52((u16 *)(b + off), h[3] << 8 | h[2], FLASH_BASE) != 0) {
             off = -1;
             goto out;
         }
         off += 2;
-        if (func_0000B52((u16 *)(b + off), h[5] << 8 | h[4], 0x2000000) != 0) {
+        if (func_0000B52((u16 *)(b + off), h[5] << 8 | h[4], FLASH_BASE) != 0) {
             off = -1;
             goto out;
         }
         off += 2;
         for (j = 0; j < gfx_objects[0].image[2]; j++) {
             v = func_000014A(&gfx_objects[0], j);
-            if (func_0000B52((u16 *)(b + off), v >> 8 | (v & 0xff) << 8, 0x2000000) != 0) {
+            if (func_0000B52((u16 *)(b + off), v >> 8 | (v & 0xff) << 8, FLASH_BASE) != 0) {
                 off = -1;
                 goto out;
             }
@@ -1356,7 +1111,7 @@ int chara_render_poses_to_flash(const struct PoseSet *a, u8 *b)
         if (gfx_objects[1].image != 0) {
             for (j = 0; j < gfx_objects[1].image[2]; j++) {
                 v = func_000014A(&gfx_objects[1], j);
-                if (func_0000B52((u16 *)(b + off), v >> 8 | (v & 0xff) << 8, 0x2000000) != 0) {
+                if (func_0000B52((u16 *)(b + off), v >> 8 | (v & 0xff) << 8, FLASH_BASE) != 0) {
                     off = -1;
                     goto out;
                 }
@@ -1366,7 +1121,7 @@ int chara_render_poses_to_flash(const struct PoseSet *a, u8 *b)
         if (gfx_objects[2].image != 0) {
             for (j = 0; j < gfx_objects[2].image[2]; j++) {
                 v = func_000014A(&gfx_objects[2], j);
-                if (func_0000B52((u16 *)(b + off), v >> 8 | (v & 0xff) << 8, 0x2000000) != 0) {
+                if (func_0000B52((u16 *)(b + off), v >> 8 | (v & 0xff) << 8, FLASH_BASE) != 0) {
                     off = -1;
                     goto out;
                 }
@@ -1374,7 +1129,7 @@ int chara_render_poses_to_flash(const struct PoseSet *a, u8 *b)
             }
         }
         for (j = n; j < h[2]; j++) {
-            if (func_0000B52((u16 *)(b + off), 0, 0x2000000) != 0) {
+            if (func_0000B52((u16 *)(b + off), 0, FLASH_BASE) != 0) {
                 off = -1;
                 goto out;
             }
@@ -1384,7 +1139,7 @@ int chara_render_poses_to_flash(const struct PoseSet *a, u8 *b)
             for (x = 0; x < h[0]; x += 2) {
                 w = f_4C8(x, y);
                 w |= f_4C8(x + 1, y) << 8;
-                if (func_0000B52((u16 *)(b + off), w, 0x2000000) != 0) {
+                if (func_0000B52((u16 *)(b + off), w, FLASH_BASE) != 0) {
                     off = -1;
                     goto out;
                 }
@@ -1392,7 +1147,7 @@ int chara_render_poses_to_flash(const struct PoseSet *a, u8 *b)
             }
         }
         len = off - start - 2;
-        if (func_0000B52((u16 *)(b + start), (len & 0xff) << 8 | len >> 8, 0x2000000) != 0) {
+        if (func_0000B52((u16 *)(b + start), (len & 0xff) << 8 | len >> 8, FLASH_BASE) != 0) {
             off = -1;
             goto out;
         }
@@ -1432,7 +1187,7 @@ int chara_render_poses_to_flash_flip(const struct PoseSet *a, u8 *b, u8 c)
 
     off = 0;
     sys_irq_disable();
-    if (func_0000B52((u16 *)(b + off), a->count << 8, 0x2000000) != 0) {
+    if (func_0000B52((u16 *)(b + off), a->count << 8, FLASH_BASE) != 0) {
         off = -1;
         goto out;
     }
@@ -1475,24 +1230,24 @@ int chara_render_poses_to_flash_flip(const struct PoseSet *a, u8 *b, u8 c)
             h[2] = 0x11;
         start = off;
         off += 2;
-        if (func_0000B52((u16 *)(b + off), h[1] << 8 | h[0], 0x2000000) != 0) {
+        if (func_0000B52((u16 *)(b + off), h[1] << 8 | h[0], FLASH_BASE) != 0) {
             off = -1;
             goto out;
         }
         off += 2;
-        if (func_0000B52((u16 *)(b + off), h[3] << 8 | h[2], 0x2000000) != 0) {
+        if (func_0000B52((u16 *)(b + off), h[3] << 8 | h[2], FLASH_BASE) != 0) {
             off = -1;
             goto out;
         }
         off += 2;
-        if (func_0000B52((u16 *)(b + off), h[5] << 8 | h[4], 0x2000000) != 0) {
+        if (func_0000B52((u16 *)(b + off), h[5] << 8 | h[4], FLASH_BASE) != 0) {
             off = -1;
             goto out;
         }
         off += 2;
         for (x = 0; x < gfx_objects[0].image[2]; x++) {
             v = func_000014A(&gfx_objects[0], x);
-            if (func_0000B52((u16 *)(b + off), v >> 8 | (v & 0xff) << 8, 0x2000000) != 0) {
+            if (func_0000B52((u16 *)(b + off), v >> 8 | (v & 0xff) << 8, FLASH_BASE) != 0) {
                 off = -1;
                 goto out;
             }
@@ -1501,7 +1256,7 @@ int chara_render_poses_to_flash_flip(const struct PoseSet *a, u8 *b, u8 c)
         if (gfx_objects[1].image != 0) {
             for (x = 0; x < gfx_objects[1].image[2]; x++) {
                 v = func_000014A(&gfx_objects[1], x);
-                if (func_0000B52((u16 *)(b + off), v >> 8 | (v & 0xff) << 8, 0x2000000) != 0) {
+                if (func_0000B52((u16 *)(b + off), v >> 8 | (v & 0xff) << 8, FLASH_BASE) != 0) {
                     off = -1;
                     goto out;
                 }
@@ -1511,7 +1266,7 @@ int chara_render_poses_to_flash_flip(const struct PoseSet *a, u8 *b, u8 c)
         if (gfx_objects[2].image != 0) {
             for (x = 0; x < gfx_objects[2].image[2]; x++) {
                 v = func_000014A(&gfx_objects[2], x);
-                if (func_0000B52((u16 *)(b + off), v >> 8 | (v & 0xff) << 8, 0x2000000) != 0) {
+                if (func_0000B52((u16 *)(b + off), v >> 8 | (v & 0xff) << 8, FLASH_BASE) != 0) {
                     off = -1;
                     goto out;
                 }
@@ -1519,7 +1274,7 @@ int chara_render_poses_to_flash_flip(const struct PoseSet *a, u8 *b, u8 c)
             }
         }
         for (x = n; x < h[2]; x++) {
-            if (func_0000B52((u16 *)(b + off), 0, 0x2000000) != 0) {
+            if (func_0000B52((u16 *)(b + off), 0, FLASH_BASE) != 0) {
                 off = -1;
                 goto out;
             }
@@ -1529,7 +1284,7 @@ int chara_render_poses_to_flash_flip(const struct PoseSet *a, u8 *b, u8 c)
             for (x = 0; x < h[0]; x += 2) {
                 w = f_4C8(x, y);
                 w |= f_4C8(x + 1, y) << 8;
-                if (func_0000B52((u16 *)(b + off), w, 0x2000000) != 0) {
+                if (func_0000B52((u16 *)(b + off), w, FLASH_BASE) != 0) {
                     off = -1;
                     goto out;
                 }
@@ -1537,7 +1292,7 @@ int chara_render_poses_to_flash_flip(const struct PoseSet *a, u8 *b, u8 c)
             }
         }
         len = off - start - 2;
-        if (func_0000B52((u16 *)(b + start), (len & 0xff) << 8 | len >> 8, 0x2000000) != 0) {
+        if (func_0000B52((u16 *)(b + start), (len & 0xff) << 8 | len >> 8, FLASH_BASE) != 0) {
             off = -1;
             goto out;
         }
@@ -1545,13 +1300,6 @@ int chara_render_poses_to_flash_flip(const struct PoseSet *a, u8 *b, u8 c)
 out:
     sys_irq_enable();
     return off;
-}
-
-/*
- * An empty function.
- */
-void func_2403BAA(void)
-{
 }
 
 const u8 D_255C804[] = { 3, 0x30, 0x30, 0x8d, 0x30, 0x48, 0x0d, 0x30, 0x30, 0x00 };

@@ -1047,28 +1047,6 @@ void room_window_animate(u8 a)
 }
 
 /*
- * Empty function (stub, `ret` only), like func_24101CA .. func_24101CE.
- */
-void func_24101C8(void)
-{
-}
-
-void func_24101CA(void)
-{
-}
-
-/*
- * Empty function (stub, `ret` only).
- */
-void func_24101CC(void)
-{
-}
-
-void func_24101CE(void)
-{
-}
-
-/*
  * town_visit_flag ("outing in progress" flag; set by town_visit_begin, cleared by town_visit_end)
  * == 1?
  */

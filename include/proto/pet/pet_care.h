@@ -52,6 +52,5 @@ void room_toilet_request_overlay(u8);
 void room_bath_request_overlay(u8);
 void room_cleaning_request_overlay(u8);
 void room_praise_overlay(u8);
-void func_250F614(void);
 
 #endif

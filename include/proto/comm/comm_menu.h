@@ -108,9 +108,7 @@ int comm_menu_proposal(void);
 int comm_stub_one(void);
 int comm_ask_marry(void);
 int ir_show_proposal_refusal(u8);
-void comm_result_anim_hook(int);
 void comm_result_anim(void);
-void comm_result_pre_hook(void);
 void comm_show_proposal_line(u8);
 void comm_show_rx_message(void);
 void comm_record_result(void);
@@ -178,9 +176,5 @@ u8 util_rand_choice(int);
 int flash_program_raw(u32, u16 *, u32);
 int ir_session(u8);
 int visit_tick(void);
-void ir_partner_hook_a(int);
-void ir_partner_hook_b(int);
-void func_24F9082(void);
-void func_24F9084(void);
 
 #endif

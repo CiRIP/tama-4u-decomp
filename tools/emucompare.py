@@ -61,6 +61,7 @@ import re
 import shutil
 import subprocess
 import sys
+import threading
 import time
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -539,11 +540,22 @@ def main():
         if os.path.exists(os.path.join(d, 'done')):
             return (json.load(open(os.path.join(d, 'result.json'))), os.path.join(d, 'run.sav'),
                     key, d)
-        tmp = d + '.tmp%d' % os.getpid()
+        # one directory per thread: the same reference can be wanted by two jobs at once
+        tmp = d + '.tmp%d_%d' % (os.getpid(), threading.get_ident())
         run(ref_img, tmp, sc, sav_in, True, '4u')
-        shutil.rmtree(d, ignore_errors=True)
-        os.rename(tmp, d)
-        open(os.path.join(d, 'done'), 'w').close()
+        for attempt in range(20):
+            if os.path.exists(os.path.join(d, 'done')):     # the other job finished it first
+                shutil.rmtree(tmp, ignore_errors=True)
+                break
+            shutil.rmtree(d, ignore_errors=True)
+            try:
+                os.rename(tmp, d)
+                open(os.path.join(d, 'done'), 'w').close()
+                break
+            except OSError:     # Windows: a file in it still open (emulator exit, scanner)
+                if attempt == 19:
+                    raise
+                time.sleep(0.5)
         return (json.load(open(os.path.join(d, 'result.json'))), os.path.join(d, 'run.sav'),
                 key, d)
 

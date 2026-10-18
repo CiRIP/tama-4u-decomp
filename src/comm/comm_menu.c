@@ -574,13 +574,6 @@ int ir_show_proposal_refusal(u8 k)
 }
 
 /*
- * Empty function (stub, `ret` only).
- */
-void comm_result_anim_hook(int a)
-{
-}
-
-/*
  * Animation for the connection result comm_game_result with the third character 1 or 3.
  */
 void comm_result_anim(void)
@@ -607,13 +600,6 @@ void comm_result_anim(void)
 }
 
 /*
- * Empty function (stub, `ret` only).
- */
-void comm_result_pre_hook(void)
-{
-}
-
-/*
  * Scrolling message text comm_proposal_texts[k - 16] (communication results).
  */
 void comm_show_proposal_line(u8 k)
@@ -631,7 +617,7 @@ void comm_show_proposal_line(u8 k)
 void comm_show_rx_message(void)
 {
     u8 buf[40];
-    u8 *p = D_27D5460;
+    u8 *p = (u8 *)(FLASH_COMM_RX + 0x5460);
     u32 i;
 
     memset(buf, 0, 40);
@@ -649,30 +635,12 @@ void comm_record_result(void)
 }
 
 /*
- * Empty function (stub, `ret` only).
- */
-void ir_partner_hook_a(int a)
-{
-}
-
-/*
- * Connection result animation and record.
+ * Record the connection result comm_game_result (pet_start_new_egg); the same as
+ * comm_record_result.
  */
 void comm_result_show_record(void)
 {
-    u8 k;
-
-    comm_result_pre_hook();
-    k = comm_game_result;
-    comm_result_anim_hook(k);
-    pet_start_new_egg(k);
-}
-
-/*
- * Empty function (stub, `ret` only).
- */
-void ir_partner_hook_b(int a)
-{
+    pet_start_new_egg(comm_game_result);
 }
 
 /*
@@ -680,7 +648,7 @@ void ir_partner_hook_b(int a)
  */
 void comm_load_rx_pictures(void)
 {
-    item_load_pictures((u32 *)&anim_pic_slots, (struct TamagoFile *)0x27d5414, 6);
+    item_load_pictures((u32 *)&anim_pic_slots, (struct TamagoFile *)(FLASH_COMM_RX + 0x5414), 6);
 }
 
 /*
@@ -734,9 +702,9 @@ void comm_show_rx_item(void)
     struct TamagoFile *p;
     const u8 *s;
 
-    item_load_pictures((void *)anim_pic_slots, (void *)D_27D5414, 3);
+    item_load_pictures((void *)anim_pic_slots, (void *)(FLASH_COMM_RX + 0x5414), 3);
     k = 0;
-    comm_find_portrait(&img, D_27D5514);
+    comm_find_portrait(&img, (u8 *)(FLASH_COMM_RX + 0x5514));
     p = comm_attached_file((void *)k);
     if ((p->hdr_word & 0xffff0000) == 0x6810000) {
         switch (p->sub_kind) {
@@ -770,7 +738,7 @@ void comm_gift_received(void)
     u8 f = 0;
     u8 t;
 
-    item_load_pictures((void *)anim_pic_slots, (void *)D_27D5414, 3);
+    item_load_pictures((void *)anim_pic_slots, (void *)(FLASH_COMM_RX + 0x5414), 3);
     if (flash_sector_86_item.x04e == 0x81) {
         if (flash_sector_86_item.x04f == 4) {
             t = flash_sector_86_item.sub_kind;
@@ -900,7 +868,7 @@ int item_use_capsule(struct TamagoFile *p)
  */
 int item_stamp_index(struct TamagoFile *p)
 {
-    flash_sector_addr(0x7c);
+    flash_sector_addr(FLASH_SEC_LETTERS);
     return item_inv_find_owned_id(&item_inv_stamps, item_get_id(p));
 }
 
@@ -1260,7 +1228,6 @@ int comm_item_exchange_result(int a, struct ExchangeRecord *b, struct ExchangeRe
     struct TamagoFile *p;
     struct TamagoFile *q;
 
-    comm_redraw_hook();
     switch (a) {
     case 4:
         p = comm_attached_file(b);
@@ -2237,8 +2204,8 @@ u8 visit_load_partner_pics(u8 k)
 {
     if (visit_partner.mode == 2) {
         if (k)
-            item_load_pictures((void *)anim_pic_slots[2], (void *)D_2780014, visit_partner.mode);
-        item_load_pictures((void *)anim_pic_slots, (void *)D_2782814, 7);
+            item_load_pictures((void *)anim_pic_slots[2], (void *)(FLASH_DL_CHARA + 0x14), visit_partner.mode);
+        item_load_pictures((void *)anim_pic_slots, (void *)(FLASH_DL_CHARA + 0x2814), 7);
         return 1;
     }
     if (k)
@@ -2439,7 +2406,7 @@ void comm_apply_partner_record(void)
     u8 a, b;
     u8 t;
 
-    ir_rx_record = (struct TamagoFile *)D_27D5400;
+    ir_rx_record = (struct TamagoFile *)(FLASH_COMM_RX + 0x5400);
     q = (u8 *)ir_rx_record;
     pet_feed(q[0xde]);
     save.pet.dominant_trait = q[0xd0];
@@ -2552,17 +2519,6 @@ int chara_base_id(u16 a)
 }
 
 /*
- * Empty function (stub, `ret` only).
- */
-void func_24F9082(void)
-{
-}
-
-void func_24F9084(void)
-{
-}
-
-/*
  * Set anim_busy = a and reset the display timeouts.
  */
 void anim_set_busy(u8 a)
@@ -2620,7 +2576,7 @@ int flash_program_raw(u32 addr, u16 *src, u32 len)
 
     flash_begin();
     for (a = addr; a < addr + len; a += 2, src++)
-        if (func_0000B52((u16 *)a, *src, 0x2000000) != 0)
+        if (func_0000B52((u16 *)a, *src, FLASH_BASE) != 0)
             break;
     return len;
 }

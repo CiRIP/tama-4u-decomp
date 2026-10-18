@@ -102,10 +102,6 @@ int pet_habit_learned(void)
     return r;
 }
 
-void func_250F614(void)
-{
-}
-
 /* the room decoration lists of the sitter scenes (room scene steps, struct RoomStep) */
 const struct RoomStep room_scene_sitter[] = {
     { 0, 0, 64, 50 }, { 9, 0, 56, 50 }, { 6, 0, 56, 50 }, { 7, 0, 56, 50 },

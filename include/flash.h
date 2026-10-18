@@ -1,17 +1,12 @@
-/* The NOR flash outside the firmware image (0x2000000..0x23FFFFF and 0x2563548..0x27FFFFF):
- * the pictures and the other assets, the save sectors, the records. Addresses only: the
- * linker script gives them (ldscripts/undefined_syms.ld). */
+/* The NOR flash outside the program: the asset data at the fixed addresses of
+ * ldscripts/address_symbols.ld, and the areas the firmware writes, as places in the map of
+ * flash_map.h (below). */
 #ifndef FLASH_H
 #define FLASH_H
 
 #include "structs.h"
+#include "flash_map.h"
 
-extern struct FlashBase flash_base;
-extern u16 D_2040000;
-extern struct PictureSetHdr D_2050000;
-extern u8 D_2050028;
-extern u8 D_2050029;
-extern u8 D_2070000;
 extern u8 D_2090E0C;
 extern struct PictureHeader D_2091748;
 extern const u8 D_2092294[];
@@ -59,32 +54,6 @@ extern u32 D_239359C;
 extern u32 D_23935A0;
 extern u32 D_239360C;
 extern u32 item_fortune_cookie;
-/* byte 0xEE of the installed bingo card: the id of its Touch Spots (spot_bingo_id_matches) */
-extern u8 D_27500EE;
-extern u8 D_27C0000[];
-extern u8 D_27C0010;
-extern struct TxRecordView20 D_27C0020;
-extern u16 comm_tx_message_chunk;
-extern u16 comm_rx_peer_id;
-extern u16 D_27D0074;
-extern u8 D_27D008C;
-extern u8 D_27D00F8;
-extern u8 D_27D0400[];
-extern u8 D_27D0402;
-extern struct RxPacketView404 D_27D0404;
-extern u8 D_27D0516[];
-extern struct ExchangeRecord comm_rx_phase2;
-extern u8 D_27D5498;
-extern u8 D_27D5499;
-extern u8 D_27D549A;
-extern u8 D_27D549B;
-extern u8 D_27D549C;
-extern u8 D_27D549D;
-extern u8 D_27D54D0;
-extern u8 D_27D54DE;
-extern u8 D_27E004E;
-extern u8 D_27E004F;
-extern u8 D_27E0051;
 extern const u8 gfx_bg_game_corner[];
 extern const u8 gfx_bg_closet[];
 extern u8 D_208EDB0[];
@@ -108,26 +77,10 @@ extern const u8 D_20B83D4[];
 extern u8 D_21B4044[];
 extern const u8 gfx_bg_tama_depa[];
 extern const u8 D_20B71AC[];
-extern u8 D_2770000[];
-extern struct MailRecord mail_records[];
 extern u8 D_20F4E14[];
 extern u8 D_20F5324[];
-extern u8 D_2570000[];
-extern u8 D_27D5460[];
-extern u8 D_27D5414[];
-extern struct TamagoFile flash_sector_86_item;
 extern u8 D_208D718[];
 extern u8 D_208D92C[];
-extern u8 D_2780014[];
-extern u8 D_2782814[];
-extern u16 comm_rx_phase1[];
-extern u8 D_27D5500[];
-extern u8 D_27C5528[];
-extern u8 D_27C8000[];
-extern u8 D_27A0400[];
-extern u8 D_27C1000[];
-extern u8 D_27D3C00[];
-extern u8 D_2780000[];
 extern const u8 D_2135E9C[];
 extern const u8 D_213618C[];
 extern u8 D_2136480[];
@@ -147,9 +100,7 @@ extern u16 flash_graphics_start[];
 extern u16 flash_graphics_end_a[];
 extern u16 flash_graphics_start_b[];
 extern u16 flash_graphics_end_b[];
-extern u8 D_27C0800[];
 extern u8 D_215DBE8[];
-extern u8 D_26E0000[];
 extern u8 D_2179D68[];
 extern const u8 D_214F0CC[];
 extern u8 D_214F680[];
@@ -158,13 +109,6 @@ extern u8 D_2143D58[];
 extern u8 D_21C335C[];
 extern const u8 D_2195EA0[];
 extern const u8 D_21AC6E8[];
-extern u8 D_27D0060[];
-extern u8 D_27C0400[];
-extern u16 dl_slot2_area[];
-extern u16 diary_area_end[];
-extern u16 spot_gashapon_ticket_slot[];
-extern u16 spot_bingo_card_slot[];
-extern u8 D_27D5400[];
 extern const u8 D_217C9CC[];
 extern u8 D_2182770[];
 extern const u8 D_2183688[];
@@ -176,21 +120,6 @@ extern u8 D_219ABC0[];
 extern u8 D_219ACF0[];
 extern const u8 D_214E810[];
 extern const u8 D_214E930[];
-extern u16 diary_scratch_page1[];
-extern u16 diary_scratch_end[];
-extern u8 D_27C5428[];
-extern u8 D_27CB800[];
-extern u8 D_27A5400[];
-extern u8 D_2580000[];
-extern u8 D_2590000[];
-extern u16 dl_chara_slot1[];
-extern u16 dl_chara_slot3[];
-extern u16 dl_chara_slot5[];
-extern u16 dl_chara_slot7[];
-extern u16 dl_chara_slot4[];
-extern u16 dl_chara_slot6[];
-extern u8 D_275005E[];
-extern u8 D_276005E[];
 extern u8 D_21CB210[];
 extern u8 D_21CBAC8[];
 extern u8 D_21CA734[];
@@ -221,7 +150,6 @@ extern const u8 D_21C0D68[];
 extern const u8 D_21C0F78[];
 extern const u8 D_21302CC[];
 extern const u8 D_219A9E0[];
-extern u8 D_27D5514[];
 extern u32 chara_sprite_sitter_pose0;
 extern u8 D_21434EC[];
 extern const u8 D_2125E24[];
@@ -954,5 +882,26 @@ extern const u8 D_21B4E34[];
 extern const u8 D_21B5028[];
 extern const u8 D_21B522C[];
 extern u8 D_212BA50[];
+
+/* The data in the flash areas the firmware writes (flash_map.h): the save areas, the records,
+ * the communication buffers. */
+#define mail_records ((struct MailRecord *)FLASH_MAIL)
+#define diary_area_end ((u16 *)(FLASH_DIARY + 0x2E000))
+#define spot_bingo_card_slot ((u16 *)FLASH_BINGO)
+#define spot_gashapon_ticket_slot ((u16 *)FLASH_GASHAPON)
+#define dl_chara_slot1 ((u16 *)(FLASH_DL_CHARA + 1 * 0x8000))
+#define dl_slot2_area ((u16 *)FLASH_DIARY_DELETE_COPY)
+#define diary_scratch_page1 ((u16 *)(FLASH_DIARY_DELETE_COPY + 0x2000))
+#define dl_chara_slot3 ((u16 *)(FLASH_DL_CHARA + 3 * 0x8000))
+#define dl_chara_slot4 ((u16 *)(FLASH_DL_CHARA + 4 * 0x8000))
+#define dl_chara_slot5 ((u16 *)(FLASH_DL_CHARA + 5 * 0x8000))
+#define dl_chara_slot6 ((u16 *)(FLASH_DL_CHARA + 6 * 0x8000))
+#define dl_chara_slot7 ((u16 *)(FLASH_DL_CHARA + 7 * 0x8000))
+#define diary_scratch_end ((u16 *)(FLASH_DIARY_DELETE_COPY + 0x2E000))
+#define comm_tx_message_chunk (*(u16 *)(FLASH_COMM_TX + 0x8E8))
+#define comm_rx_phase1 ((u16 *)FLASH_COMM_RX)
+#define comm_rx_peer_id (*(u16 *)(FLASH_COMM_RX + 0x72))
+#define comm_rx_phase2 (*(struct ExchangeRecord *)(FLASH_COMM_RX + 0x800))
+#define flash_sector_86_item (*(struct TamagoFile *)FLASH_GIFT)
 
 #endif

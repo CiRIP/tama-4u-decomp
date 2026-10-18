@@ -1070,7 +1070,6 @@ func_2413C9E	town_enter_matchmaking	# fable-2 / opus-1
 func_2413CB0	town_enter_nopic
 func_2413CBE	town_enter_nopic_b
 func_2413CD6	town_hook_stub_a
-func_2413CD8	town_hook_stub_b
 func_2413CDA	town_hook_stub_call
 func_2413CE2	town_always_open	# majority
 func_2413CE6	town_always_open_b
@@ -1129,7 +1128,6 @@ func_2415DEE	ui_small_menu
 func_2415F28	shop_browser
 func_24161B4	shop_fashion
 func_2416230	shop_play_tools
-func_241628E	diary_hook_layout_done
 func_2416290	gfx_count_used_objects
 func_24162C4	diary_copy_template
 func_24162E6	diary_page_meal_a	# T2: event 2000 (dead)
@@ -1762,15 +1760,11 @@ func_24F77F2	comm_menu_proposal
 func_24F7898	comm_stub_one
 func_24F789C	comm_ask_marry
 func_24F78EA	ir_show_proposal_refusal	# rule: legacy IR
-func_24F7934	comm_result_anim_hook
 func_24F7936	comm_result_anim
-func_24F796E	comm_result_pre_hook
 func_24F7970	comm_show_proposal_line	# majority
 func_24F799A	comm_show_rx_message
 func_24F79D2	comm_record_result
-func_24F79E0	ir_partner_hook_a
 func_24F79E2	comm_result_show_record
-func_24F79FC	ir_partner_hook_b
 func_24F79FE	comm_load_rx_pictures
 func_24F7A12	comm_find_portrait
 func_24F7A6C	comm_show_rx_item
@@ -1948,7 +1942,6 @@ func_25031AC	ir_rx_reset
 func_25031C2	ir_dir_entry_write
 func_250323A	ir_status_word_write
 func_250325E	ir_xfer_enter
-func_250328A	comm_redraw_hook
 func_250328C	ir_count_tier	# opus-1 / opus-2: maps a count to a tier
 func_25032A4	ir_apply_points	# majority
 func_2503324	ir_session_leave
@@ -1956,17 +1949,12 @@ func_2503334	ir_stub_zero_a
 func_2503338	ir_stub_zero_b
 func_250333C	friend_find_or_add
 func_250344C	ir_locate_partner_pics	# F16 is the IR receive path
-func_25034C0	friend_new_hook
 func_25034C2	comm_write_default_partner_image
-func_2503584	friend_portrait_hook
 func_2503586	friend_event_hook_a
-func_2503588	friend_event_hook_b
 func_250358A	friend_event_pick
 func_25035CE	friend_event_fire
 func_250363A	friend_event_run_pending
 func_25036B6	friend_event_minute_check
-func_25037BC	friend_add_hook
-func_25037C0	friend_clear_hook
 func_25037C2	friend_portrait_file
 func_2503832	friend_portrait_file_received
 func_250387A	friend_add_after_exchange
@@ -2220,15 +2208,11 @@ func_250DB42	snd_init
 func_250DB8E	snd_play
 func_250DC10	snd_wait_end
 func_250DC28	snd_error_beep
-func_250DC30	spi_init_hook
 func_250DC34	spi_enable
 func_250DC42	spi_disable
 func_250DC50	spi_cs_assert
 func_250DC5A	spi_cs_release
-func_250DC64	spi_send_byte	# vestigial SPI stubs by role (opus)
-func_250DC66	spi_send_bytes	# majority
 func_250DC68	spi_recv_byte
-func_250DC6A	spi_recv_bytes	# opus-1
 func_250DC6C	spi_flash_setup
 func_250DC80	spi_flash_read_id
 func_250DC98	spi_flash_write_enable
@@ -2475,8 +2459,6 @@ func_2528736	comm_outcome_game2
 func_25287F2	comm_outcome_photo
 func_252888C	comm_run_outcome
 func_252893A	comm_idle_touch_event
-func_2528A4A	comm_trace
-func_2528A4C	comm_trace2
 func_2528A4E	comm_user_cancelled
 func_2528A68	nfc_short_delay
 func_2528A78	nfc_power_off
@@ -2509,8 +2491,6 @@ func_252967E	comm_check_peer_phase
 func_252979C	comm_count_and_save
 func_25297BE	comm_count_add	# comm_count is the counter D_000138A
 func_25297DC	comm_store_peer_mail
-func_25298CA	ir_transfer_abort
-func_25298CC	ir_transfer
 func_25298CE	nfc_show_session_screen
 func_2529B78	test_nfc_loopback	# rule: factory test
 func_2529C48	nfc_session_clear

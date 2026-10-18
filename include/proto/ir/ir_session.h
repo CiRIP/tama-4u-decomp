@@ -118,7 +118,5 @@ int ir_test_hello(void);
 int ir_test_packets(void);
 u8 visit_start(u8);
 u8 ir_visit_pair_check(void);
-void func_24FB610(void);
-void func_24FB612(void);
 
 #endif

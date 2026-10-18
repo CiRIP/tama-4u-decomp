@@ -11,6 +11,7 @@
 #include "proto/chara/chara_select.h"
 #include "proto/save/save_flash.h"
 #include "proto/comm/comm_outcome.h"
+#include "flash_map.h"
 
 /*
  * F4 = the special-form routes of the twelve adults 0x10..0x15 / 0x3E9..0x3EE (the special
@@ -215,7 +216,7 @@ u8 evo_cond_trait0(u8 k)
         if (t == 0)
             return t;
     }
-    if (flash_sector_addr(0x76)[0xb8] > 2 && save.pet.traits[0] > 9) {
+    if (flash_sector_addr(FLASH_SEC_DEFAULT_BG)[0xb8] > 2 && save.pet.traits[0] > 9) {
         if (k != 1)
             return 10;
         save.pet.worn_accessory = t;
@@ -236,7 +237,7 @@ u8 evo_cond_trait1(u8 k)
         if (t == 0)
             return t;
     }
-    if (flash_sector_addr(0x76)[0xb9] > 2 && save.pet.traits[1] > 9) {
+    if (flash_sector_addr(FLASH_SEC_DEFAULT_BG)[0xb9] > 2 && save.pet.traits[1] > 9) {
         if (k != 1)
             return 11;
         save.pet.worn_clothes = t;
@@ -490,11 +491,11 @@ u8 evo_route_lost(void)
             return 2;
         return 0;
     case 10:
-        if (flash_sector_addr(0x76)[0xb8] <= 2)
+        if (flash_sector_addr(FLASH_SEC_DEFAULT_BG)[0xb8] <= 2)
             return 4;
         return 0;
     case 11:
-        if (flash_sector_addr(0x76)[0xb9] <= 2)
+        if (flash_sector_addr(FLASH_SEC_DEFAULT_BG)[0xb9] <= 2)
             return 5;
         return 0;
     case 12:

@@ -229,10 +229,10 @@ void flash_write_sector_86(u16 *src, u16 len)
     int i;
 
     sys_irq_disable();
-    func_0000A54(0x2000000, 0x86, 0x86);
+    func_0000A54(FLASH_BASE, FLASH_SEC_GIFT, FLASH_SEC_GIFT);
     dst = (u16 *)&flash_sector_86_item;
     for (i = 0; i < len >> 1; i++, dst++)
-        func_0000B52(dst, src[i], 0x2000000);
+        func_0000B52(dst, src[i], FLASH_BASE);
     sys_irq_enable();
 }
 
@@ -271,9 +271,9 @@ int ir_check_kinds_pair(void)
     if (r != 0)
         return 0;
     if (comm_exchange_kind == 5)
-        r = ir_store_attached_file((int)D_27D5400);
+        r = ir_store_attached_file((int)(FLASH_COMM_RX + 0x5400));
     else if (comm_exchange_kind == 4)
-        r = ir_store_attached_file((int)D_27C5428);
+        r = ir_store_attached_file((int)(FLASH_COMM_TX + 0x5428));
     return r;
 }
 
@@ -358,10 +358,6 @@ void save_with_short_sound(void)
     btn_a_presses = a;
     btn_b_presses = b;
     btn_c_presses = c;
-}
-
-void func_2504458(void)
-{
 }
 
 /*

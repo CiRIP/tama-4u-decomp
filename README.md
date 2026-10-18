@@ -30,15 +30,17 @@ program's checksum where the factory test mode expects it, `tools/apicheck.py` c
   its end. Game text is written as `_("...")` in the game's character set
   (`tools/charset.py`); `tools/textpp.py` turns it into bytes before compiling.
 * `include/proto/<subsystem>/<file>.h`: what each source file defines; `structs.h` shared
-  types; `flash.h` the flash data outside the program; `hw.h` the peripheral registers;
+  types; `flash_map.h` the flash sector map (every area by name: `FLASH_SEC_DIARY`,
+  `FLASH_DIARY`, ...; `notes/findings/flash.md`); `flash.h` the flash data outside the
+  program; `hw.h` the peripheral registers;
   `common.h` the basic types and `DSTRAM`.
 * `asm/`: what stays assembly: the vector table, the downloaded-program API jump table
   (`api.s`), the code run from internal RAM (`iram.s`: display compositor, LCD flush, NOR
   flash erase / program, which must not run from flash), the sound tick interrupt entry, and
   four timing-critical IR routines (`asm/func/`, bit timing counted in instructions).
 * `ldscripts/firmware.ld` (memory map and sections), `address_symbols.ld` (the fixed
-  addresses of the flash data the program reads: pictures, sounds, save areas, the NOR command
-  addresses), `aliases.ld` (names inside data objects, as symbol + offset).
+  addresses of the asset data the program reads: pictures, sounds, built-in items, and the NOR
+  command addresses; the areas the firmware writes are in `flash_map.h`), `aliases.ld` (names inside data objects, as symbol + offset).
 * `tools/`: build helpers above, `extract_assets.py`, `tamago.py` (TAMAGO file reader),
   and the validation tools `emucompare.py`, `scenarios.py`, `emucover.py`.
 * `notes/`: what is known about the firmware (`notes/README.md`), the names
@@ -55,7 +57,10 @@ Fixed by the hardware or by things outside this program, and kept:
   0x84740..0x847BF, which stays free;
 * the code copied to internal RAM at 0 at start-up, and the flash layout: graphics and sound
   data, the save areas, the diary pages from 0x2570000 (the program must end before it), the
-  NOR command addresses 0x2000AAA / 0x2000554;
+  NOR command addresses 0x2000AAA / 0x2000554. The areas the firmware writes are named in
+  `include/flash_map.h` and the C reaches them only through those names, so an area moves by
+  changing its sector there (the factory-test table `test_flash_areas` also lists the sizes
+  of its ranges in halfwords);
 * the save data's byte layout: `struct SaveBlock` (`include/proto/save/save_flash.h`), one
   struct holding the friend list, mail counters, album order and `struct PetState`, with the
   original offsets, so saves of the original firmware load and the other way round;

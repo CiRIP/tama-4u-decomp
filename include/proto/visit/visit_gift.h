@@ -5,6 +5,5 @@
 #include "structs.h"
 
 void visit_gift(int, u8);
-void func_2508D66(void);
 
 #endif

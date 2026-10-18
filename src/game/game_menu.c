@@ -24,6 +24,7 @@
 #include "proto/snd/snd_play.h"
 #include "proto/spot/spot_reader.h"
 #include "proto/game/game_builtin.h"
+#include "flash_map.h"
 
 const u8 D_255FA04[] = _("おたからザクザク");
 const u8 D_255FA18[] = _("ケーキできるかな");
@@ -306,7 +307,7 @@ redraw:
                 game_session.x001 = 0;
                 game_session.x002 = 0;
                 dl_install_program(p);
-                q = p; p = (u8 *)(u32)q[0xb1]; p += q[0xb0] << 8; p += q[0xaf] << 16; p += q[0xae] << 24; p += 0x2000000; anim_game_corner_start(); r = ((int (*)(void))p)();
+                q = p; p = (u8 *)(u32)q[0xb1]; p += q[0xb0] << 8; p += q[0xaf] << 16; p += q[0xae] << 24; p += FLASH_DL_PROGRAM; anim_game_corner_start(); r = ((int (*)(void))p)();
             }
             if (r < 0)
                 goto redraw;
@@ -395,8 +396,8 @@ redraw:
                     evo_count_item_use_young(2, 0);
                     evo_count_game();
                     if (dl != 0) {
-                        dl_chara_affection_update(0x2000000);
-                        pet_add_traits((u8 *)0x20000b8);
+                        dl_chara_affection_update(FLASH_DL_PROGRAM);
+                        pet_add_traits((u8 *)(FLASH_DL_PROGRAM + 0xB8));
                     }
                     if (save.pet.game_count < 99)
                         save.pet.game_count++;

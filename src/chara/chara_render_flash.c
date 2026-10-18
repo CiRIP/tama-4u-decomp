@@ -54,7 +54,7 @@ void comm_gift_sector_init(int a)
     u8 buf[12];
 
     sys_irq_disable();
-    func_0000A54(0x2000000, 0x86, 0x86);
+    func_0000A54(FLASH_BASE, FLASH_SEC_GIFT, FLASH_SEC_GIFT);
     sys_irq_enable();
     comm_clear_pose_list(buf);
     buf[0] = 1;
@@ -92,7 +92,7 @@ int comm_render_picture_records(const struct PoseSet *a, u8 *b, int mode, u8 c)
     off = 0;
     sys_irq_disable();
     if (mode == 0 || mode == 4 || mode == 3) {
-        if (func_0000B52((u16 *)b, a->count, 0x2000000) != 0) {
+        if (func_0000B52((u16 *)b, a->count, FLASH_BASE) != 0) {
             off = -1;
             goto out;
         }
@@ -173,17 +173,17 @@ int comm_render_picture_records(const struct PoseSet *a, u8 *b, int mode, u8 c)
             h[2] = 0x11;
         start = off;
         off += 2;
-        if (func_0000B52((u16 *)(b + off), h[1] << 8 | h[0], 0x2000000) != 0) {
+        if (func_0000B52((u16 *)(b + off), h[1] << 8 | h[0], FLASH_BASE) != 0) {
             off = -1;
             goto out;
         }
         off += 2;
-        if (func_0000B52((u16 *)(b + off), h[3] << 8 | h[2], 0x2000000) != 0) {
+        if (func_0000B52((u16 *)(b + off), h[3] << 8 | h[2], FLASH_BASE) != 0) {
             off = -1;
             goto out;
         }
         off += 2;
-        if (func_0000B52((u16 *)(b + off), h[5] << 8 | h[4], 0x2000000) != 0) {
+        if (func_0000B52((u16 *)(b + off), h[5] << 8 | h[4], FLASH_BASE) != 0) {
             off = -1;
             goto out;
         }
@@ -204,7 +204,7 @@ int comm_render_picture_records(const struct PoseSet *a, u8 *b, int mode, u8 c)
             t = func_000014A(&gfx_objects[0], j);
             if ((mode == 0 || mode == 1) && save.pet.x0cc == 1)
                 t = func_00002D4(t);
-            if (func_0000B52((u16 *)(b + off), t >> 8 | (t & 0xff) << 8, 0x2000000) != 0) {
+            if (func_0000B52((u16 *)(b + off), t >> 8 | (t & 0xff) << 8, FLASH_BASE) != 0) {
                 off = -1;
                 goto out;
             }
@@ -215,7 +215,7 @@ int comm_render_picture_records(const struct PoseSet *a, u8 *b, int mode, u8 c)
                 t = func_000014A(&gfx_objects[1], j);
                 if ((mode == 0 || mode == 1) && save.pet.x0cc == 1)
                     t = func_00002D4(t);
-                if (func_0000B52((u16 *)(b + off), t >> 8 | (t & 0xff) << 8, 0x2000000) != 0) {
+                if (func_0000B52((u16 *)(b + off), t >> 8 | (t & 0xff) << 8, FLASH_BASE) != 0) {
                     off = -1;
                     goto out;
                 }
@@ -227,7 +227,7 @@ int comm_render_picture_records(const struct PoseSet *a, u8 *b, int mode, u8 c)
                 t = func_000014A(&gfx_objects[2], j);
                 if ((mode == 0 || mode == 1) && save.pet.x0cc == 1)
                     t = func_00002D4(t);
-                if (func_0000B52((u16 *)(b + off), t >> 8 | (t & 0xff) << 8, 0x2000000) != 0) {
+                if (func_0000B52((u16 *)(b + off), t >> 8 | (t & 0xff) << 8, FLASH_BASE) != 0) {
                     off = -1;
                     goto out;
                 }
@@ -235,7 +235,7 @@ int comm_render_picture_records(const struct PoseSet *a, u8 *b, int mode, u8 c)
             }
         }
         for (j = n; j < h[2]; j++) {
-            if (func_0000B52((u16 *)(b + off), 0, 0x2000000) != 0) {
+            if (func_0000B52((u16 *)(b + off), 0, FLASH_BASE) != 0) {
                 off = -1;
                 goto out;
             }
@@ -249,7 +249,7 @@ int comm_render_picture_records(const struct PoseSet *a, u8 *b, int mode, u8 c)
                 for (x = 0; x < h[0]; x += 2) {
                     w = func_00004C8(x, y);
                     w |= func_00004C8(x + 1, y) << 8;
-                    if (func_0000B52((u16 *)(b + off), w, 0x2000000) != 0) {
+                    if (func_0000B52((u16 *)(b + off), w, FLASH_BASE) != 0) {
                         off = -1;
                         goto out;
                     }
@@ -262,7 +262,7 @@ int comm_render_picture_records(const struct PoseSet *a, u8 *b, int mode, u8 c)
                 for (x = 0; x < h[0]; x += 2) {
                     w = gfx_screen_pixel(x, y);
                     w |= gfx_screen_pixel(x + 1, y) << 8;
-                    if (func_0000B52((u16 *)(b + off), w, 0x2000000) != 0) {
+                    if (func_0000B52((u16 *)(b + off), w, FLASH_BASE) != 0) {
                         off = -1;
                         goto out;
                     }
@@ -272,7 +272,7 @@ int comm_render_picture_records(const struct PoseSet *a, u8 *b, int mode, u8 c)
             break;
         }
         len = off - start - 2;
-        if (func_0000B52((u16 *)(b + start), len, 0x2000000) != 0) {
+        if (func_0000B52((u16 *)(b + start), len, FLASH_BASE) != 0) {
             off = -1;
             goto out;
         }
@@ -337,7 +337,7 @@ int chara_render_poses_flash(const struct PoseSet *a, u8 *b)
 
     off = 0;
     sys_irq_disable();
-    if (func_0000B52((u16 *)(b + off), a->count << 8, 0x2000000) != 0) {
+    if (func_0000B52((u16 *)(b + off), a->count << 8, FLASH_BASE) != 0) {
         off = -1;
         goto out;
     }
@@ -401,17 +401,17 @@ int chara_render_poses_flash(const struct PoseSet *a, u8 *b)
             h[2] = 0x12;
         start = off;
         off += 2;
-                if (func_0000B52((u16 *)(b + off), h[1] << 8 | h[0], 0x2000000) != 0) {
+                if (func_0000B52((u16 *)(b + off), h[1] << 8 | h[0], FLASH_BASE) != 0) {
             off = -1;
             goto out;
         }
         off += 2;
-                if (func_0000B52((u16 *)(b + off), h[3] << 8 | h[2], 0x2000000) != 0) {
+                if (func_0000B52((u16 *)(b + off), h[3] << 8 | h[2], FLASH_BASE) != 0) {
             off = -1;
             goto out;
         }
         off += 2;
-                if (func_0000B52((u16 *)(b + off), h[5] << 8 | h[4], 0x2000000) != 0) {
+                if (func_0000B52((u16 *)(b + off), h[5] << 8 | h[4], FLASH_BASE) != 0) {
             off = -1;
             goto out;
         }
@@ -431,13 +431,13 @@ int chara_render_poses_flash(const struct PoseSet *a, u8 *b)
             if (save.pet.x0cc == 1)
                 v = func_00002D4(v);
             if (x == 1) {
-                if (func_0000B52((u16 *)(b + off), 0x60, 0x2000000) != 0) {
+                if (func_0000B52((u16 *)(b + off), 0x60, FLASH_BASE) != 0) {
                     off = -1;
                     goto out;
                 }
                 off += 2;
             }
-                        if (func_0000B52((u16 *)(b + off), v >> 8 | (v & 0xff) << 8, 0x2000000) != 0) {
+                        if (func_0000B52((u16 *)(b + off), v >> 8 | (v & 0xff) << 8, FLASH_BASE) != 0) {
                 off = -1;
                 goto out;
             }
@@ -448,7 +448,7 @@ int chara_render_poses_flash(const struct PoseSet *a, u8 *b)
                 v = func_000014A(&gfx_objects[1], x);
                 if (save.pet.x0cc == 1)
                     v = func_00002D4(v);
-                            if (func_0000B52((u16 *)(b + off), v >> 8 | (v & 0xff) << 8, 0x2000000) != 0) {
+                            if (func_0000B52((u16 *)(b + off), v >> 8 | (v & 0xff) << 8, FLASH_BASE) != 0) {
                     off = -1;
                     goto out;
                 }
@@ -460,7 +460,7 @@ int chara_render_poses_flash(const struct PoseSet *a, u8 *b)
                 v = func_000014A(&gfx_objects[2], x);
                 if (save.pet.x0cc == 1)
                     v = func_00002D4(v);
-                            if (func_0000B52((u16 *)(b + off), v >> 8 | (v & 0xff) << 8, 0x2000000) != 0) {
+                            if (func_0000B52((u16 *)(b + off), v >> 8 | (v & 0xff) << 8, FLASH_BASE) != 0) {
                     off = -1;
                     goto out;
                 }
@@ -468,7 +468,7 @@ int chara_render_poses_flash(const struct PoseSet *a, u8 *b)
             }
         }
         for (x = dy; x < h[2]; x++) {
-            if (func_0000B52((u16 *)(b + off), 0, 0x2000000) != 0) {
+            if (func_0000B52((u16 *)(b + off), 0, FLASH_BASE) != 0) {
                 off = -1;
                 goto out;
             }
@@ -479,7 +479,7 @@ int chara_render_poses_flash(const struct PoseSet *a, u8 *b)
                 w = func_00004C8(x, y);
                 w |= func_00004C8(x + 1, y) << 8;
                 w = gfx_index_to_palette_slot(w);
-                if (func_0000B52((u16 *)(b + off), w, 0x2000000) != 0) {
+                if (func_0000B52((u16 *)(b + off), w, FLASH_BASE) != 0) {
                     off = -1;
                     goto out;
                 }
@@ -487,7 +487,7 @@ int chara_render_poses_flash(const struct PoseSet *a, u8 *b)
             }
         }
         len = off - start - 2;
-        if (func_0000B52((u16 *)(b + start), (len & 0xff) << 8 | len >> 8, 0x2000000) != 0) {
+        if (func_0000B52((u16 *)(b + start), (len & 0xff) << 8 | len >> 8, FLASH_BASE) != 0) {
             off = -1;
             goto out;
         }
@@ -531,7 +531,7 @@ int chara_render_poses_flash_flip(const struct PoseSet *a, u8 *b, u8 c)
 
     off = 0;
     sys_irq_disable();
-    if (func_0000B52((u16 *)(b + off), a->count << 8, 0x2000000) != 0) {
+    if (func_0000B52((u16 *)(b + off), a->count << 8, FLASH_BASE) != 0) {
         off = -1;
         goto out;
     }
@@ -589,17 +589,17 @@ int chara_render_poses_flash_flip(const struct PoseSet *a, u8 *b, u8 c)
             h[2] = 0x11;
         start = off;
         off += 2;
-        if (func_0000B52((u16 *)(b + off), h[1] << 8 | h[0], 0x2000000) != 0) {
+        if (func_0000B52((u16 *)(b + off), h[1] << 8 | h[0], FLASH_BASE) != 0) {
             off = -1;
             goto out;
         }
         off += 2;
-        if (func_0000B52((u16 *)(b + off), h[3] << 8 | h[2], 0x2000000) != 0) {
+        if (func_0000B52((u16 *)(b + off), h[3] << 8 | h[2], FLASH_BASE) != 0) {
             off = -1;
             goto out;
         }
         off += 2;
-        if (func_0000B52((u16 *)(b + off), h[5] << 8 | h[4], 0x2000000) != 0) {
+        if (func_0000B52((u16 *)(b + off), h[5] << 8 | h[4], FLASH_BASE) != 0) {
             off = -1;
             goto out;
         }
@@ -618,7 +618,7 @@ int chara_render_poses_flash_flip(const struct PoseSet *a, u8 *b, u8 c)
             t = func_000014A(&gfx_objects[0], j);
             if (save.pet.x0cc == 1)
                 t = func_00002D4(t);
-            if (func_0000B52((u16 *)(b + off), t >> 8 | (t & 0xff) << 8, 0x2000000) != 0) {
+            if (func_0000B52((u16 *)(b + off), t >> 8 | (t & 0xff) << 8, FLASH_BASE) != 0) {
                 off = -1;
                 goto out;
             }
@@ -629,7 +629,7 @@ int chara_render_poses_flash_flip(const struct PoseSet *a, u8 *b, u8 c)
                 t = func_000014A(&gfx_objects[1], j);
                 if (save.pet.x0cc == 1)
                     t = func_00002D4(t);
-                if (func_0000B52((u16 *)(b + off), t >> 8 | (t & 0xff) << 8, 0x2000000) != 0) {
+                if (func_0000B52((u16 *)(b + off), t >> 8 | (t & 0xff) << 8, FLASH_BASE) != 0) {
                     off = -1;
                     goto out;
                 }
@@ -641,7 +641,7 @@ int chara_render_poses_flash_flip(const struct PoseSet *a, u8 *b, u8 c)
                 t = func_000014A(&gfx_objects[2], j);
                 if (save.pet.x0cc == 1)
                     t = func_00002D4(t);
-                if (func_0000B52((u16 *)(b + off), t >> 8 | (t & 0xff) << 8, 0x2000000) != 0) {
+                if (func_0000B52((u16 *)(b + off), t >> 8 | (t & 0xff) << 8, FLASH_BASE) != 0) {
                     off = -1;
                     goto out;
                 }
@@ -649,7 +649,7 @@ int chara_render_poses_flash_flip(const struct PoseSet *a, u8 *b, u8 c)
             }
         }
         for (j = n; j < h[2]; j++) {
-            if (func_0000B52((u16 *)(b + off), 0, 0x2000000) != 0) {
+            if (func_0000B52((u16 *)(b + off), 0, FLASH_BASE) != 0) {
                 off = -1;
                 goto out;
             }
@@ -661,7 +661,7 @@ int chara_render_poses_flash_flip(const struct PoseSet *a, u8 *b, u8 c)
                 do {
                     w = func_00004C8(x, y);
                     w |= func_00004C8(x + 1, y) << 8;
-                    if (func_0000B52((u16 *)(b + off), w, 0x2000000) != 0) {
+                    if (func_0000B52((u16 *)(b + off), w, FLASH_BASE) != 0) {
                         off = -1;
                         goto out;
                     }
@@ -671,7 +671,7 @@ int chara_render_poses_flash_flip(const struct PoseSet *a, u8 *b, u8 c)
             }
         }
         len = off - start - 2;
-        if (func_0000B52((u16 *)(b + start), (len & 0xff) << 8 | len >> 8, 0x2000000) != 0) {
+        if (func_0000B52((u16 *)(b + start), (len & 0xff) << 8 | len >> 8, FLASH_BASE) != 0) {
             off = -1;
             goto out;
         }
@@ -777,7 +777,6 @@ void ir_store_received_letter(int a)
     int u;
 
     btn_enable();
-    comm_redraw_hook();
     if (a == 0)
         album_photo_slot();
     else
@@ -839,7 +838,7 @@ u8 *album_photo_slot(void)
     u8 tmp[72];
     int i;
 
-    return (u8 *)0x2770000 + i * 0x2800;
+    return (u8 *)FLASH_PHOTOS + i * 0x2800;
 }
 
 struct RecordDirView {
@@ -874,7 +873,7 @@ u8 *album_make_photo(u8 a, u8 *b, u8 *c)
 
     hc = (struct RecordDirView *)c;
     hb = (struct RecordDirView *)b;
-    r = flash_first_erased_record(D_2770000, 0x2800, 6);
+    r = flash_first_erased_record((u8 *)FLASH_PHOTOS, 0x2800, 6);
     if (r < 0) {
         r = item_pick_slot_to_overwrite();
         if (r < 0)
@@ -956,7 +955,7 @@ u8 *album_make_photo(u8 a, u8 *b, u8 *c)
     buf[5] = 0xff;
     if (album_photo_write(buf, r) != 0)
         return (u8 *)-1;
-    return (u8 *)0x2770000 + r * 0x2800;
+    return (u8 *)FLASH_PHOTOS + r * 0x2800;
 }
 
 /*
@@ -970,23 +969,23 @@ int album_photo_write(u8 *a, int b)
     int j, k, p, o;
     u16 v;
 
-    base = (u8 *)(b * 0x2800 + 0x2770000);
+    base = (u8 *)(b * 0x2800 + FLASH_PHOTOS);
     sys_irq_disable();
     off = 0;
-    if (func_0000B52((u16 *)(base + off), a[1] << 8 | a[0], 0x2000000) != 0)
+    if (func_0000B52((u16 *)(base + off), a[1] << 8 | a[0], FLASH_BASE) != 0)
         goto fail;
     off += 2;
-    if (func_0000B52((u16 *)(base + off), a[3] << 8 | a[2], 0x2000000) != 0)
+    if (func_0000B52((u16 *)(base + off), a[3] << 8 | a[2], FLASH_BASE) != 0)
         goto fail;
     off += 2;
-    if (func_0000B52((u16 *)(base + off), a[5] << 8 | a[4], 0x2000000) != 0)
+    if (func_0000B52((u16 *)(base + off), a[5] << 8 | a[4], FLASH_BASE) != 0)
         goto fail;
     off += 2;
     for (i = 0; i < gfx_object_count; i++) {
         if (gfx_objects[i].image != 0) {
             for (j = 0; j < gfx_objects[i].image[2]; j++) {
                 v = func_000014A(&gfx_objects[i], j);
-                if (func_0000B52((u16 *)(base + off), (v & 0xff) << 8 | v >> 8, 0x2000000) != 0)
+                if (func_0000B52((u16 *)(base + off), (v & 0xff) << 8 | v >> 8, FLASH_BASE) != 0)
                     goto fail;
                 off += 2;
             }
@@ -996,7 +995,7 @@ int album_photo_write(u8 *a, int b)
         for (j = 0; j < a[0]; j += 2) {
             v = gfx_photo_pixel(j, i);
             v |= gfx_photo_pixel(j + 1, i) << 8;
-            if (func_0000B52((u16 *)(base + off), v, 0x2000000) != 0)
+            if (func_0000B52((u16 *)(base + off), v, FLASH_BASE) != 0)
                 goto fail;
             off += 2;
         }
@@ -1080,8 +1079,8 @@ u8 gfx_object_pixel_b(struct GfxObject *p, u8 x, u8 y)
 
 /*
  * Returns 0 (stub). ir_exchange calls it as f(&data, &len, &c) for the record to send in
- * the legacy IR session; like the transfer ir_transfer (`ret`) it is emptied out in this
- * firmware, so the outputs stay uninitialised.
+ * the legacy IR session; like the transfer routine (an empty `ret`, left out of this source)
+ * it is emptied out in this firmware, so the outputs stay uninitialised.
  */
 int ir_send_data_stub(void)
 {
@@ -1094,10 +1093,6 @@ int ir_send_data_stub(void)
 int ir_stub_zero_c(void)
 {
     return 0;
-}
-
-void func_25029E2(void)
-{
 }
 
 /*
@@ -1122,10 +1117,6 @@ int ir_stub_zero_e(void)
 int ir_stub_zero_f(void)
 {
     return 0;
-}
-
-void func_25029F0(void)
-{
 }
 
 /*

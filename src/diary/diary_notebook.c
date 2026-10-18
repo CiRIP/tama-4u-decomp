@@ -51,12 +51,7 @@
  * records of 100 bytes {s32 friend index, s32 kind (0/1/2, -1 = our draft), u8 sender
  * name[0x14], u8 body[0x40], pad[8]}; sector 0xC (0x2040000) is the scratch copy used to
  * rewrite it.
- *
- * diary_hook_layout_done: empty function (stub, `ret` only).
  */
-void diary_hook_layout_done(int a)
-{
-}
 
 /*
  * Number of used display objects among the first n (index of the last non-empty sprite
@@ -109,7 +104,6 @@ u8 diary_page_meal_a(const u8 *a)
     anim_draw_pic(9, D_20F5384, 0, 0x40, 0x24);
     anim_draw_pic(10, D_20F4E14, 0, 0x5a, 9);
     anim_draw_pic(11, D_20F5324, 0, 0x79, 9);
-    diary_hook_layout_done(12);
     return gfx_count_used_objects(0x17);
 }
 
@@ -133,7 +127,6 @@ u8 diary_page_meal_b(const u8 *a)
     anim_draw_pic(10, D_20F5384, 0, 0x40, 0x24);
     anim_draw_pic(11, D_20F4E14, 0, 0x5a, 9);
     anim_draw_pic(12, D_20F5324, 0, 0x79, 9);
-    diary_hook_layout_done(13);
     return gfx_count_used_objects(0x18);
 }
 
@@ -156,7 +149,6 @@ u8 diary_page_meal_c(const u8 *a)
     anim_draw_pic(9, D_20F5384, 0, 0x40, 0x24);
     anim_draw_pic(10, D_20F4E14, 0, 0x5a, 9);
     anim_draw_pic(11, D_20F5324, 0, 0x79, 9);
-    diary_hook_layout_done(12);
     return gfx_count_used_objects(0x17);
 }
 
@@ -175,7 +167,6 @@ u8 diary_page_school_lesson(const u8 *a)
     anim_draw_pic(9, D_20F5384, 0, 0x40, 0x24);
     anim_draw_pic(10, D_20F4E14, 0, 0x5a, 9);
     anim_draw_pic(11, D_20F5324, 0, 0x79, 9);
-    diary_hook_layout_done(12);
     return gfx_count_used_objects(0x17);
 }
 
@@ -196,7 +187,6 @@ u8 diary_page_school_friend(const u8 *a)
     anim_draw_pic(9, D_20F5384, 0, 0x40, 0x24);
     anim_draw_pic(10, D_20F4E14, 0, 0x5a, 9);
     anim_draw_pic(11, D_20F5324, 0, 0x79, 9);
-    diary_hook_layout_done(12);
     return gfx_count_used_objects(0x17);
 }
 
@@ -230,7 +220,6 @@ u8 diary_page_make_success(const u8 *a, const u8 *b)
     anim_draw_pic(8, D_20F5384, 0, 0x40, 0x24);
     anim_draw_pic(9, D_20F4E14, 0, 0x5a, 9);
     anim_draw_pic(10, D_20F5324, 0, 0x79, 9);
-    diary_hook_layout_done(11);
     return gfx_count_used_objects(0x15);
 }
 
@@ -249,7 +238,6 @@ u8 diary_page_make_failure(const u8 *a, const u8 *b)
     anim_draw_pic(8, D_20F5384, 0, 0x40, 0x24);
     anim_draw_pic(9, D_20F4E14, 0, 0x5a, 9);
     anim_draw_pic(10, D_20F5324, 0, 0x79, 9);
-    diary_hook_layout_done(11);
     return gfx_count_used_objects(0x15);
 }
 
@@ -306,7 +294,6 @@ u8 diary_page_meal_d(const u8 *a)
     anim_draw_pet(6, 6, 0, 0x71, 0x2e);
     anim_draw_pic(9, D_20F4E14, 0, 0x5a, 9);
     anim_draw_pic(10, D_20F5324, 0, 0x79, 9);
-    diary_hook_layout_done(11);
     return gfx_count_used_objects(0x16);
 }
 
@@ -329,7 +316,6 @@ u8 diary_page_meal_e(const u8 *a)
     anim_draw_pic(9, D_214E810, 0, 0x73, 0x37);
     anim_draw_pic(10, D_20F4E14, 0, 0x5a, 9);
     anim_draw_pic(11, D_20F5324, 0, 0x79, 9);
-    diary_hook_layout_done(12);
     return gfx_count_used_objects(0x17);
 }
 
@@ -351,7 +337,6 @@ u8 diary_page_meal_f(const u8 *a)
     anim_draw_pet(6, 3, 0, 0x71, 0x35);
     anim_draw_pic(9, D_20F4E14, 0, 0x5a, 9);
     anim_draw_pic(10, D_20F5324, 0, 0x79, 9);
-    diary_hook_layout_done(11);
     return gfx_count_used_objects(0x16);
 }
 
@@ -371,7 +356,6 @@ u8 diary_page_park_athletic(void)
     anim_draw_pic(8, anim_pic_slots[1][2], 0, 0x6b, 0x29);
     anim_draw_pic(9, D_20F4E14, 0, 0x5a, 9);
     anim_draw_pic(10, D_20F5324, 0, 0x79, 9);
-    diary_hook_layout_done(11);
     return gfx_count_used_objects(0x16);
 }
 
@@ -390,7 +374,6 @@ u8 diary_page_park_sand(void)
     anim_draw_pic(8, anim_pic_slots[1][2], 0x10, 0x4f, 0x28);
     anim_draw_pic(9, D_20F4E14, 0, 0x5a, 9);
     anim_draw_pic(10, D_20F5324, 0, 0x79, 9);
-    diary_hook_layout_done(11);
     return gfx_count_used_objects(0x16);
 }
 
@@ -406,7 +389,6 @@ u8 diary_page_park_slide(void)
     anim_draw_pic(5, D_2181264, 0, 0x5d, 0x2a);
     anim_draw_pic(6, D_20F4E14, 0, 0x5a, 9);
     anim_draw_pic(7, D_20F5324, 0, 0x79, 9);
-    diary_hook_layout_done(8);
     return gfx_count_used_objects(0x14);
 }
 
@@ -423,7 +405,6 @@ u8 diary_page_job_patrol(void)
     anim_draw_pic(6, D_20F5384, 0, 0x40, 0x24);
     anim_draw_pic(7, D_20F4E14, 0, 0x5a, 9);
     anim_draw_pic(8, D_20F5324, 0, 0x79, 9);
-    diary_hook_layout_done(9);
     return gfx_count_used_objects(0x14);
 }
 
@@ -439,7 +420,6 @@ u8 diary_page_together_a(void)
     anim_draw_pic(5, D_20F5384, 0, 0x40, 0x24);
     anim_draw_pic(6, D_20F4E14, 0, 0x5a, 9);
     anim_draw_pic(7, D_20F5324, 0, 0x79, 9);
-    diary_hook_layout_done(8);
     return gfx_count_used_objects(0x13);
 }
 
@@ -456,7 +436,6 @@ u8 diary_page_together_b(void)
     anim_draw_pic(5, D_20F5384, 0, 0x40, 0x24);
     anim_draw_pic(6, D_20F4E14, 0, 0x5a, 9);
     anim_draw_pic(7, D_20F5324, 0, 0x79, 9);
-    diary_hook_layout_done(8);
     return gfx_count_used_objects(0x13);
 }
 
@@ -471,7 +450,6 @@ u8 diary_page_garden(void)
     anim_draw_pic(4, D_20F5384, 0, 0x40, 0x24);
     anim_draw_pic(5, D_20F4E14, 0, 0x5a, 9);
     anim_draw_pic(6, D_20F5324, 0, 0x79, 9);
-    diary_hook_layout_done(7);
     return gfx_count_used_objects(0x12);
 }
 
@@ -487,7 +465,6 @@ u8 diary_page_comm(void)
     anim_draw_pic(4, D_20F5384, 0, 0x40, 0x24);
     anim_draw_pic(5, D_20F4E14, 0, 0x5a, 9);
     anim_draw_pic(6, D_20F5324, 0, 0x79, 9);
-    diary_hook_layout_done(7);
     return gfx_count_used_objects(0x12);
 }
 
@@ -506,7 +483,6 @@ u8 diary_page_bath(void)
     anim_draw_pic(7, D_20F5384, 0, 0x40, 0x24);
     anim_draw_pic(8, D_20F4E14, 0, 0x5a, 9);
     anim_draw_pic(9, D_20F5324, 0, 0x79, 9);
-    diary_hook_layout_done(10);
     return gfx_count_used_objects(0x15);
 }
 
@@ -535,7 +511,7 @@ u8 friend_portrait_slot(int k)
     if (save.friend_list[k].met_flags[1] != 0)
         return save.friend_list[k].met_flags[1] - 1;
     for (i = 0; i <= 2; i++) {
-        r = flash_first_erased_record(flash_sector_addr(i + 9), FRIEND_PORTRAIT_SIZE, 0x11);
+        r = flash_first_erased_record(flash_sector_addr(i + FLASH_SEC_PORTRAITS), FRIEND_PORTRAIT_SIZE, 0x11);
         if (r >= 0) {
             r += i * 17;
             break;
@@ -614,7 +590,7 @@ u8 friend_delete(int k)
             if (save.friend_list[k].met_flags[1] != 0) {
                 m = save.friend_list[k].met_flags[1] - 1;
                 snd_wait_end();
-                t = m / 17 + 9;
+                t = m / 17 + FLASH_SEC_PORTRAITS;
                 m = m % 17;
                 q = flash_sector_addr(t);
                 q += m * 0xe80;
@@ -652,7 +628,7 @@ void friend_draw_portrait(int idx, u8 x, u8 y, u8 c)
 
     if (save.friend_list[idx].met_flags[1] != 0) {
         k = save.friend_list[idx].met_flags[1] - 1;
-        bank = k / 17 + 9;
+        bank = k / 17 + FLASH_SEC_PORTRAITS;
         k = k % 17;
         s = flash_sector_addr(bank) + k * FRIEND_PORTRAIT_SIZE;
         if (*(int *)s == -1)
@@ -684,7 +660,7 @@ int mail_notice_from_friend(void)
     r = rand() % n;
     strncpy((char *)buf, (char *)save.friend_list[r].name, 0x10);
     k = save.friend_list[r].met_flags[1] - 1;
-    flash_sector_addr((u8)(k / 17 + 9));
+    flash_sector_addr((u8)(k / 17 + FLASH_SEC_PORTRAITS));
     btn_a_presses = 0;
     btn_b_presses = 0;
     btn_c_presses = 0;
@@ -872,7 +848,7 @@ int mail_find(int id, u8 fl, u8 *out, int d, int pcnt)
     }
     if (fl & 0x10) {
         i = 0;
-        e = (struct MailRecordView *)0x22d0000;
+        e = (struct MailRecordView *)mail_records;
         r = -1;
         for (; i < 100; i++, e++) {
             if (e->friend_id == -1) {
@@ -902,7 +878,7 @@ int mail_find(int id, u8 fl, u8 *out, int d, int pcnt)
 def:
     n = 99;
 go:
-    e = (struct MailRecordView *)0x22d0000 + n;
+    e = (struct MailRecordView *)FLASH_MAIL + n;
     i = n;
     r = -1;
     m = 0;
@@ -1120,14 +1096,14 @@ void mail_drop_oldest(void)
     int i, j;
 
     j = 0;
-    flash_backup_sector(0x35);
+    flash_backup_sector(FLASH_SEC_MAIL);
     sys_irq_disable();
-    func_0000A54(0x2000000, 0x35, 0x35);
-    p = (u16 *)0x2040064;
-    q = (u16 *)0x22d0000;
+    func_0000A54(FLASH_BASE, FLASH_SEC_MAIL, FLASH_SEC_MAIL);
+    p = (u16 *)(FLASH_SECTOR_COPY + 0x64);
+    q = (u16 *)mail_records;
     for (; j <= 0x62; j++)
         for (i = 0; i <= 0x7f; i++, p++, q++)
-            func_0000B52(q, *p, 0x2000000);
+            func_0000B52(q, *p, FLASH_BASE);
     sys_irq_enable();
 }
 
@@ -1145,7 +1121,7 @@ int mail_store(int x, int idx, int mode, int buf, u8 force)
     u16 *d;
     int i, j, k, empty;
 
-    p = (u8 *)0x22d0000;
+    p = (u8 *)mail_records;
     if (idx >= 0) {
         for (i = 0; i < idx; i++)
             p += 100;
@@ -1171,15 +1147,15 @@ int mail_store(int x, int idx, int mode, int buf, u8 force)
     }
     sys_irq_disable();
     if (empty == 0) {
-        func_0000A54(0x2000000, 0xc, 0xc);
-        s = (u16 *)0x22d0000;
-        d = (u16 *)0x2040000;
+        func_0000A54(FLASH_BASE, FLASH_SEC_SECTOR_COPY, FLASH_SEC_SECTOR_COPY);
+        s = (u16 *)mail_records;
+        d = (u16 *)FLASH_SECTOR_COPY;
         for (i = 0; i <= 0x7fff; i++, d++, s++)
-            if (func_0000B52(d, *s, 0x2000000) != 0)
+            if (func_0000B52(d, *s, FLASH_BASE) != 0)
                 goto fail;
-        func_0000A54(0x2000000, 0x35, 0x35);
-        p = (u8 *)0x2040000;
-        d = (u16 *)0x22d0000;
+        func_0000A54(FLASH_BASE, FLASH_SEC_MAIL, FLASH_SEC_MAIL);
+        p = (u8 *)FLASH_SECTOR_COPY;
+        d = (u16 *)mail_records;
         for (i = 0; i <= 0x63; i++, p += 100) {
             if (i == idx) {
                 k = 0;
@@ -1190,7 +1166,7 @@ int mail_store(int x, int idx, int mode, int buf, u8 force)
             }
             if (mode == 0 || (mode == 1 && k != 0)) {
                 for (j = 0; j <= 0x31; j++, d++, s++)
-                    if (func_0000B52(d, *s, 0x2000000) != 0)
+                    if (func_0000B52(d, *s, FLASH_BASE) != 0)
                         goto fail;
             }
         }
@@ -1203,19 +1179,12 @@ int mail_store(int x, int idx, int mode, int buf, u8 force)
         s = (u16 *)buf;
         d = (u16 *)p;
         for (j = 0; j <= 0x31; j++, d++, s++)
-            if (func_0000B52(d, *s, 0x2000000) != 0)
+            if (func_0000B52(d, *s, FLASH_BASE) != 0)
                 goto fail;
     }
 done:
     sys_irq_enable();
     return 0;
-}
-
-/*
- * Empty function (stub, `ret` only).
- */
-void func_2418032(void)
-{
 }
 
 /*
@@ -1230,11 +1199,11 @@ void mail_renumber_friends(int a)
     u16 *s;
     int i, j;
 
-    flash_backup_sector(0x35);
+    flash_backup_sector(FLASH_SEC_MAIL);
     sys_irq_disable();
-    func_0000A54(0x2000000, 0x35, 0x35);
-    p = (u8 *)0x2040000;
-    q = (u16 *)0x22d0000;
+    func_0000A54(FLASH_BASE, FLASH_SEC_MAIL, FLASH_SEC_MAIL);
+    p = (u8 *)FLASH_SECTOR_COPY;
+    q = (u16 *)mail_records;
     for (j = 0; j <= 0x63; j++) {
         for (i = 0; i <= 0x63; i++)
             buf[i] = *p++;
@@ -1242,7 +1211,7 @@ void mail_renumber_friends(int a)
             buf[0]--;
         s = (u16 *)buf;
         for (i = 0; i <= 0x31; i++, q++, s++)
-            func_0000B52(q, *s, 0x2000000);
+            func_0000B52(q, *s, FLASH_BASE);
     }
     sys_irq_enable();
 }
@@ -1296,15 +1265,15 @@ for (;;) {
                 sys_irq_disable();
                 old = room_view;
                 room_view = 0;
-                func_0000A54(0x2000000, 13, 13);
-                n = chara_render_pose_set(0, (struct PictureSetHdr *)0x2050000);
+                func_0000A54(FLASH_BASE, FLASH_SEC_TEMP_RECORD, FLASH_SEC_TEMP_RECORD);
+                n = chara_render_pose_set(0, (struct PictureSetHdr *)FLASH_TEMP_RECORD);
                 room_view = old;
                 sys_irq_enable();
                 if (n < 0)
                     return -1;
-                n = ((struct PictureSetHdr *)0x2050000)->x002 << 8;
-                n += ((struct PictureSetHdr *)0x2050000)->x003;
-                ptr = (u8 *)0x2050006 + n;
+                n = ((struct PictureSetHdr *)FLASH_TEMP_RECORD)->x002 << 8;
+                n += ((struct PictureSetHdr *)FLASH_TEMP_RECORD)->x003;
+                ptr = (u8 *)(FLASH_TEMP_RECORD + 0x6) + n;
                 loaded = 1;
             }
             n = mail_card(1, (int)buf, a, 0, (int)ptr);
@@ -1328,15 +1297,15 @@ for (;;) {
             sys_irq_disable();
             old = room_view;
             room_view = 0;
-            func_0000A54(0x2000000, 13, 13);
-            n = chara_render_pose_set(0, (struct PictureSetHdr *)0x2050000);
+            func_0000A54(FLASH_BASE, FLASH_SEC_TEMP_RECORD, FLASH_SEC_TEMP_RECORD);
+            n = chara_render_pose_set(0, (struct PictureSetHdr *)FLASH_TEMP_RECORD);
             room_view = old;
             sys_irq_enable();
             if (n < 0)
                 return -1;
-            n = ((struct PictureSetHdr *)0x2050000)->x002 << 8;
-            n += ((struct PictureSetHdr *)0x2050000)->x003;
-            ptr = (u8 *)0x2050006 + n;
+            n = ((struct PictureSetHdr *)FLASH_TEMP_RECORD)->x002 << 8;
+            n += ((struct PictureSetHdr *)FLASH_TEMP_RECORD)->x003;
+            ptr = (u8 *)(FLASH_TEMP_RECORD + 0x6) + n;
             loaded = 1;
         }
     restart:
@@ -1676,7 +1645,7 @@ u8 album_photo_browser(void)
     }
 redraw:
     k = save.pet.photo_slots[cur] - 1;
-    img = (u8 *)(k * 0x2800 + 0x2770000);
+    img = (u8 *)(k * 0x2800 + FLASH_PHOTOS);
     ui_new_screen();
     gfx_object_create(0, 0x1c, 0, 0, 0, (const u8 *)img);
     if (sel != 0) {
@@ -1703,8 +1672,8 @@ redraw:
                 case 0:
                     if (ui_confirm_really() != 0) {
                         snd_wait_end();
-                        flash_backup_sector(0x7f);
-                        flash_restore_sector_except(0x7f, img, 0x2800);
+                        flash_backup_sector(FLASH_SEC_PHOTOS);
+                        flash_restore_sector_except(FLASH_SEC_PHOTOS, img, 0x2800);
                         for (i = cur; i <= 4; i++) {
                             p = (int)&save.pet;
                             o = 0xb4;
@@ -1808,7 +1777,7 @@ again:
  */
 int mail_friend_index(int a)
 {
-    return *(int *)(a * 100 + 0x22d0000);
+    return *(int *)(a * 100 + FLASH_MAIL);
 }
 
 /*
@@ -1826,15 +1795,15 @@ void mail_mark_all_read(void)
 
     j = 0;
     sys_irq_disable();
-    func_0000A54(0x2000000, 0xc, 0xc);
-    s = (u16 *)0x22d0000;
-    d = (u16 *)0x2040000;
+    func_0000A54(FLASH_BASE, FLASH_SEC_SECTOR_COPY, FLASH_SEC_SECTOR_COPY);
+    s = (u16 *)mail_records;
+    d = (u16 *)FLASH_SECTOR_COPY;
     for (; j <= 0x7fff; j++, d++, s++)
-        if (func_0000B52(d, *s, 0x2000000) != 0)
+        if (func_0000B52(d, *s, FLASH_BASE) != 0)
             goto out;
-    func_0000A54(0x2000000, 0x35, 0x35);
-    p = (u8 *)0x2040000;
-    d = (u16 *)0x22d0000;
+    func_0000A54(FLASH_BASE, FLASH_SEC_MAIL, FLASH_SEC_MAIL);
+    p = (u8 *)FLASH_SECTOR_COPY;
+    d = (u16 *)mail_records;
     for (j = 0; j <= 0x63; j++, p += 100) {
         if (*(u32 *)(p + 4) == 1) {
             t = p;
@@ -1845,7 +1814,7 @@ void mail_mark_all_read(void)
         } else
             s = (u16 *)p;
         for (i = 0; i <= 0x31; i++, d++, s++)
-            if (func_0000B52(d, *s, 0x2000000) != 0)
+            if (func_0000B52(d, *s, FLASH_BASE) != 0)
                 goto out;
     }
 out:
@@ -2187,7 +2156,7 @@ int diary_writing_scene(void)
  */
 int diary_page_count(void)
 {
-    int r = flash_first_erased_record(D_2570000, 0x2000, 0x17);
+    int r = flash_first_erased_record((u8 *)FLASH_DIARY, 0x2000, 0x17);
 
     return r == -1 ? 0x17 : r;
 }
@@ -2217,24 +2186,24 @@ void diary_delete_page(int n)
     u16 *d;
     int i, j;
 
-    s = (u16 *)D_2570000;
+    s = (u16 *)FLASH_DIARY;
     d = dl_slot2_area;
     e = diary_area_end;
     sys_irq_disable();
-    func_0000A54(0x2000000, 0x81, 0x83);
+    func_0000A54(FLASH_BASE, FLASH_SEC_DIARY_DELETE_COPY, FLASH_SEC_DL_CHARA_LAST);
     do {
-        if (func_0000B52(d, *s, 0x2000000) != 0)
+        if (func_0000B52(d, *s, FLASH_BASE) != 0)
             goto out;
         s++;
         d++;
     } while (s < e);
-    func_0000A54(0x2000000, 0x5f, 0x61);
+    func_0000A54(FLASH_BASE, FLASH_SEC_DIARY, FLASH_SEC_DIARY_LAST);
     s = dl_slot2_area;
-    d = (u16 *)D_2570000;
+    d = (u16 *)FLASH_DIARY;
     for (j = 0; j <= 0x17; j++) {
         if (j != n) {
             for (i = 0; i <= 0xfff; i++, s++, d++)
-                if (func_0000B52(d, *s, 0x2000000) != 0)
+                if (func_0000B52(d, *s, FLASH_BASE) != 0)
                     goto out;
         } else
             s += 0x1000;
@@ -2293,7 +2262,7 @@ top:
     k = diary_prev_page(0);
 redraw:
     ui_new_screen();
-    p = (u8 *)0x2570000 + (k << 13);
+    p = (u8 *)FLASH_DIARY + (k << 13);
     memset(buf, 0, 0x25);
     memcpy(buf, p, 0x24);
     p += 0x24;
@@ -2403,13 +2372,13 @@ int diary_drop_oldest(void)
     int r;
 
     r = 0;
-    s = (u16 *)D_2570000;
+    s = (u16 *)FLASH_DIARY;
     d = dl_slot2_area;
     e = diary_area_end;
     sys_irq_disable();
-    func_0000A54(0x2000000, 0x81, 0x83);
+    func_0000A54(FLASH_BASE, FLASH_SEC_DIARY_DELETE_COPY, FLASH_SEC_DL_CHARA_LAST);
     do {
-        if (func_0000B52(d, *s, 0x2000000) != 0) {
+        if (func_0000B52(d, *s, FLASH_BASE) != 0) {
             r = -1;
             break;
         }
@@ -2417,12 +2386,12 @@ int diary_drop_oldest(void)
         d++;
     } while (s < e);
     if (r == 0) {
-        func_0000A54(0x2000000, 0x5f, 0x61);
+        func_0000A54(FLASH_BASE, FLASH_SEC_DIARY, FLASH_SEC_DIARY_LAST);
         s = diary_scratch_page1;
-        d = (u16 *)D_2570000;
+        d = (u16 *)FLASH_DIARY;
         e = diary_scratch_end;
         do {
-            if (func_0000B52(d, *s, 0x2000000) != 0) {
+            if (func_0000B52(d, *s, FLASH_BASE) != 0) {
                 r = -1;
                 break;
             }
@@ -2451,37 +2420,37 @@ int diary_delete_last(void)
         return -1;
     n--;
     sys_irq_disable();
-    func_0000A54(0x2000000, 0xf, 0xf);
-    b = t = (u16 *)0x2070000;
+    func_0000A54(FLASH_BASE, FLASH_SEC_DIARY_COPY, FLASH_SEC_DIARY_COPY);
+    b = t = (u16 *)FLASH_DIARY_COPY;
     if (n >= 0 && n <= 7) {
-        a = s = (u16 *)D_2570000;
-        sec = 0x5f;
+        a = s = (u16 *)FLASH_DIARY;
+        sec = FLASH_SEC_DIARY;
         len = n * 0x2000;
     } else if (n >= 8 && n <= 15) {
-        a = s = (u16 *)D_2580000;
-        sec = 0x60;
+        a = s = (u16 *)(FLASH_DIARY + 0x10000);
+        sec = FLASH_SEC_DIARY + 1;
         len = (n - 8) * 0x2000;
     } else {
-        a = s = (u16 *)D_2590000;
-        sec = 0x61;
+        a = s = (u16 *)(FLASH_DIARY + 0x20000);
+        sec = FLASH_SEC_DIARY + 2;
         len = (n - 16) * 0x2000;
     }
     if (n == 0 || n == 8 || n == 16) {
-        func_0000A54(0x2000000, sec, sec);
+        func_0000A54(FLASH_BASE, sec, sec);
         goto done;
     fail:
         sys_irq_enable();
         return -1;
     }
     for (i = 0; i <= 0x7fff; i++, a++, b++)
-        if (func_0000B52(b, *a, 0x2000000) != 0)
+        if (func_0000B52(b, *a, FLASH_BASE) != 0)
             goto fail;
-    func_0000A54(0x2000000, sec, sec);
+    func_0000A54(FLASH_BASE, sec, sec);
     i = 0;
     if (i >= len / 2)
         goto done;
 again:
-    if (func_0000B52(s, *t, 0x2000000) != 0)
+    if (func_0000B52(s, *t, FLASH_BASE) != 0)
         goto fail;
     i++;
     s++;
@@ -3076,9 +3045,9 @@ zero:
 go:
     sys_irq_disable();
     i = 0;
-    s = (u16 *)0x2570000 + (k << 12);
+    s = (u16 *)FLASH_DIARY + (k << 12);
 again:
-    if (func_0000B52(s, *p, 0x2000000) != 0)
+    if (func_0000B52(s, *p, FLASH_BASE) != 0)
         goto fail1;
     i++;
     s++;
@@ -3114,32 +3083,32 @@ int diary_rasterize_page(u8 *a, u8 *b, int k, u8 n)
 
     off = 0;
     r = -1;
-    s = (u16 *)0x2570000 + (k << 12);
+    s = (u16 *)FLASH_DIARY + (k << 12);
     p = b;
     sys_irq_disable();
     for (i = off; i < 0x24; i += 2, off += 2) {
         d = (u16 *)((u8 *)s + off);
         t = p[i + 1] << 8;
         t |= p[i];
-        if (func_0000B52(d, t, 0x2000000) != 0)
+        if (func_0000B52(d, t, FLASH_BASE) != 0)
             goto out;
     }
     d = (u16 *)((u8 *)s + off);
     t = a[1] << 8;
     t |= a[0];
-    if (func_0000B52(d, t, 0x2000000) != 0)
+    if (func_0000B52(d, t, FLASH_BASE) != 0)
         goto out;
     off += 2;
     d = (u16 *)((u8 *)s + off);
     t = a[3] << 8;
     t |= a[2];
-    if (func_0000B52(d, t, 0x2000000) != 0)
+    if (func_0000B52(d, t, FLASH_BASE) != 0)
         goto out;
     off += 2;
     d = (u16 *)((u8 *)s + off);
     t = a[5] << 8;
     t |= a[4];
-    if (func_0000B52(d, t, 0x2000000) != 0)
+    if (func_0000B52(d, t, FLASH_BASE) != 0)
         goto out;
     off += 2;
     for (j = 0; j < n; j++) {
@@ -3147,7 +3116,7 @@ int diary_rasterize_page(u8 *a, u8 *b, int k, u8 n)
             continue;
         for (i = 0; i < gfx_objects[j].image[2]; i++, off += 2) {
             v = func_000014A(&gfx_objects[j], i);
-            if (func_0000B52((u16 *)((u8 *)s + off), (v & 0xff) << 8 | v >> 8, 0x2000000) != 0)
+            if (func_0000B52((u16 *)((u8 *)s + off), (v & 0xff) << 8 | v >> 8, FLASH_BASE) != 0)
                 goto out;
         }
     }
@@ -3156,7 +3125,7 @@ int diary_rasterize_page(u8 *a, u8 *b, int k, u8 n)
         for (i = x0; i < x0 + a[0]; i += 2, off += 2) {
             v = gfx_raster_pixel(i, j, n);
             v |= gfx_raster_pixel(i + 1, j, n) << 8;
-            if (func_0000B52((u16 *)((u8 *)s + off), v, 0x2000000) != 0)
+            if (func_0000B52((u16 *)((u8 *)s + off), v, FLASH_BASE) != 0)
                 goto out;
         }
     }
@@ -3303,7 +3272,7 @@ u8 album_sort_records(void)
 
     n = 0;
     for (i = 0; i <= 0x4f; i++) {
-        p = flash_sector_addr(0x37) + (i << 12);
+        p = flash_sector_addr(FLASH_SEC_ALBUM) + (i << 12);
         buf[i].key = *(u32 *)(p + 8);
         for (s = (u16 *)p; s < (u16 *)(p + 0x10); s++) {
             if (*s != 0xffff) {
@@ -3317,7 +3286,7 @@ u8 album_sort_records(void)
     for (i = 0; i <= 0x4f; i++)
         save.album_order[i] = buf[i].index;
     for (i = 0; i <= 0x4f; i++) {
-        p = flash_sector_addr(0x37) + (i << 12);
+        p = flash_sector_addr(FLASH_SEC_ALBUM) + (i << 12);
         for (s = (u16 *)p; s < (u16 *)(p + 0x10); s++) {
             if (*s != 0xffff) {
                 n++;
@@ -3326,13 +3295,6 @@ u8 album_sort_records(void)
         }
     }
     return n;
-}
-
-/*
- * Empty function (stub, `ret` only).
- */
-void func_241AA10(void)
-{
 }
 
 /*
@@ -3358,7 +3320,7 @@ void album_draw_overview(u8 n, void *list)
     ui_new_screen();
     gfx_object_create_centered(0x40, 0x24, 0, 0, D_2114320);
     for (i = 0; i < n; i++) {
-        p = flash_sector_addr(0x37) + (((u8 *)list)[i] << 12);
+        p = flash_sector_addr(FLASH_SEC_ALBUM) + (((u8 *)list)[i] << 12);
         memcpy(e, p, 0x20);
         switch (e[0]) {
         case 0x10:
@@ -3483,7 +3445,7 @@ again:
                 }
             } while (save.album_order[i] == 0xff);
         }
-        p = flash_sector_addr(0x37) + (save.album_order[i] << 12);
+        p = flash_sector_addr(FLASH_SEC_ALBUM) + (save.album_order[i] << 12);
         memcpy(buf, p, 0x20);
         p += 0x20;
         ui_new_screen();

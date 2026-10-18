@@ -46,7 +46,5 @@ void tmr_t5_standard_tick(void);
 void tmr_t5_cmpa_vector(void);
 void tmr_t5_tick_handler(void);
 int ir_stop(int v);
-void func_2504F9E(void);
-void func_25051CC(void);
 
 #endif

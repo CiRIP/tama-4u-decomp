@@ -296,14 +296,10 @@ u8 func_2408658(void);
 void pet_clear_traits(int);
 void pet_count_activity(u8);
 void pet_clear_activities(void);
-void func_2408726(void);
 int func_2408728(void);
 int func_2408730(void);
 u16 chara_album_key(int);
 int chara_find_by_codes(u8, u8, u8);
 int chara_family_in_album(u16);
-void func_2405CF6(void);
-void func_240872C(void);
-void func_240872E(void);
 
 #endif

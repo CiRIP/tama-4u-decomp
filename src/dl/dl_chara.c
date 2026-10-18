@@ -25,7 +25,7 @@
  */
 int dl_chara_count(void)
 {
-    u8 *p = D_2780000;
+    u8 *p = (u8 *)FLASH_DL_CHARA;
     int n = 0;
     int i;
 
@@ -45,7 +45,7 @@ u8 *dl_chara_file(u8 k)
 
     if (k > 7)
         return (u8 *)-1;
-    p = D_2780000;
+    p = (u8 *)FLASH_DL_CHARA;
     for (i = 0; i < k; i++)
         p += 0x8000;
     if (*p != 0xff)
@@ -67,7 +67,7 @@ struct DlCharaRecord *dl_chara_record(u8 k)
 
     if (k > 7)
         return (struct DlCharaRecord *)-1;
-    p = D_2780000;
+    p = (u8 *)FLASH_DL_CHARA;
     for (i = 0; i < k; i++)
         p += 0x8000;
     if (*p != 0xff)
@@ -80,7 +80,7 @@ struct DlCharaRecord *dl_chara_record(u8 k)
  */
 struct DlCharaRecord *dl_chara_record_by_id(u16 id)
 {
-    u8 *p = D_2780000;
+    u8 *p = (u8 *)FLASH_DL_CHARA;
     int i;
 
     for (i = 0; i <= 7; i++, p += 0x8000) {
@@ -101,7 +101,7 @@ u8 dl_chara_slot_by_name(u8 *name)
     int found;
     u8 *p;
 
-    p = D_2780000;
+    p = (u8 *)FLASH_DL_CHARA;
     i = 0;
     found = -1;
     for (; i <= 7; i++) {
@@ -126,7 +126,7 @@ u8 *dl_chara_sprites(u8 k)
 
     if (k > 7)
         return (u8 *)-1;
-    p = D_2780000;
+    p = (u8 *)FLASH_DL_CHARA;
     for (i = 0; i < k; i++)
         p += 0x8000;
     if (*p != 0xff)
@@ -205,14 +205,6 @@ u8 *dl_chara_description(u8 k)
         return p + 0x232;
     return (u8 *)-1;
 }
-
-/*
- * Empty function (stub, `ret` only).
- */
-void func_25055CE(void)
-{
-}
-
 
 /*
  * Affection counters of the downloaded characters (pet.dl_affection), updated
@@ -351,78 +343,78 @@ void dl_chara_slot_write(int k, int a)
     if (k > 7)
         return;
     sys_irq_disable();
-    func_0000A54(0x2000000, 0xe, 0xe);
+    func_0000A54(FLASH_BASE, FLASH_SEC_CHARA_COPY, FLASH_SEC_CHARA_COPY);
     switch (k) {
     case 0:
         s = dl_chara_slot1;
-        d = (u16 *)0x2068000;
-        s3 = (u16 *)0x2060000;
-        d2 = (u16 *)0x2060000;
-        d3 = (u16 *)D_2780000;
-        sec = 0x80;
+        d = (u16 *)(FLASH_CHARA_COPY + 0x8000);
+        s3 = (u16 *)FLASH_CHARA_COPY;
+        d2 = (u16 *)FLASH_CHARA_COPY;
+        d3 = (u16 *)FLASH_DL_CHARA;
+        sec = FLASH_SEC_DL_CHARA;
         break;
     case 1:
-        s = (u16 *)D_2780000;
-        d = (u16 *)0x2060000;
-        d2 = (u16 *)0x2068000;
-        s3 = (u16 *)0x2060000;
-        d3 = (u16 *)D_2780000;
-        sec = 0x80;
+        s = (u16 *)FLASH_DL_CHARA;
+        d = (u16 *)FLASH_CHARA_COPY;
+        d2 = (u16 *)(FLASH_CHARA_COPY + 0x8000);
+        s3 = (u16 *)FLASH_CHARA_COPY;
+        d3 = (u16 *)FLASH_DL_CHARA;
+        sec = FLASH_SEC_DL_CHARA;
         break;
     case 2:
         s = dl_chara_slot3;
-        d = (u16 *)0x2068000;
-        s3 = (u16 *)0x2060000;
-        d2 = (u16 *)0x2060000;
+        d = (u16 *)(FLASH_CHARA_COPY + 0x8000);
+        s3 = (u16 *)FLASH_CHARA_COPY;
+        d2 = (u16 *)FLASH_CHARA_COPY;
         d3 = dl_slot2_area;
-        sec = 0x81;
+        sec = FLASH_SEC_DL_CHARA + 1;
         break;
     case 3:
         s = dl_slot2_area;
-        d = (u16 *)0x2060000;
-        d2 = (u16 *)0x2068000;
-        s3 = (u16 *)0x2060000;
+        d = (u16 *)FLASH_CHARA_COPY;
+        d2 = (u16 *)(FLASH_CHARA_COPY + 0x8000);
+        s3 = (u16 *)FLASH_CHARA_COPY;
         d3 = dl_slot2_area;
-        sec = 0x81;
+        sec = FLASH_SEC_DL_CHARA + 1;
         break;
     case 4:
         s = dl_chara_slot5;
-        d = (u16 *)0x2068000;
-        s3 = (u16 *)0x2060000;
-        d2 = (u16 *)0x2060000;
+        d = (u16 *)(FLASH_CHARA_COPY + 0x8000);
+        s3 = (u16 *)FLASH_CHARA_COPY;
+        d2 = (u16 *)FLASH_CHARA_COPY;
         d3 = dl_chara_slot4;
-        sec = 0x82;
+        sec = FLASH_SEC_DL_CHARA + 2;
         break;
     case 5:
         s = dl_chara_slot4;
-        d = (u16 *)0x2060000;
-        d2 = (u16 *)0x2068000;
-        s3 = (u16 *)0x2060000;
+        d = (u16 *)FLASH_CHARA_COPY;
+        d2 = (u16 *)(FLASH_CHARA_COPY + 0x8000);
+        s3 = (u16 *)FLASH_CHARA_COPY;
         d3 = dl_chara_slot4;
-        sec = 0x82;
+        sec = FLASH_SEC_DL_CHARA + 2;
         break;
     case 6:
         s = dl_chara_slot7;
-        d = (u16 *)0x2068000;
-        s3 = (u16 *)0x2060000;
-        d2 = (u16 *)0x2060000;
+        d = (u16 *)(FLASH_CHARA_COPY + 0x8000);
+        s3 = (u16 *)FLASH_CHARA_COPY;
+        d2 = (u16 *)FLASH_CHARA_COPY;
         d3 = dl_chara_slot6;
-        sec = 0x83;
+        sec = FLASH_SEC_DL_CHARA + 3;
         break;
     case 7:
     default:
         s = dl_chara_slot6;
-        d = (u16 *)0x2060000;
-        d2 = (u16 *)0x2068000;
-        s3 = (u16 *)0x2060000;
+        d = (u16 *)FLASH_CHARA_COPY;
+        d2 = (u16 *)(FLASH_CHARA_COPY + 0x8000);
+        s3 = (u16 *)FLASH_CHARA_COPY;
         d3 = dl_chara_slot6;
-        sec = 0x83;
+        sec = FLASH_SEC_DL_CHARA + 3;
         break;
     }
     *(u32 *)nb = 0x8000;
     i = 0;
     do {
-        if (func_0000B52(d, *s, 0x2000000) != 0)
+        if (func_0000B52(d, *s, FLASH_BASE) != 0)
             goto out;
         i++;
         d++;
@@ -432,18 +424,18 @@ void dl_chara_slot_write(int k, int a)
         i = 0;
         *(u32 *)nb = 0x47fe;
         do {
-            if (func_0000B52(d2, *p, 0x2000000) != 0)
+            if (func_0000B52(d2, *p, FLASH_BASE) != 0)
                 goto out;
             i++;
             d2++;
             p++;
         } while (i < (int)(*(u32 *)nb >> 1));
     }
-    func_0000A54(0x2000000, sec, sec);
+    func_0000A54(FLASH_BASE, sec, sec);
     *(u32 *)nb = 0x10000;
     i = 0;
     do {
-        if (func_0000B52(d3, *s3, 0x2000000) != 0)
+        if (func_0000B52(d3, *s3, FLASH_BASE) != 0)
             goto out;
         i++;
         d3++;
@@ -480,7 +472,7 @@ int dl_chara_store(int p)
     u8 *a;
     int i;
 
-    a = D_2780000;
+    a = (u8 *)FLASH_DL_CHARA;
     i = 0;
     r = -1;
     for (; i <= 7; i++) {
@@ -494,7 +486,7 @@ int dl_chara_store(int p)
         dl_chara_slot_write(i, p);
         return r;
     }
-    a = D_2780000;
+    a = (u8 *)FLASH_DL_CHARA;
     i = 0;
     r = -1;
     for (; i <= 7; i++) {
@@ -617,7 +609,7 @@ int dl_chara_pick_slot(void)
     btn_b_presses = 0;
     btn_c_presses = 0;
     ui_timeout = 10;
-    base = D_2780000;
+    base = (u8 *)FLASH_DL_CHARA;
     s = base;
     e = (struct DlCharaRecord *)(base + 0x204);
     redraw = 1;
@@ -643,7 +635,7 @@ int dl_chara_pick_slot(void)
             base += 0x8000;
             if (k >= n) {
                 k = 0;
-                base = D_2780000;
+                base = (u8 *)FLASH_DL_CHARA;
             }
             s = base;
         } while (*base == 0xff);

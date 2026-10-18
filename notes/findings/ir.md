@@ -5,7 +5,8 @@ the infrared link of the earlier models (bit-banged on P03/P04/P05, a 62 kHz car
 pulse-distance code, 20-byte packets with an 8-bit sum in byte 19), plus several
 application-level session drivers. None of it runs in normal play, and it could not work
 anyway: the receive interrupt is not in the vector table, and the session-level transfer
-routine ir_transfer that ir_exchange depends on is an empty `ret`.
+routine ir_transfer that ir_exchange depends on is an empty `ret` (this source leaves it,
+ir_transfer_abort and their calls out).
 
 Levels used below: **V** = verified in the code or the S1C33E07 manual (id001557.pdf), **I** =
 inferred, with a confidence level.

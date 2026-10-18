@@ -37,6 +37,5 @@ int ir_write_message_chunk(void);
 int ir_store_received_diary(u8, int);
 int ir_store_received_message(u8, int);
 void diary_write_pending_page(void);
-void func_2504458(void);
 
 #endif

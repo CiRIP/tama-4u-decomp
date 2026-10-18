@@ -30,6 +30,5 @@ void btn_wait_release(void);
 void test_sound_draw(int);
 void test_sound(void);
 void test_rtc_count(void);
-void func_251A28A(void);
 
 #endif

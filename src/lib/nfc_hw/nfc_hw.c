@@ -304,4 +304,4 @@ volatile struct NfcTxFifo nfc_tx_fifo;
 volatile struct NfcRxFifo nfc_rx_fifo;
 struct NfcId3 nfc_id3;
 u8 nfc_cancel_request;
-u32 nfc_flash_base = (u32)&flash_base;
+u32 nfc_flash_base = FLASH_BASE;

@@ -67,6 +67,5 @@ u8 dl_chara_profile_card(s8);
 u8 dl_chara_added_screen(void);
 int dl_chara_list(void);
 int dl_pet_by_codes(u8, u8);
-void func_25055CE(void);
 
 #endif

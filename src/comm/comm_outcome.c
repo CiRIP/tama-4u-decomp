@@ -587,8 +587,8 @@ void comm_outcome_gift(void)
         }
         comm_is_initiator = 1;
         comm_exchange_kind = 4;
-        comm_item_exchange_result(4, (struct ExchangeRecord *)0x27c0800, &comm_rx_phase2);
-        v = comm_take_gift_item((struct ExchangeRecord *)0x27c0800);
+        comm_item_exchange_result(4, (struct ExchangeRecord *)(FLASH_COMM_TX + 0x800), &comm_rx_phase2);
+        v = comm_take_gift_item((struct ExchangeRecord *)(FLASH_COMM_TX + 0x800));
         if (v == 0) {
             *(u8 *)&comm_exchange_kind = v;
             anim_clear_pic_slots2();
@@ -604,7 +604,7 @@ void comm_outcome_gift(void)
         nfc_session.item_refused = 0;
         comm_is_initiator = 0;
         comm_exchange_kind = 5;
-        r = comm_item_exchange_result(5, (struct ExchangeRecord *)0x27c0800, &comm_rx_phase2);
+        r = comm_item_exchange_result(5, (struct ExchangeRecord *)(FLASH_COMM_TX + 0x800), &comm_rx_phase2);
         if (r != 0)
             r = 1;
         comm_exchange_kind = 0;
@@ -679,9 +679,9 @@ u8 comm_can_marry(void)
 
     for (i = 0; i <= 20; i++)
         list[i] = 0;
-    comm_tx_record = 0x27c0800;
-    comm_rx_record = (u8 *)0x27d0800;
-    if (*(u8 *)0x27d085f == *(u8 *)0x27c085f) {
+    comm_tx_record = (FLASH_COMM_TX + 0x800);
+    comm_rx_record = (u8 *)&comm_rx_phase2;
+    if (comm_rx_phase2.gender == *(u8 *)(FLASH_COMM_TX + 0x85F)) {
         if (nfc_session.x002 == 1)
             comm_proposal_refused_msg(2);
         else
@@ -735,7 +735,7 @@ void comm_outcome_marriage(void)
     if (comm_can_marry() != 2) {
         comm_rx_record = (u8 *)&comm_rx_phase2;
         if (nfc_session.x002 == 1) {
-            q = (u8 *)&comm_rx_phase2 + *(u16 *)0x27D08E2;
+            q = (u8 *)&comm_rx_phase2 + comm_rx_phase2.sect_poses;
             comm_load_section_pics(anim_pic_slots, q, 3);
             anim_proposal();
             q = (u8 *)&comm_rx_phase2 + *(u16 *)(comm_rx_record + 0xea);
@@ -746,7 +746,7 @@ void comm_outcome_marriage(void)
                 anim_comm_done();
                 tmr_t5_wait_100ms(*(u16 *)(comm_rx_record + 0x76) * 10);
             }
-            q = (u8 *)0x27D0800;
+            q = (u8 *)&comm_rx_phase2;
             q += *(u16 *)(comm_rx_record + 0xe2);
             comm_load_section_pics(anim_pic_slots, q, 3);
             anim_just_married();
@@ -826,11 +826,11 @@ void comm_outcome_game2(void)
 {
     u8 m;
 
-    comm_tx_record = 0x27C0800;
+    comm_tx_record = (FLASH_COMM_TX + 0x800);
     comm_rx_record = (u8 *)&comm_rx_phase2;
     m = nfc_session.x002;
     if (m == 1) {
-        comm_load_section_pics(anim_pic_slots, *(u16 *)0x27D08E2 + (u8 *)&comm_rx_phase2, 3);
+        comm_load_section_pics(anim_pic_slots, comm_rx_phase2.sect_poses + (u8 *)&comm_rx_phase2, 3);
         nfc_session.score_initiator = *(u16 *)(comm_tx_record + 0xb0);
         nfc_session.score_target = *(u16 *)(comm_rx_record + 0xb0);
         nfc_session.score_total = nfc_session.score_initiator + nfc_session.score_target;
@@ -858,7 +858,7 @@ void comm_outcome_game2(void)
  */
 void comm_outcome_photo(void)
 {
-    comm_tx_record = (u32)D_27C0800;
+    comm_tx_record = (u32)(FLASH_COMM_TX + 0x800);
     comm_rx_record = (u8 *)&comm_rx_phase2;
     if (nfc_session.x002 == 1) {
         comm_load_section_pics(anim_pic_slots, comm_rx_phase2.sect_poses + (u8 *)&comm_rx_phase2, 3);
@@ -907,13 +907,12 @@ int comm_run_outcome(void)
 {
     u16 v;
 
-    comm_trace2(1);
     comm_exclusive_timing_off();
     room_view = 0;
     if (nfc_session.x003 == 2) {
         v = *(u16 *)(comm_rx_record + 0x74);
     } else {
-        comm_outcome_record = 0x27D0000;
+        comm_outcome_record = FLASH_COMM_RX;
         v = *(u16 *)(comm_outcome_record + 0x74);
     }
     switch (nfc_session.x003) {
@@ -1021,20 +1020,6 @@ void comm_idle_touch_event(void)
         nfc_session.x003 = z;
     }
     nfc_wait_field_on();
-}
-
-/*
- * Empty trace hook (called with step numbers by the NFC session code).
- */
-void comm_trace(void)
-{
-}
-
-/*
- * Empty trace hook.
- */
-void comm_trace2(int a)
-{
 }
 
 /*
@@ -1168,7 +1153,7 @@ int comm_erase_banks(void)
 
     snd_wait_before_flash();
     sys_irq_disable();
-    v0 = func_0000A54((int)((const u8 *)&flash_base), 0x84, 0x85);
+    v0 = func_0000A54(FLASH_BASE, FLASH_SEC_COMM_TX, FLASH_SEC_COMM_RX);
     sys_irq_enable();
     return v0;
 }
@@ -1194,7 +1179,7 @@ int flash_fill(u32 n, u32 dst, u16 v)
     snd_wait_before_flash();
     sys_irq_disable();
     for (i = 0, off = 0; i < n / 2; i++, off += 2) {
-        if (func_0000B52((u16 *)(p + off), w[0], 0x2000000) != 0)
+        if (func_0000B52((u16 *)(p + off), w[0], FLASH_BASE) != 0)
             return -1;
     }
     sys_irq_enable();
@@ -1229,7 +1214,7 @@ int flash_program_bytes(u32 n, u32 dst, u8 *src)
     memset(buf, 0, 4);
     sys_irq_disable();
     for (i = 0, off = 0; i < n / 2; i++, off += 2) {
-        if (func_0000B52((u16 *)(dst + off), *(u16 *)(src + off), 0x2000000) != 0)
+        if (func_0000B52((u16 *)(dst + off), *(u16 *)(src + off), FLASH_BASE) != 0)
             return -1;
     }
     sys_irq_enable();
@@ -1250,7 +1235,7 @@ int flash_program_halfwords(u32 dst, u16 *src, int n)
     sys_irq_disable();
     d = dst;
     for (i = r; i < n / 2; i++) {
-        r = func_0000B52((u16 *)d, src[i], 0x2000000);
+        r = func_0000B52((u16 *)d, src[i], FLASH_BASE);
         if (r != 0)
             break;
         d += 2;
@@ -1311,9 +1296,9 @@ void snd_wait_before_flash(void)
  * comm_remember_peer in comm_phase1_peer, else 2: guards that the phase-2 record of an exchange comes
  * from the same Tamagotchi as phase 1 (asm).
  */
-int comm_same_peer(u16 id, int name)
+int comm_same_peer(u16 id, const u8 *name)
 {
-    u8 *s = (u8 *)name;
+    const u8 *s = name;
     int hi = id >> 8;
     u8 lo = id;
     u8 i;
@@ -1350,9 +1335,9 @@ void comm_remember_peer(u16 v, u8 *src)
  * |= 2), comm_friend_is_new = 0; otherwise the first free record is filled (x014 = 1 or 2, x015 =
  * 0), comm_friend_is_new = 1. Returns the index, or 31 when no record is free (asm).
  */
-u8 friend_lookup_or_add(u16 id, int name, u8 flag)
+u8 friend_lookup_or_add(u16 id, const u8 *name, u8 flag)
 {
-    u8 *s = (u8 *)name;
+    const u8 *s = name;
     int hi = id >> 8;
     u8 lo = id;
     u8 k, j, diff;
@@ -1415,7 +1400,7 @@ u8 *friend_portrait(int k)
     if (c > 29 || comm_friend_is_new != 0)
         return r;
     a = save.friend_list[k].met_flags[1] - 1;
-    b = a / 0x11 + 9;
+    b = a / 0x11 + FLASH_SEC_PORTRAITS;
     a = a % 0x11;
     r = flash_sector_addr(b) + a * 0xe80;
     if (*(u32 *)r == 0xffffffff)
@@ -1445,22 +1430,22 @@ void friend_book_update(void)
     snd_wait_before_flash();
     if (nfc_session.x003 == 2) {
         q = comm_rx_record;
-        t = friend_lookup_or_add(comm_rx_packet.rec.owner_id, (int)comm_rx_packet.rec.name, comm_rx_packet.rec.gender);
+        t = friend_lookup_or_add(comm_rx_packet.rec.owner_id, comm_rx_packet.rec.name, comm_rx_packet.rec.gender);
         comm_partner_slot = t;
         q = q + comm_rx_packet.rec.sect_profile + 8;
         snd_wait_before_flash();
         sys_irq_disable();
-        func_0000A54(0x2000000, 13, 13);
-        flash_program_bytes(0xe00, 0x2050000, friend_portrait(comm_partner_slot));
-        flash_program_bytes(0x80, 0x2050e00, q);
-        q = (u8 *)0x2050000;
+        func_0000A54(FLASH_BASE, FLASH_SEC_TEMP_RECORD, FLASH_SEC_TEMP_RECORD);
+        flash_program_bytes(0xe00, FLASH_TEMP_RECORD, friend_portrait(comm_partner_slot));
+        flash_program_bytes(0x80, (FLASH_TEMP_RECORD + 0xE00), q);
+        q = (u8 *)FLASH_TEMP_RECORD;
         nfc_session.friend_data = (u32)q;
         sys_irq_enable();
     } else {
         int o;
-        comm_partner_slot = friend_lookup_or_add(((struct ExchangeRecord *)0x27d0800)->owner_id, 0x27d0860, ((struct ExchangeRecord *)0x27d0800)->gender);
-        o = ((struct ExchangeRecord *)0x27d0800)->sect_portrait;
-        q = (u8 *)(o + 0x27d0808);
+        comm_partner_slot = friend_lookup_or_add(comm_rx_phase2.owner_id, comm_rx_phase2.name, comm_rx_phase2.gender);
+        o = comm_rx_phase2.sect_portrait;
+        q = (u8 *)&comm_rx_phase2 + 8 + o;
         nfc_session.friend_data = (u32)q;
     }
     if (comm_partner_slot <= 0x1d) {
@@ -1542,7 +1527,7 @@ void comm_make_random_friend(void)
     d[5] = (util_rand_except(100, 100) + 1) % 30 + 1;
     d[6] = 4;
     d[7] = (util_rand_except(200, 200) + 1) % 50 + 1;
-    comm_partner_slot = friend_lookup_or_add(s, (int)d, 1);
+    comm_partner_slot = friend_lookup_or_add(s, d, 1);
     p = buf;
     b[0] = (u32)(util_rand_except(100, 100) + 1) % 2;
     b[1] = (util_rand_except(200, 100) + 1) % 6;
@@ -1564,10 +1549,10 @@ void comm_make_random_friend(void)
     t = buf;
     snd_wait_before_flash();
     sys_irq_disable();
-    func_0000A54(0x2000000, 0xd, 0xd);
-    flash_program_bytes(0xe00, 0x2050000, friend_portrait(comm_partner_slot));
-    flash_program_bytes(0x80, 0x2050e00, t);
-    t = (u8 *)0x2050000;
+    func_0000A54(FLASH_BASE, FLASH_SEC_TEMP_RECORD, FLASH_SEC_TEMP_RECORD);
+    flash_program_bytes(0xe00, FLASH_TEMP_RECORD, friend_portrait(comm_partner_slot));
+    flash_program_bytes(0x80, (FLASH_TEMP_RECORD + 0xE00), t);
+    t = (u8 *)FLASH_TEMP_RECORD;
     nfc_session.friend_data = (u32)t;
     sys_irq_enable();
     if (comm_partner_slot <= 29) {

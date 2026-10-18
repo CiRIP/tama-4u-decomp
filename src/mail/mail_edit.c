@@ -26,7 +26,7 @@ u8 mail_count_for_friend(int id)
     u8 *p;
     int n, i;
 
-    p = (u8 *)0x22d0000;
+    p = (u8 *)mail_records;
     n = i = 0;
     for (; i < 100; i++, p += 0x64) {
         if (*(int *)p == id && *(int *)(p + 4) >= 0)
@@ -343,7 +343,7 @@ void mail_draw_card(int a, int b, u8 c, int d, int e)
     } else {
         gfx_object_set_flags(gfx_object_create(0, 0x1c, 0, 0, 0, D_212393C), 0x10);
         n = save.friend_list[b].met_flags[1] - 1;
-        bank = n / 17 + 9;
+        bank = n / 17 + FLASH_SEC_PORTRAITS;
         n = n % 17;
         img = flash_sector_addr(bank) + n * FRIEND_PORTRAIT_SIZE;
         gfx_object_create(0x52, 0x5e - img[1], 0x10, 0, 0, (const u8 *)img);
@@ -482,7 +482,7 @@ int friend_picture_record(int i)
 
     if (save.friend_list[i].met_flags[1] != 0) {
         k = save.friend_list[i].met_flags[1] - 1;
-        a = k / 17 + 9;
+        a = k / 17 + FLASH_SEC_PORTRAITS;
         k = k % 17;
         r = flash_sector_addr(a) + k * 0xe80;
         if (*(int *)r == -1)

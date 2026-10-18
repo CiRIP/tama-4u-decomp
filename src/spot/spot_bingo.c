@@ -212,7 +212,7 @@ int spot_bingo_card_erase(void)
     int r;
 
     sys_irq_disable();
-    r = func_0000A54(0x2000000, 0x7d, 0x7d);
+    r = func_0000A54(FLASH_BASE, FLASH_SEC_BINGO, FLASH_SEC_BINGO);
     sys_irq_enable();
     ui_set_mark(3, 0);
     return r;

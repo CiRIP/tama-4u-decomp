@@ -211,7 +211,7 @@ int room_next_design(int a, int b)
         if (b == save.pet.room_designs[a]) {
             if (a != 0)
                 continue;
-            if (item_same_identity((int)flash_sector_addr(0x76), item_bank_record(k, b)) != 0)
+            if (item_same_identity((int)flash_sector_addr(FLASH_SEC_DEFAULT_BG), item_bank_record(k, b)) != 0)
                 continue;
         }
         if (item_bank_has(k, b, f))
@@ -564,8 +564,7 @@ const struct BankListEntry room_tbl[5] = {
     { D_255BD6C, 13, 0x1f },
     { D_255BD74, 14, 0x1f },
 };
-/* the room designs: pictures by pet.room_designs[0] .. x06A (D_26E0204: in the save area) */
-extern u8 D_26E0204[];
+/* the room designs: pictures by pet.room_designs[0] .. x06A (FLASH_DEFAULT_BG + 0x204: in the save area) */
 extern u8 D_20D5BE0[];
 extern u8 D_20CEEF0[];
 extern u8 D_20D6E08[];
@@ -576,8 +575,8 @@ extern u8 D_20D1340[];
 extern u8 D_20D2568[];
 extern u8 D_20D3790[];
 const u32 room_living_designs[25] = {
-    (u32)D_26E0204, (u32)D_26E0204, (u32)D_26E0204, (u32)D_26E0204, (u32)D_26E0204,
-    (u32)D_26E0204, (u32)D_26E0204, (u32)D_26E0204, (u32)D_26E0204, (u32)D_26E0204,
+    (u32)(FLASH_DEFAULT_BG + 0x204), (u32)(FLASH_DEFAULT_BG + 0x204), (u32)(FLASH_DEFAULT_BG + 0x204), (u32)(FLASH_DEFAULT_BG + 0x204), (u32)(FLASH_DEFAULT_BG + 0x204),
+    (u32)(FLASH_DEFAULT_BG + 0x204), (u32)(FLASH_DEFAULT_BG + 0x204), (u32)(FLASH_DEFAULT_BG + 0x204), (u32)(FLASH_DEFAULT_BG + 0x204), (u32)(FLASH_DEFAULT_BG + 0x204),
     (u32)D_20C8204, (u32)D_20D5BE0, (u32)D_20CEEF0, (u32)D_20D6E08, (u32)D_20D8030,
     (u32)D_20D9258, (u32)D_20D0118, (u32)D_20D1340, (u32)D_20D2568, (u32)D_20D3790,
     (u32)D_20C8204, (u32)D_20C8204, (u32)D_20C8204, (u32)D_20C8204, (u32)D_20C8204,

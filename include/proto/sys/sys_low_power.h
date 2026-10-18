@@ -7,6 +7,5 @@
 void sys_sleep_osc1(void);
 void sys_sleep_osc3(void);
 void sys_leave_low_power(void);
-void func_24F71D8(void);
 
 #endif

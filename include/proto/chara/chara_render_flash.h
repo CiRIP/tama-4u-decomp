@@ -31,7 +31,5 @@ int ir_stub_zero_f(void);
 int ir_stub_zero_g(void);
 int ir_stub_zero_h(void);
 int ir_send_data_stub_b(void);
-void func_25029E2(void);
-void func_25029F0(void);
 
 #endif

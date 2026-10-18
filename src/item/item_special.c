@@ -228,7 +228,7 @@ int item_coupon_viewer(void)
 again:
     ui_new_screen();
     memcpy(buf, anim_pic_slots, 0x3c);
-    item_load_pictures(anim_pic_slots[0], (struct TamagoFile *)flash_sector_addr(0x7c), 0xf);
+    item_load_pictures(anim_pic_slots[0], (struct TamagoFile *)flash_sector_addr(FLASH_SEC_LETTERS), 0xf);
     gfx_object_create(0, 0x1c, 0, 0, 0, anim_pic_slots[0][0]);
     memcpy(anim_pic_slots, buf, 0x3c);
     func_00009A6();
@@ -339,7 +339,7 @@ int item_coupon_erase(void)
     int v0;
 
     sys_irq_disable();
-    v0 = func_0000A54((int)((const u8 *)&flash_base), 0x7c, 0x7c);
+    v0 = func_0000A54(FLASH_BASE, FLASH_SEC_LETTERS, FLASH_SEC_LETTERS);
     sys_irq_enable();
     snd_wait_end();
     save_game();
@@ -358,10 +358,10 @@ u8 item_special_missing(u8 k)
 
     switch (k) {
     case 0:
-        p = (u32 *)flash_sector_addr(0x7c);
+        p = (u32 *)flash_sector_addr(FLASH_SEC_LETTERS);
         break;
     case 1:
-        p = (u32 *)0x2750000;
+        p = (u32 *)spot_bingo_card_slot;
         f = 0;
         if (spot_bingo_card_kind((struct TamagoFile *)p) == -1)
             f = 1;

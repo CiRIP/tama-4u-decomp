@@ -194,8 +194,8 @@ void comm_exclusive_timing_off(void)
 void comm_erase_tx_sectors(void)
 {
     sys_irq_disable();
-    func_0000A54(0x2000000, 0x84, 0x84);
-    func_0000A54(0x2000000, 0x87, 0x87);
+    func_0000A54(FLASH_BASE, FLASH_SEC_COMM_TX, FLASH_SEC_COMM_TX);
+    func_0000A54(FLASH_BASE, FLASH_SEC_COMM_TX2, FLASH_SEC_COMM_TX2);
     sys_irq_enable();
 }
 
@@ -205,8 +205,8 @@ void comm_erase_tx_sectors(void)
 void comm_erase_rx_sectors(void)
 {
     sys_irq_disable();
-    func_0000A54(0x2000000, 0x85, 0x85);
-    func_0000A54(0x2000000, 0x82, 0x82);
+    func_0000A54(FLASH_BASE, FLASH_SEC_COMM_RX, FLASH_SEC_COMM_RX);
+    func_0000A54(FLASH_BASE, FLASH_SEC_COMM_RX2, FLASH_SEC_COMM_RX2);
     sys_irq_enable();
 }
 
@@ -223,11 +223,11 @@ void comm_erase_session_buffers(void)
     u8 *p;
 
     if (comm_exchange_kind == 0) {
-        p = D_27C0000;
+        p = (u8 *)FLASH_COMM_TX;
         if (*p != 0xff || *(p += 0x10) != 0xff || *(p += 0x10) != 0xff || *(p += 0x10) != 0xff)
             comm_erase_tx_sectors();
     } else {
-        p = D_27D0400;
+        p = (u8 *)(FLASH_COMM_RX + 0x400);
         if (*p != 0xff || *(p += 2) != 0xff || *(p += 2) != 0xff || *(p += 2) != 0xff)
             comm_erase_rx_sectors();
     }
@@ -244,11 +244,11 @@ void comm_select_rx_write_pointer(void)
     if (ir_block_kind == 0)
         comm_erase_tx_sectors();
     if (comm_exchange_kind == 0)
-        p = D_27C8000;
+        p = (u8 *)(FLASH_COMM_TX + 0x8000);
     else if ((ir_session_flags & 3) != 0)
-        p = D_27A0400;
+        p = (u8 *)(FLASH_COMM_RX2 + 0x400);
     else
-        p = D_27D0400;
+        p = (u8 *)(FLASH_COMM_RX + 0x400);
     comm_flash_write_ptr = (u32)p;
 }
 
@@ -264,7 +264,7 @@ int comm_flash_append(u16 *src, int len)
     sys_irq_disable();
     dst = (u16 *)comm_flash_write_ptr;
     for (i = 0; i < len / 2; i++, dst++) {
-        r = func_0000B52(dst, src[i], 0x2000000);
+        r = func_0000B52(dst, src[i], FLASH_BASE);
         if (r != 0)
             break;
     }
@@ -285,7 +285,7 @@ int comm_flash_append_fill(u16 *src, int len)
     sys_irq_disable();
     dst = (u16 *)comm_flash_write_ptr;
     for (i = 0; i < len / 2; i++, dst++) {
-        r = func_0000B52(dst, *src, 0x2000000);
+        r = func_0000B52(dst, *src, FLASH_BASE);
         if (r != 0)
             break;
     }
@@ -316,17 +316,17 @@ int ir_rx_store_block(u16 *src, int len)
         switch (ir_block_kind) {
         case 0:
             comm_erase_tx_sectors();
-            p = D_27C1000;
+            p = (u8 *)(FLASH_COMM_TX + 0x1000);
             break;
         case 2:
             if (comm_exchange_kind == 0) {
                 comm_erase_tx_sectors();
-                p = D_27C8000;
+                p = (u8 *)(FLASH_COMM_TX + 0x8000);
             } else if ((ir_session_flags & 3) != 0) {
-                p = D_27A0400;
+                p = (u8 *)(FLASH_COMM_RX2 + 0x400);
             } else {
                 comm_erase_rx_sectors();
-                p = D_27D0400;
+                p = (u8 *)(FLASH_COMM_RX + 0x400);
             }
             break;
         default:

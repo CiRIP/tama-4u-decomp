@@ -9,14 +9,6 @@
 #include "proto/tmr/tmr_timeouts.h"
 #include "hw.h"
 
-void spi_init_hook(void)
-{
-}
-
-void func_250DC32(void)
-{
-}
-
 /*
  * SPI module enable (SPI_CTL1 bit 0). Only used by the vestigial SPI-flash code.
  */
@@ -49,49 +41,36 @@ void spi_cs_release(void)
     P6_P6D |= 0x10;
 }
 
-void spi_send_byte(int a)
-{
-}
-
-void spi_send_bytes(u8 *a, int b)
-{
-}
-
 int spi_recv_byte(void)
-{
-}
-
-void spi_recv_bytes(int a, int b)
 {
 }
 
 /*
  * Vestigial SPI-flash setup: LCDC IRAM select = 1, SPI clock on (spi_clock_on), SPI enable.
- * The byte-transfer routines of this group are empty stubs: there is no SPI flash on the
+ * The byte-transfer routines of this group are empty in the original (`ret`), so the calls to
+ * them are left out here: only the chip select toggles remain. There is no SPI flash on the
  * board; the NOR flash on the bus holds all data.
  */
 void spi_flash_setup(void)
 {
     LCDC_IRAM = 1;
     spi_clock_on();
-    spi_init_hook();
     spi_enable();
 }
 
 /*
- * Vestigial SPI-flash code: JEDEC "read ID" command 0x9F (CS = P64; the transfer
- * routines spi_send_byte/250DC66/250DC6A are empty stubs, so nothing is sent).
+ * Vestigial SPI-flash code: JEDEC "read ID" (CS = P64; the original sends the command 0x9F
+ * and reads 3 bytes into its argument through the empty transfer routines).
  */
-void spi_flash_read_id(int p0)
+void spi_flash_read_id(void)
 {
     spi_cs_assert();
-    spi_send_byte(0x9f);
-    spi_recv_bytes(p0, 3);
     spi_cs_release();
 }
 
 /*
- * Vestigial SPI-flash code: write enable (0x06) and poll the status (0x05) for 5 s.
+ * Vestigial SPI-flash code: write enable (command 0x06 in the original), poll the status for
+ * 5 s, then command 0x60 (chip erase?) and poll again.
  */
 void spi_flash_write_enable(void)
 {
@@ -99,7 +78,6 @@ void spi_flash_write_enable(void)
     volatile u8 s;
 
     spi_cs_assert();
-    spi_send_byte(6);
     spi_cs_release();
     tmr_t5_start_timeout(5000);
     for (;;) {
@@ -115,7 +93,6 @@ void spi_flash_write_enable(void)
     if (fail)
         return;
     spi_cs_assert();
-    spi_send_byte(0x60);
     spi_cs_release();
     tmr_t5_start_timeout(5000);
     for (;;) {
@@ -129,20 +106,16 @@ void spi_flash_write_enable(void)
 }
 
 /*
- * Vestigial SPI-flash code: command a with a 2-byte zero argument (erase?), then poll.
+ * Vestigial SPI-flash code: write enable, then (in the original) command 0x52 with the 3-byte
+ * argument {its argument, 0, 0} (block erase?), polling the status after each.
  */
-void spi_flash_command_zero_arg(int a)
+void spi_flash_command_zero_arg(void)
 {
-    u8 buf[3];
     volatile u8 st;
     int r;
 
-    buf[0] = a;
-    buf[1] = 0;
-    buf[2] = 0;
     r = 0;
     spi_cs_assert();
-    spi_send_byte(6);
     spi_cs_release();
     tmr_t5_start_timeout(3000);
     for (;;) {
@@ -157,8 +130,6 @@ void spi_flash_command_zero_arg(int a)
     tmr_flags &= ~0x20;
     if (r == 0) {
         spi_cs_assert();
-        spi_send_byte(0x52);
-        spi_send_bytes(buf, 3);
         spi_cs_release();
         tmr_t5_start_timeout(3000);
         for (;;) {
@@ -173,20 +144,16 @@ void spi_flash_command_zero_arg(int a)
 }
 
 /*
- * Vestigial SPI-flash code: sector command at address a (0x20 erase?), then poll.
+ * Vestigial SPI-flash code: write enable, then (in the original) the sector command 0x20
+ * (erase?) with the address {a >> 8, a, 0} of its argument a, polling the status after each.
  */
-void spi_flash_sector_command(u16 a)
+void spi_flash_sector_command(void)
 {
-    u8 buf[3];
     volatile u8 st;
     int r;
 
-    buf[0] = a >> 8;
-    buf[1] = a;
-    buf[2] = 0;
     r = 0;
     spi_cs_assert();
-    spi_send_byte(6);
     spi_cs_release();
     tmr_t5_start_timeout(2000);
     for (;;) {
@@ -201,8 +168,6 @@ void spi_flash_sector_command(u16 a)
     tmr_flags &= ~0x20;
     if (r == 0) {
         spi_cs_assert();
-        spi_send_byte(0x20);
-        spi_send_bytes(buf, 3);
         spi_cs_release();
         tmr_t5_start_timeout(2000);
         for (;;) {
@@ -217,36 +182,26 @@ void spi_flash_sector_command(u16 a)
 }
 
 /*
- * Vestigial SPI-flash code: read 0x100 bytes at page addr (command 0x03) into p.
+ * Vestigial SPI-flash code: page read; the original sends the command 0x03 and the address
+ * {addr >> 8, addr, 0} of its argument addr, and reads 0x100 bytes into its argument p.
  */
-void spi_flash_read_page(u16 addr, int p)
+void spi_flash_read_page(void)
 {
-    u8 buf[3];
-
-    buf[0] = addr >> 8;
-    buf[1] = addr;
-    buf[2] = 0;
     spi_cs_assert();
-    spi_send_byte(3);
-    spi_send_bytes(buf, 3);
-    spi_recv_bytes(p, 0x100);
     spi_cs_release();
 }
 
 /*
- * Vestigial SPI-flash code: program the page a from p (0x02), then poll.
+ * Vestigial SPI-flash code: write enable, then page program; the original sends the command
+ * 0x02, the address {a >> 8, a, 0} of its argument a and 0x100 bytes from its argument p,
+ * polling the status after each.
  */
-void spi_flash_program_page(u16 a, int p)
+void spi_flash_program_page(void)
 {
-    u8 buf[3];
     volatile u8 st;
     int r;
 
-    buf[0] = a >> 8;
-    buf[1] = a;
-    buf[2] = 0;
     spi_cs_assert();
-    spi_send_byte(6);
     r = 0;
     spi_cs_release();
     tmr_t5_start_timeout(100);
@@ -262,9 +217,6 @@ void spi_flash_program_page(u16 a, int p)
     tmr_flags &= ~0x20;
     if (r == 0) {
         spi_cs_assert();
-        spi_send_byte(2);
-        spi_send_bytes(buf, 3);
-        spi_send_bytes((u8 *)p, 0x100);
         spi_cs_release();
         tmr_t5_start_timeout(100);
         for (;;) {
@@ -292,24 +244,15 @@ void spi_clock_on(void)
     CMU_PROTECT = 0;
 }
 
-void func_250DF38(void)
-{
-}
-
-void func_250DF3A(void)
-{
-}
-
 /*
- * Vestigial SPI-flash code: read the status register (0x05). Always returns 0 because the
- * transfer stubs do nothing.
+ * Vestigial SPI-flash code: read the status register (the original sends the command 0x05
+ * through the empty transfer routine). The read spi_recv_byte is an empty stub too.
  */
 int spi_flash_read_status(void)
 {
     u8 r;
 
     spi_cs_assert();
-    spi_send_byte(5);
     r = spi_recv_byte();
     spi_cs_release();
     return r;

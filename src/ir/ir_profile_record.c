@@ -1,6 +1,6 @@
 /*
  * Writes our 0x6C-byte profile block of the old serial (IR) protocol into a record, padding it;
- * followed by five empty stubs.
+ * followed by two stubs that return 0.
  *
  * Code 250043A..250090C, .rodata from 253B248. No .rodata or call evidence ties its functions
  * to a neighbour: its boundaries are a guess.
@@ -14,6 +14,7 @@
 #include "proto/ir/ir_receive.h"
 #include "proto/owner/owner_profile.h"
 #include "libc.h"
+#include "flash_map.h"
 
 /*
  * Pad a 0x6C-byte flash record from offset a with zero halfwords.
@@ -27,7 +28,7 @@ int flash_pad_record(u32 a, u8 *p)
     a = 0x6c - a;
     for (i = off = 0; i < a >> 1; i++) {
         u16 *q = (u16 *)(p + off);
-        if (func_0000B52(q, buf[0], 0x2000000) != 0)
+        if (func_0000B52(q, buf[0], FLASH_BASE) != 0)
             return -1;
         off += 2;
     }
@@ -98,7 +99,7 @@ int flash_write_text_record(u8 *a, u8 *dst)
     p[0x1b] = 0;
     s = p;
     for (i = 0, off = 0; i < 14u; i++, off += 2)
-        if (func_0000B52((u16 *)(dst + off), *(u16 *)(s + off), 0x2000000) != 0)
+        if (func_0000B52((u16 *)(dst + off), *(u16 *)(s + off), FLASH_BASE) != 0)
             return -1;
     dst += off;
     total += off;
@@ -126,7 +127,7 @@ int flash_write_text_record(u8 *a, u8 *dst)
     }
     s = q;
     for (i = 0, off = 0; i < 8u; i++, off += 2)
-        if (func_0000B52((u16 *)(dst + off), *(u16 *)(s + off), 0x2000000) != 0)
+        if (func_0000B52((u16 *)(dst + off), *(u16 *)(s + off), FLASH_BASE) != 0)
             return -1;
     dst += off;
     total += off;
@@ -178,7 +179,7 @@ int flash_write_text_record(u8 *a, u8 *dst)
     }
     s = buf;
     for (i = 0, off = 0; i < 8u; i++, off += 2)
-        if (func_0000B52((u16 *)(dst + off), *(u16 *)(s + off), 0x2000000) != 0)
+        if (func_0000B52((u16 *)(dst + off), *(u16 *)(s + off), FLASH_BASE) != 0)
             return -1;
     dst += off;
     total += off;
@@ -207,25 +208,13 @@ int flash_write_text_record(u8 *a, u8 *dst)
         memcpy(r + 7, chara_trait_caps(save.pet.x000), 5);
     s = buf;
     for (i = 0, off = 0; i < 8u; i++, off += 2)
-        if (func_0000B52((u16 *)(dst + off), *(u16 *)(s + off), 0x2000000) != 0)
+        if (func_0000B52((u16 *)(dst + off), *(u16 *)(s + off), FLASH_BASE) != 0)
             return -1;
     dst += off;
     total += off;
     if (flash_pad_record(total, dst) != 0)
         return -1;
     return 0x6c;
-}
-
-void func_2500902(void)
-{
-}
-
-void func_2500904(void)
-{
-}
-
-void func_2500906(void)
-{
 }
 
 /*
